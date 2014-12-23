@@ -1,3 +1,7 @@
+mm_samy_editor:
+    resource: "@MMSamyEditorBundle/Resources/config/routing.yml"
+    prefix:   /
+
 app:
     resource: @AppBundle/Controller/
     type:     annotation

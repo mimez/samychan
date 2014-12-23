@@ -1,0 +1,5 @@
+services:
+    mm_samy_editor.scm_parser:
+        class: MM\SamyEditorBundle\Scm\Parser
+    mm_samy_editor.scm_utilities:
+        class: MM\SamyEditorBundle\Scm\Utilities

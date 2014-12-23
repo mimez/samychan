@@ -1,0 +1,22 @@
+MM\SamyEditorBundle\Entity\ScmPackage:
+    type: entity
+    table: scm_packages
+    id:
+        scm_package_id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        hash:
+            type: string
+            length: 255
+        filename:
+            type: string
+            length: 255
+    oneToMany:
+        files:
+            targetEntity: ScmFile
+            mappedBy: scmPackage
+            cascade: ["persist"]
+    lifecycleCallbacks: {  }

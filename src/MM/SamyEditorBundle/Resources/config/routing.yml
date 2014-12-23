@@ -1,0 +1,19 @@
+mm_samy_editor_homepage:
+    path:     /
+    defaults: { _controller: MMSamyEditorBundle:Default:index }
+
+mm_samy_editor_scm_package:
+    path:     /{hash}/
+    defaults: { _controller: MMSamyEditorBundle:ScmPackage:index }
+
+mm_samy_editor_scm_package_download:
+    path:     /{hash}/download/
+    defaults: { _controller: MMSamyEditorBundle:ScmPackage:download }
+
+mm_samy_editor_scm_file:
+    path:     /{hash}/file/{scmFileId}/
+    defaults: { _controller: MMSamyEditorBundle:ScmPackage:file }
+
+mm_samy_editor_scm_channel:
+    path:     /{hash}/channel/{scmChannelId}/
+    defaults: { _controller: MMSamyEditorBundle:ScmPackage:channel }

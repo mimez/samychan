@@ -1,0 +1,26 @@
+MM\SamyEditorBundle\Entity\ScmChannel:
+    type: entity
+    table: scm_channels
+    repositoryClass: MM\SamyEditorBundle\Entity\ScmChannelRepository
+    id:
+        scm_channel_id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        channelNo:
+            type: integer
+        name:
+            type: string
+        data:
+            type: binary
+    manyToOne:
+        scmFile:
+            targetEntity: ScmFile
+            inversedBy: channels
+            joinColumn:
+                name: scm_file_id
+                nullable: false
+                referencedColumnName: scm_file_id
+    lifecycleCallbacks: {  }

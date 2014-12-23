@@ -1,0 +1,6 @@
+<h1>Symfony Channel Editor</h1>
+{{ form_start(form) }}
+{{ form_widget(form) }}
+{{ form_end(form) }}
+
+<a href="{{ path('mm_samy_editor_scm_file', {'hash': scmPackage.hash, 'scmFileId': scmChannel.scmFile.scmFileId}) }}">back</a>

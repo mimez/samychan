@@ -1,0 +1,29 @@
+MM\SamyEditorBundle\Entity\ScmFile:
+    type: entity
+    table: scm_files
+    id:
+        scm_file_id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        filename:
+            type: string
+            length: 255
+        data:
+            type: binary
+    manyToOne:
+        scmPackage:
+            targetEntity: ScmPackage
+            inversedBy: files
+            joinColumn:
+                name: scm_package_id
+                nullable: false
+                referencedColumnName: scm_package_id
+    oneToMany:
+        channels:
+            targetEntity: ScmChannel
+            mappedBy: scmFile
+            cascade: ["persist"]
+    lifecycleCallbacks: {  }

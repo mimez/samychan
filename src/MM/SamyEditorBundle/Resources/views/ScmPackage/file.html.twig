@@ -1,0 +1,21 @@
+<h1>Channel list</h1>
+<table>
+    <thead>
+        <tr>
+            <td>Channel-No.</td>
+            <td>Name</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for channel in scmChannels %}
+            <tr>
+                <td>
+                    <a href="{{ path('mm_samy_editor_scm_channel', {'hash': scmPackage.hash, 'scmChannelId': channel.scmChannelId}) }}">{{ channel.channelNo }}</a>
+                </td>
+                <td>
+                    {{ channel.name }}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
