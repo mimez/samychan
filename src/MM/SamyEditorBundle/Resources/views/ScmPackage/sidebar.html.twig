@@ -1,0 +1,21 @@
+<div class="static-sidebar-wrapper sidebar-inverse">
+    <div class="static-sidebar">
+        <div class="sidebar">
+            <div class="widget stay-on-collapse">
+                <nav role="navigation" class="widget-body">
+
+                    <ul class="acc-menu">
+                        {% for navitem in navitems %}
+                            <li>
+                                <a href="{{ navitem.path }}">
+                                    <i class="fa {{ navitem.icon }}"></i><span>{{ navitem.label }}</span>
+                                    <span class="badge badge-dark">1</span>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>

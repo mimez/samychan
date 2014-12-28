@@ -3,11 +3,7 @@
 {% block sidebar %}
     {{ render(controller('MMSamyEditorBundle:ScmPackage:sidebar', {'scmPackage': scmPackage})) }}
 {% endblock %}
-
 {% block content %}
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    {{ form_end(form) }}
-
-    <a href="{{ path('mm_samy_editor_scm_file', {'hash': scmPackage.hash, 'scmFileId': scmChannel.scmFile.scmFileId}) }}">back</a>
+    <h2>SCM Package</h2>
+    <p>Choose your file.</p>
 {% endblock %}

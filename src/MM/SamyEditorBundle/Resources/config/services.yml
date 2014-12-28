@@ -1,5 +1,9 @@
 services:
     mm_samy_editor.scm_parser:
         class: MM\SamyEditorBundle\Scm\Parser
-    mm_samy_editor.scm_utilities:
-        class: MM\SamyEditorBundle\Scm\Utilities
+    mm_samy_editor.scm_packer:
+        class: MM\SamyEditorBundle\Scm\Packer
+        arguments: ["@doctrine"]
+    mm_samy_editor.scm_orderer:
+        class: MM\SamyEditorBundle\Scm\Orderer
+        arguments: ["@doctrine"]

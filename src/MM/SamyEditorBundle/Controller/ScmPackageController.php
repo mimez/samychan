@@ -5,6 +5,7 @@ namespace MM\SamyEditorBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use MM\SamyEditorBundle\Scm;
+use MM\SamyEditorBundle\Entity;
 
 class ScmPackageController extends Controller
 {
@@ -13,19 +14,9 @@ class ScmPackageController extends Controller
         $em = $this->get('doctrine');
         $scmPackage = $em->getRepository('MM\SamyEditorBundle\Entity\ScmPackage')->findOneBy(array('hash' => $hash));
 
-        foreach ($scmPackage->getFiles() as $file)
-        {
-            echo $file->getFileName() . '<br>';
-
-            echo "channels: <br>";
-            foreach ($file->getChannels() as $channel)
-            {
-                echo $channel->getChannelNo() . ':' . $channel->getName() . '<br>';
-            }
-
-        }
-
-        die();
+        return $this->render('MMSamyEditorBundle:ScmPackage:index.html.twig', array(
+            'scmPackage' => $scmPackage,
+        ));
     }
 
     public function fileAction($hash, $scmFileId)
@@ -58,20 +49,18 @@ class ScmPackageController extends Controller
         $em = $this->get('doctrine');
         $scmPackage = $em->getRepository('MM\SamyEditorBundle\Entity\ScmPackage')->findOneBy(array('hash' => $hash));
 
-        $scmPacker = new Scm\Packer($scmPackage);
-        $scm = $scmPacker->getScm();
+        // pack the scm package
+        $scmBinaryData = $this->get('mm_samy_editor.scm_packer')->pack($scmPackage);
 
         header('Content-Type: application/zip');
-        header(sprintf('Content-Length: %s', strlen($scm)));
+        header(sprintf('Content-Length: %s', strlen($scmBinaryData)));
         header(sprintf('Content-Disposition: attachment; filename="%s"', $scmPackage->getFilename()));
-        echo $scm;
+        echo $scmBinaryData;
         die();
     }
 
     public function channelAction($hash, $scmChannelId, Request $request)
     {
-
-
         $em = $this->get('doctrine')->getManager();
 
         $scmPackage = $em->getRepository('MM\SamyEditorBundle\Entity\ScmPackage')->findOneBy(array('hash' => $hash));
@@ -86,9 +75,28 @@ class ScmPackageController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+            $em->getConnection()->beginTransaction();
+
+            // read old channelNo (a bit stupid, old value is not reachable via entity
+            $q = "SELECT c.channelNo FROM MM\SamyEditorBundle\Entity\ScmChannel c WHERE c.scm_channel_id = :scmChannelId";
+            $oldChannelNo = $this->get('doctrine')->getManager()->createQuery($q)
+                ->setParameter('scmChannelId', $scmChannel->getScmChannelId())
+                ->getSingleScalarResult();
+
+            // save the channel
             $data = $form->getData();
+            $data->setUpdatedAt(new \DateTime());
             $em->persist($data);
             $em->flush();
+
+            // reorder channels if necessary
+            $scmOrderer = $this->get('mm_samy_editor.scm_orderer');
+            $scmOrderer->reorderChannels(
+                $scmChannel->getScmFile(),
+                ($oldChannelNo - $data->getChannelNo()) > 0 ? 'bottomup' : 'topdown'
+            );
+
+            $em->getConnection()->commit();
 
             return $this->redirectToRoute('mm_samy_editor_scm_channel', array(
                 'hash' => $scmPackage->getHash(),
@@ -117,4 +125,55 @@ class ScmPackageController extends Controller
     }
 
 
+    /**
+     * Embedded Controller um die Sidebar zu bauen
+     *
+     * @param Entity\ScmPackage $scmPackage
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function sidebarAction(Entity\ScmPackage $scmPackage)
+    {
+        $supportedFiles = array(
+            'map-CableD' => array(
+                'label' => 'Cable Digital',
+                'icon' => 'fa-signal',
+            ),
+            'map-AirA' => array(
+                'label' => 'Terrestrial Analog',
+                'icon' => 'fa-globe',
+            ),
+            'map-SateD' => array(
+                'label' => 'Satelite Digital',
+                'icon' => 'fa-globe',
+            ),
+            'map-AstraHDPlusD' => array(
+                'label' => 'AstraHDPlus Digital',
+                'icon' => 'fa-globe',
+            ),
+
+        );
+
+        // Generate Navitems
+        $navitems = array();
+        foreach ($scmPackage->getFiles() as $scmFile) {
+
+            // if the scmFile is not supported, we dont display it in the sidebar
+            if (!isset($supportedFiles[$scmFile->getFilename()])) {
+                continue;
+            }
+
+            // supported scmFile, go on and generate the nav item
+            $navitem = $supportedFiles[$scmFile->getFilename()];
+            $navitem['path'] = $this->generateUrl('mm_samy_editor_scm_file', array(
+                'hash' => $scmPackage->getHash(),
+                'scmFileId' => $scmFile->getScmFileId(),
+            ));
+
+            $navitems[] = $navitem;
+        }
+
+        return $this->render('MMSamyEditorBundle:ScmPackage:sidebar.html.twig', array(
+            'navitems' => $navitems
+        ));
+    }
 }

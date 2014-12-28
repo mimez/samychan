@@ -15,6 +15,9 @@ MM\SamyEditorBundle\Entity\ScmChannel:
             type: string
         data:
             type: binary
+        updatedAt:
+            type: datetime
+            nullable: true
     manyToOne:
         scmFile:
             targetEntity: ScmFile
