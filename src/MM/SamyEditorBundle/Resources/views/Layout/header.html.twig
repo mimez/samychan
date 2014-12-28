@@ -1,0 +1,31 @@
+
+<header>
+    <nav class="top-bar" data-topbar role="navigation">
+        <ul class="title-area">
+            <li class="name">
+                <h1><a href="/"><i class="fa fa-wrench"></i> SamyCHAN</a></h1>
+            </li>
+            <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+            <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+        </ul>
+
+        <section class="top-bar-section">
+            <ul>
+                <li>
+                    <form method="post" enctype="multipart/form-data" action="{{ path('mm_samy_editor_scm_package_upload') }}">
+                        <label class="file-upload">
+                            <i class="fa fa-folder-open"></i> Open .scm</a>
+                            <input type="file" name="form[file]" onchange="this.form.submit();"/>
+                        </label>
+                    </form>
+                </li>
+                {% if scmPackage is defined %}
+                    <li>
+                        <a href="{{ path('mm_samy_editor_scm_package_download', {'hash': scmPackage.hash}) }}"><i class="fa fa-cloud-download"></i> Download .scm</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </section>
+
+    </nav>
+</header>

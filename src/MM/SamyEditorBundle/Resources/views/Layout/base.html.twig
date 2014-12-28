@@ -14,43 +14,29 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="/styles.css">
 
+    {% stylesheets '@MMSamyEditorBundle/Resources/scss/styles.scss' %}
+    <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
 <body>
-    <header id="topnav" class="navbar navbar-default navbar-fixed-top clearfix" role="banner">
-        <a id="leftmenu-trigger" class="" data-toggle="tooltip" data-placement="right" title="Toggle Sidebar"></a>
-        <a class="navbar-brand" href="/">SamyChan</a>
-        <div class="yamm navbar-left navbar-collapse collapse in">
-            <ul class="nav navbar-nav">
-                <li class="dropdown" id="widget-classicmenu">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">One more separated link</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </header>
-    <div id="wrapper">
-        <div id="layout-static">
-            {% block sidebar %}
+    {% include 'MMSamyEditorBundle:Layout:header.html.twig' %}
+    {% block raw %}{% endblock %}
+    <div class="layout">
+        {% block sidebar %}
+
+        {% endblock %}
+        <div class="content">
+            {% for type in ['success', 'error', 'notice'] %}
+                {% for flashMessage in app.session.flashbag.get(type) %}
+                    <div data-alert class="alert-box {{ type }} radius">
+                        {{ flashMessage }}
+                        <a href="#" class="close">&times;</a>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            {% block content %}
 
             {% endblock %}
-            <div class="static-content-wrapper">
-                <div class="static-content">
-                    <div class="page-content">
-                        {% block content %}
-
-                        {% endblock %}
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </body>

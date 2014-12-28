@@ -161,7 +161,7 @@ class Parser {
         $zip = new \ZipArchive;
         $res = $zip->open($path);
 
-        if (!$res)
+        if (true !== $res)
         {
             throw new \Exception('cannot open zip archive');
         }

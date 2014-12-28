@@ -2,6 +2,10 @@ mm_samy_editor_homepage:
     path:     /
     defaults: { _controller: MMSamyEditorBundle:Default:index }
 
+mm_samy_editor_scm_package_upload:
+    path:     /upload/
+    defaults: { _controller: MMSamyEditorBundle:ScmPackage:upload }
+
 mm_samy_editor_scm_package:
     path:     /{hash}/
     defaults: { _controller: MMSamyEditorBundle:ScmPackage:index }

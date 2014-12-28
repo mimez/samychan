@@ -9,6 +9,41 @@ use MM\SamyEditorBundle\Entity;
 
 class ScmPackageController extends Controller
 {
+    public function uploadAction(Request $request)
+    {
+        $defaultData = array();
+        $form = $this->createFormBuilder($defaultData, array('csrf_protection' => false))
+            ->add('file', 'file')
+            ->add('send', 'submit')
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            try {
+                // data is an array with "name", "email", and "message" keys
+                $data = $form->getData();
+                $em = $this->get('doctrine')->getManager();
+                $scmArchiveLoader = $this->get('mm_samy_editor.scm_parser');
+                $scmPackage = $scmArchiveLoader->load($data['file']->openFile());
+                $scmPackage->setFilename($data['file']->getClientOriginalName());
+                $em->persist($scmPackage);
+                $em->flush();
+
+                return $this->redirectToRoute('mm_samy_editor_scm_package', array('hash' => $scmPackage->getHash()));
+            } catch (\Exception $e) {
+                $request->getSession()->getFlashBag()->add(
+                    'error',
+                    $e->getMessage()
+                );
+            }
+        }
+
+        return $this->render('MMSamyEditorBundle:Default:uploadscm.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
+
     public function indexAction($hash)
     {
         $em = $this->get('doctrine');
@@ -97,6 +132,11 @@ class ScmPackageController extends Controller
             );
 
             $em->getConnection()->commit();
+
+            $request->getSession()->getFlashBag()->add(
+                'success',
+                'Channel successfully saved'
+            );
 
             return $this->redirectToRoute('mm_samy_editor_scm_channel', array(
                 'hash' => $scmPackage->getHash(),

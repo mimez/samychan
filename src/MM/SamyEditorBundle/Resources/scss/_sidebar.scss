@@ -1,0 +1,26 @@
+.sidebar {
+    background: $sidebar-background;
+    width: 250px;
+
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+
+    li {
+        margin-top: 0;
+    }
+
+    a {
+        color: #8bc4ea !important;
+        border-bottom: 1px solid $sidebar-background-hover;
+        display: block;
+        padding: 15px 30px
+    }
+
+    a:hover {
+        background: $isdebar-border-bottom;
+        color: #fff !important;
+    }
+}

@@ -1,0 +1,16 @@
+label.file-upload input[type="file"] {
+    position: fixed;
+    top: -1000px;
+}
+
+.top-bar-section ul li label {
+    display: block;
+    width: 100%;
+    color: #fff;
+    font-size: 0.8125rem;
+    line-height: 2.8125rem;
+    padding: 0 0.9375rem;
+}
+.top-bar-section ul li label:hover {
+    background: $topbar-link-bg-hover;
+}

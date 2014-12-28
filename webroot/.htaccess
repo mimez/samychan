@@ -1,0 +1,4 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ app_dev.php [QSA,L]
+RedirectMatch permanent ^/app_dev\.php/(.*) /$1

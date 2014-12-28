@@ -18,7 +18,8 @@
         "sensio/distribution-bundle": "~3.0",
         "sensio/framework-extra-bundle": "~3.0",
         "incenteev/composer-parameter-handler": "~2.0",
-        "leafo/lessphp": "dev-master"
+        "zurb/foundation": "5.5.0",
+        "leafo/scssphp": "dev-master"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"
