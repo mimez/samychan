@@ -15,6 +15,7 @@ class ScmPackageController extends Controller
         $defaultData = array();
         $form = $this->createFormBuilder($defaultData, array('csrf_protection' => false))
             ->add('file', 'file')
+            ->add('series', 'choice', array('choices' => array('auto' => 'Auto', 'H' => 'H-Series'), 'required' => false))
             ->add('send', 'submit')
             ->getForm();
 
@@ -22,11 +23,16 @@ class ScmPackageController extends Controller
 
         if ($form->isValid()) {
             try {
-                // data is an array with "name", "email", and "message" keys
                 $data = $form->getData();
+
                 $em = $this->get('doctrine')->getManager();
-                $scmArchiveLoader = $this->get('mm_samy_editor.scm_parser');
-                $scmPackage = $scmArchiveLoader->load($data['file']->openFile());
+
+                // parse uploaded file
+                $scmPackage = $this->get('mm_samy_editor.scm_parser')->load(
+                    $data['file']->openFile(), // the file itself
+                    (isset($data['series']) && $data['series'] != 'auto' ? $data['series'] : null) // auto detection?
+                );
+
                 $scmPackage->setFilename($data['file']->getClientOriginalName());
                 $em->persist($scmPackage);
                 $em->flush();
@@ -101,6 +107,7 @@ class ScmPackageController extends Controller
                 'hash' => $scmPackage->getHash(),
                 'scmFileId' => $scmFile->getScmFileId(),
             ));
+            $navitem['channelCount'] = $this->getChannelCountByScmFile($scmFile);
 
             $navitems[] = $navitem;
         }
@@ -108,6 +115,21 @@ class ScmPackageController extends Controller
         return $this->render('MMSamyEditorBundle:ScmPackage:sidebar.html.twig', array(
             'navitems' => $navitems
         ));
+    }
+
+    /**
+     * Calculates the channel count of a scmFile
+     *
+     * @param Entity\ScmFile $scmFile
+     * @return integer
+     */
+    public function getChannelCountByScmFile(Entity\ScmFile $scmFile)
+    {
+        $em = $this->get('doctrine')->getManager();
+
+        $q = $em->createQuery('SELECT COUNT(c.channelNo) FROM MM\SamyEditorBundle\Entity\ScmChannel c WHERE c.scmFile = :scmFile AND c.channelNo > 0');
+        $q->setParameter('scmFile', $scmFile);
+        return (int)$q->getSingleScalarResult();
     }
 
     /**

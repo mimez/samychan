@@ -49,13 +49,13 @@ class Parser {
      * @return ScmPackage
      * @throws \Exception
      */
-    public function load(\SplFileObject $file)
+    public function load(\SplFileObject $file, $series = null)
     {
         // Scm files are zip archives. open / load the archive
         $zip = $this->openArchive($file->getRealPath());
 
         // detect the series (by cloneInfo)
-        $series = $this->detectSeries($zip);
+        $series = isset($series) ? $series : $this->detectSeries($zip);
 
         // each series has a own config
         $config = $this->getConfigBySeries($series);
