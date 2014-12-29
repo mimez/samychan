@@ -37,6 +37,10 @@
                 }
             });
 
+            // set placeholder for search and remove "search" string (looks cleaner)
+            $('input[type=search]').attr("placeholder", "search...");
+            $(".dataTables_filter label").contents().filter(function(){return this.nodeType !== 1;}).remove();
+
             // change of a cell
             dataTable.on('change', 'td', function(event, newValue) {
                 // get TR and td

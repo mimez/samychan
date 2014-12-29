@@ -14,6 +14,9 @@ MM\SamyEditorBundle\Entity\ScmPackage:
         filename:
             type: string
             length: 255
+        series:
+            type: string
+            length: 1
     oneToMany:
         files:
             targetEntity: ScmFile

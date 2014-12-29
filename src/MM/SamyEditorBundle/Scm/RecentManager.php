@@ -94,7 +94,10 @@ class RecentManager
         $scmPackages = [];
         for ($i = 0; $i < min(count($recentScmPackages), 5); $i++) {
             $hash = $recentScmPackages[$i];
-            $scmPackages[] = $scmPackageRepository->findOneBy(array('hash' => $hash));
+            $p = $scmPackageRepository->findOneBy(array('hash' => $hash));
+            if ($p) {
+                $scmPackages[] = $p;
+            }
         }
 
         return $scmPackages;

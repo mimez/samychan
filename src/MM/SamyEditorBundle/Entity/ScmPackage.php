@@ -140,4 +140,32 @@ class ScmPackage
     {
         return $this->filename;
     }
+    /**
+     * @var string
+     */
+    private $series;
+
+
+    /**
+     * Set series
+     *
+     * @param string $series
+     * @return ScmPackage
+     */
+    public function setSeries($series)
+    {
+        $this->series = $series;
+
+        return $this;
+    }
+
+    /**
+     * Get series
+     *
+     * @return string 
+     */
+    public function getSeries()
+    {
+        return $this->series;
+    }
 }

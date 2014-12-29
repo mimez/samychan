@@ -27,6 +27,14 @@ class Parser {
             'map-CableD' => array(
                 'byte_length' => '320',
                 'unpack_format' => 'S1ChannelNo/@64/A200Label'
+            ),
+            'map-SateD' => array(
+                'byte_length' => '168',
+                'unpack_format' => 'S1ChannelNo/@36/A100Label'
+            ),
+            'map-AstraHDPlusD' => array(
+                'byte_length' => '212',
+                'unpack_format' => 'S1ChannelNo/@48/A100Label'
             )
         ),
     );
@@ -56,6 +64,7 @@ class Parser {
         $scmPackage = new ScmPackage();
         $scmPackage->setHash(uniqid()); // unique hash as access-token
         $scmPackage->setFilename($file->getFilename());
+        $scmPackage->setSeries($series);
 
         for ($index = 0; $zip->getFromIndex($index); $index++)
         {

@@ -1,9 +1,10 @@
 .hero {
-    background: url("http://foundation.zurb.com/assets/css/../img/marquee-stars.svg") repeat scroll 0 0 #074E68;
-    height: 650px;
+    background: url("/bundles/mmsamyeditor/images/hero.jpg") no-repeat;
+    height: 750px;
     padding: 100px 20px 0;
     position: relative;
     text-align: left;
+    background-size: 100%;
 }
 
 .hero h1 {

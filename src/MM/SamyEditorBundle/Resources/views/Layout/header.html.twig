@@ -26,16 +26,18 @@
                 {% endif %}
             </ul>
             <ul class="right">
-                <li class="has-dropdown">
-                    <a href="#">Recent files</a>
-                    <ul class="dropdown">
-                        {% for scmPackage in scm_recent_manager.recentScmPackages %}
-                            <li>
-                                <a href="{{ path('mm_samy_editor_scm_package', {'hash': scmPackage.hash}) }}">{{ scmPackage.filename }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </li>
+                {% if scm_recent_manager.recentScmPackages|length > 0 %}
+                    <li class="has-dropdown">
+                        <a href="#">Recent files</a>
+                        <ul class="dropdown">
+                            {% for scmPackage in scm_recent_manager.recentScmPackages %}
+                                <li>
+                                    <a href="{{ path('mm_samy_editor_scm_package', {'hash': scmPackage.hash}) }}">{{ scmPackage.filename }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endif %}
             </ul>
         </section>
     </nav>

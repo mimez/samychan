@@ -26,9 +26,9 @@ $base-path: "../../../../../vendor/zurb/foundation/scss/";
 @import $base-path + "foundation/components/orbit";
 @import $base-path + "foundation/components/pagination";
 @import $base-path + "foundation/components/panels";
-@import $base-path + "foundation/components/pricing-tables";
-@import $base-path + "foundation/components/progress-bars";
-@import $base-path + "foundation/components/range-slider";
+//@import $base-path + "foundation/components/pricing-tables";
+//@import $base-path + "foundation/components/progress-bars";
+//@import $base-path + "foundation/components/range-slider";
 @import $base-path + "foundation/components/reveal";
 @import $base-path + "foundation/components/side-nav";
 @import $base-path + "foundation/components/split-buttons";
@@ -40,7 +40,7 @@ $base-path: "../../../../../vendor/zurb/foundation/scss/";
 @import $base-path + "foundation/components/tooltips";
 @import $base-path + "foundation/components/top-bar";
 @import $base-path + "foundation/components/type";
-@import $base-path + "foundation/components/offcanvas";
+//@import $base-path + "foundation/components/offcanvas";
 @import $base-path + "foundation/components/visibility";
 
 // custom files2
