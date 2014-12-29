@@ -91,7 +91,7 @@ class RecentManager
         $scmPackageRepository = $em->getRepository('MM\SamyEditorBundle\Entity\ScmPackage');
 
         // itererate through the (up to) latest 5 scm packages
-        $scmPackages = [];
+        $scmPackages = array();
         for ($i = 0; $i < min(count($recentScmPackages), 5); $i++) {
             $hash = $recentScmPackages[$i];
             $p = $scmPackageRepository->findOneBy(array('hash' => $hash));
