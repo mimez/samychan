@@ -11,13 +11,20 @@
     <meta name="author" content="Michael Mezger">
 
     <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,700' rel='stylesheet' type='text/css'>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-
-
     {% stylesheets '@MMSamyEditorBundle/Resources/scss/styles.scss' %}
-    <link rel="stylesheet" href="{{ asset_url }}">
+        <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %}
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/plug-ins/3cfcc339e89/api/fnReloadAjax.js"></script>
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+    {% javascripts '@MMSamyEditorBundle/Resources/public/js/*' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 <body>
     {% include 'MMSamyEditorBundle:Layout:header.html.twig' %}
     {% block raw %}{% endblock %}
@@ -39,5 +46,8 @@
             {% endblock %}
         </div>
     </div>
+    <script>
+        $(document).foundation();
+    </script>
 </body>
 </html>

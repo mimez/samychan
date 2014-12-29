@@ -67,7 +67,6 @@ class Parser {
 
             if (isset($config[$filename]))
             {
-                echo "unpacking " . $filename . '<br>';
                 $fileConfig = $config[$filename];
 
                 $temp = new \SplTempFileObject();

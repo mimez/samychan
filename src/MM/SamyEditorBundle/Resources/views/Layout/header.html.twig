@@ -1,5 +1,5 @@
 
-<header>
+<header class="sticky">
     <nav class="top-bar" data-topbar role="navigation">
         <ul class="title-area">
             <li class="name">
@@ -25,7 +25,18 @@
                     </li>
                 {% endif %}
             </ul>
+            <ul class="right">
+                <li class="has-dropdown">
+                    <a href="#">Recent files</a>
+                    <ul class="dropdown">
+                        {% for scmPackage in scm_recent_manager.recentScmPackages %}
+                            <li>
+                                <a href="{{ path('mm_samy_editor_scm_package', {'hash': scmPackage.hash}) }}">{{ scmPackage.filename }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
         </section>
-
     </nav>
 </header>

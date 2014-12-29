@@ -29,6 +29,8 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    globals:
+        scm_recent_manager: "@mm_samy_editor.scm_recent_manager"
 
 # Assetic Configuration
 assetic:

@@ -7,3 +7,6 @@ services:
     mm_samy_editor.scm_orderer:
         class: MM\SamyEditorBundle\Scm\Orderer
         arguments: ["@doctrine"]
+    mm_samy_editor.scm_recent_manager:
+        class: MM\SamyEditorBundle\Scm\RecentManager
+        arguments: ["@service_container"]

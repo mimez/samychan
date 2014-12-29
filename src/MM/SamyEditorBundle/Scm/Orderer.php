@@ -76,20 +76,8 @@ class Orderer {
         // load sort config
         $sortconfig = $this->getSortConfigByDirection($sortdir, $scmFile);
 
-        // get channels
-        // we do this by a native sql because we need to order by updatedAt in a special way (NULLS last).
-        // we cannot do that with dql / doctrine :(
-        $q = "SELECT
-                c.scm_channel_id
-              FROM
-                scm_channels c
-              WHERE
-                c.scm_file_id = :scmFileId
-              ORDER BY
-                c.channelNo {$sortconfig['sqlSortDir']},
-                c.updatedAt IS NOT NULL DESC,
-                c.updatedAt DESC";
-        $scmChannels = $em->getConnection()->executeQuery($q, array('scmFileId' => $scmFile->getScmFileId()))->fetchAll();
+        // get channels by direction
+        $scmChannels = $this->getChannels($scmFile, $sortconfig['sqlSortDir']);
 
         $lastChannelNo = $sortconfig['lastChannelNo'];
         foreach ($scmChannels as $scmChannel) {
@@ -103,7 +91,6 @@ class Orderer {
 
             // CONFLICT: current channel has a number that is already assigned
             if (version_compare($scmChannel->getChannelNo(), $lastChannelNo, $sortconfig['conflictOperator']) > 0) {
-                echo "assigning new no: " . ($lastChannelNo + $sortconfig['moveOffset']) . '<br>';
                 $scmChannel->setChannelNo($lastChannelNo + $sortconfig['moveOffset']);
                 $em->persist($scmChannel);
             }
@@ -113,6 +100,70 @@ class Orderer {
         }
 
         $em->flush();
+    }
+
+    /**
+     * Reordering channels (gapless)
+     *
+     * @param Entity\ScmFile $scmFile
+     */
+    public function reorderChannelsGapless(Entity\ScmFile $scmFile)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        // get channels by direction
+        $scmChannels = $this->getChannels($scmFile);
+
+        $currentChannelNo = 1;
+        foreach ($scmChannels as $scmChannel) {
+
+            // fetch scmChannel from doctrine
+            $scmChannel = $em->getRepository('MM\SamyEditorBundle\Entity\ScmChannel')->find($scmChannel['scm_channel_id']);
+
+            if ($scmChannel->getChannelNo() == 0) {
+                continue;
+            }
+
+            // CONFLICT
+            if ($scmChannel->getChannelNo() != $currentChannelNo) {
+                $scmChannel->setChannelNo($currentChannelNo);
+                $em->persist($scmChannel);
+            }
+
+            // setting lastChannelNo to current channel or lastChannelNo
+            $currentChannelNo++;
+        }
+
+        $em->flush();
+    }
+
+    /**
+     * Helper for fetching Channels from the DB
+     *
+     * @param Entity\ScmFile $scmFile
+     * @param string $sortDir
+     * @return array
+     */
+    protected function getChannels(Entity\ScmFile $scmFile, $sortDir = 'ASC')
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        // get channels
+        // we do this by a native sql because we need to order by updatedAt in a special way (NULLS last).
+        // we cannot do that with dql / doctrine :(
+        $q = "SELECT
+                c.scm_channel_id
+              FROM
+                scm_channels c
+              WHERE
+                c.scm_file_id = :scmFileId
+              ORDER BY
+                c.channelNo {$sortDir},
+                c.updatedAt IS NOT NULL DESC,
+                c.updatedAt DESC";
+        $scmChannels = $em->getConnection()->executeQuery($q, array('scmFileId' => $scmFile->getScmFileId()))->fetchAll();
+
+        return $scmChannels;
     }
 
     /**
