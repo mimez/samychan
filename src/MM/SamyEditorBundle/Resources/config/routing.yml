@@ -18,6 +18,10 @@ mm_samy_editor_scm_file:
     path:     /{hash}/file/{scmFileId}/
     defaults: { _controller: MMSamyEditorBundle:ScmFile:file }
 
+mm_samy_editor_scm_file_favorites:
+    path:     /{hash}/file/{scmFileId}/favorites/{favNo}/
+    defaults: { _controller: MMSamyEditorBundle:ScmFile:favorites }
+
 mm_samy_editor_scm_file_json:
     path:     /{hash}/file/{scmFileId}/json/
     defaults: { _controller: MMSamyEditorBundle:ScmFile:fileJson }

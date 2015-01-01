@@ -1,0 +1,20 @@
+{% extends 'MMSamyEditorBundle:Layout:base.html.twig' %}
+
+{% block sidebar %}
+    {{ render(controller('MMSamyEditorBundle:ScmPackage:sidebar', {'scmPackage': scmPackage})) }}
+{% endblock %}
+{% block content %}
+    <h1>Favs</h1>
+
+    <div id="channels">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+    </div>
+
+    <script>
+        $().ready(function() {
+            $('#channels select').multiselect2side({'search': 'on', labeldx: ''});
+        });
+    </script>
+{% endblock %}

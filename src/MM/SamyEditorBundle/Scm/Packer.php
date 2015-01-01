@@ -3,6 +3,7 @@
 namespace MM\SamyEditorBundle\Scm;
 
 use MM\SamyEditorBundle\Entity;
+use Symfony\Component\Yaml;
 
 class Packer {
 
@@ -54,10 +55,8 @@ class Packer {
         // Dateien des SCM-Packages durchlaufen und der ZIP-Datei hinzufuegen
         foreach ($scmPackage->getFiles() as $file)
         {
-            if ($file->getFilename() == 'map-AstraHDPlusD') {
-                #echo bin2hex($this->assambleFileData($file));die;
-            }
-            $zip->addFromString($file->getFilename(), $this->assambleFileData($file));
+            $newBinaryData = $this->assambleFileData($file);
+            $zip->addFromString($file->getFilename(), $newBinaryData);
         }
 
         $zip->close();
@@ -87,11 +86,15 @@ class Packer {
             return stream_get_contents($scmFile->getData());
         }
 
+        // load Config
+        $fileConfig = $this->getConfigBySeries($scmFile->getScmPackage()->getSeries());
+        $fileConfig = $fileConfig[$scmFile->getFilename()];
+
         // update binary data of the channel and return the whole data
         $data = '';
 
         foreach ($scmChannels as $scmChannel) {
-            $this->updateChannelData($scmChannel);
+            $this->updateChannelData($scmChannel, $fileConfig);
             $data .= is_resource($scmChannel->getData()) ? stream_get_contents($scmChannel->getData()) : $scmChannel->getData();
         }
 
@@ -102,8 +105,9 @@ class Packer {
      * Binary Data des Channels aktualisieren
      *
      * @param ScmChannel $scmChannel
+     * @param array $fileConfig
      */
-    public function updateChannelData(Entity\ScmChannel $scmChannel)
+    public function updateChannelData(Entity\ScmChannel $scmChannel, array $fileConfig)
     {
         // check if the channel is a real channel
         if ($scmChannel->getChannelNo() == 0) {
@@ -116,12 +120,21 @@ class Packer {
         $data->fwrite($originalData);
         $data->rewind();
 
-        // channel-no aktualisieren
-        $data->fwrite(pack('s', $scmChannel->getChannelNo()), 2);
-        $data->rewind();
+        // iterate over fields and write the new value of each into the binaryString
+        foreach ($fileConfig['fields'] as $fieldName => $fieldConfig) {
 
-        // name aktualisieren
-        // @todo
+            // get value from entity
+            $fieldValue = $scmChannel->{'get' . ucfirst($fieldName)}();
+
+            // load datatype and cast the value to binary
+            $dataType = new $fieldConfig['type'];
+            $binaryFieldValue = $dataType->toBinary($fieldValue, $fieldConfig['length']);
+
+            // write new value into binary raw data
+            $data->fseek($fieldConfig['offset']);
+            $data->fwrite($binaryFieldValue, isset($fieldConfig['length']) ? $fieldConfig['length'] : null);
+            $data->rewind();
+        }
 
         // checksum aktualisieren
         $binaryChecksumByte = $this->calculateChecksum($data->fread(strlen($originalData)));
@@ -157,5 +170,36 @@ class Packer {
         $checksum = str_pad($checksum, 2, '0', STR_PAD_LEFT);
 
         return hex2bin($checksum);
+    }
+
+    /**
+     * config by series
+     *
+     * @param $series
+     * @return mixed
+     * @throws \Exception
+     */
+    protected function getConfigBySeries($series) {
+        $config = $this->getConfig();
+        if (!isset($config[$series])) {
+            throw new \Exception(sprintf('requested config for series=(%s) does not exist', $series));
+        }
+
+        return $config[$series];
+    }
+
+    /**
+     * get Configuration
+     *
+     * @return mixed
+     */
+    protected function getConfig()
+    {
+        if (!isset($channelParserConfig)) {
+            $yaml = new Yaml\Parser();
+            $value = $yaml->parse(file_get_contents(__DIR__ . '/../Resources/config/channel_format.yml'));
+        }
+
+        return $value['channel_format'];
     }
 }

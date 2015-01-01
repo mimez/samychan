@@ -10,3 +10,6 @@ services:
     mm_samy_editor.scm_recent_manager:
         class: MM\SamyEditorBundle\Scm\RecentManager
         arguments: ["@service_container"]
+    mm_samy_editor.scm_favorite_manager:
+        class: MM\SamyEditorBundle\Scm\FavoriteManager
+        arguments: ["@doctrine"]

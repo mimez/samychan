@@ -1,0 +1,55 @@
+channel_format:
+    H:
+        map-CableD:
+            byte_length: 320
+            fields:
+                channelNo:
+                    offset: 0
+                    length: 2
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger16
+                name:
+                    offset: 64
+                    length: 100
+                    type: MM\SamyEditorBundle\Scm\DataType\String
+                fav1sort:
+                    offset: 292
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                fav2sort:
+                    offset: 296
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                fav3sort:
+                    offset: 300
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                fav4sort:
+                    offset: 304
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                fav5sort:
+                    offset: 308
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+        map-SateD:
+            byte_length: 168
+            fields:
+                channelNo:
+                    offset: 0
+                    length: 2
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger16
+                name:
+                    offset: 36
+                    length: 100
+                    type: MM\SamyEditorBundle\Scm\DataType\String
+        map-AstraHDPlusD:
+            byte_length: 212
+            fields:
+                channelNo:
+                    offset: 0
+                    length: 2
+                    type: integer
+                name:
+                    offset: 48
+                    length: 100
+                    type: string

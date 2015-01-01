@@ -1,6 +1,7 @@
 MM\SamyEditorBundle\Entity\ScmFile:
     type: entity
     table: scm_files
+    repositoryClass: MM\SamyEditorBundle\Entity\ScmFileRepository
     id:
         scm_file_id:
             type: integer

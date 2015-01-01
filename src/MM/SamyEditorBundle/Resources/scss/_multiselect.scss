@@ -1,0 +1,34 @@
+.ms2side__div {
+    select {
+        height: 300px;
+        width: 200px;
+    }
+
+    .ms2side__select {
+        float: left;
+        position: relative;
+        padding-top: 55px;
+    }
+
+    .ms2side__header {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+    }
+
+    .ms2side__options {
+        float: left;
+        margin: 0;
+        padding: 80px 8px 0 8px !important;
+        width: 100px;
+        color: black;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    .ms2side__options a .ms2side__updown a {
+        display: block;
+        font-size: 75px;
+    }
+}

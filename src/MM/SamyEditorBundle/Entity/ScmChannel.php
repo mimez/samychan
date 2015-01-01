@@ -164,4 +164,144 @@ class ScmChannel
     {
         return $this->updatedAt;
     }
+    /**
+     * @var integer
+     */
+    private $fav1sort;
+
+    /**
+     * @var integer
+     */
+    private $fav2sort;
+
+    /**
+     * @var integer
+     */
+    private $fav3sort;
+
+    /**
+     * @var integer
+     */
+    private $fav4sort;
+
+    /**
+     * @var integer
+     */
+    private $fav5sort;
+
+
+    /**
+     * Set fav1sort
+     *
+     * @param integer $fav1sort
+     * @return ScmChannel
+     */
+    public function setFav1sort($fav1sort)
+    {
+        $this->fav1sort = $fav1sort;
+
+        return $this;
+    }
+
+    /**
+     * Get fav1sort
+     *
+     * @return integer 
+     */
+    public function getFav1sort()
+    {
+        return $this->fav1sort;
+    }
+
+    /**
+     * Set fav2sort
+     *
+     * @param integer $fav2sort
+     * @return ScmChannel
+     */
+    public function setFav2sort($fav2sort)
+    {
+        $this->fav2sort = $fav2sort;
+
+        return $this;
+    }
+
+    /**
+     * Get fav2sort
+     *
+     * @return integer 
+     */
+    public function getFav2sort()
+    {
+        return $this->fav2sort;
+    }
+
+    /**
+     * Set fav3sort
+     *
+     * @param integer $fav3sort
+     * @return ScmChannel
+     */
+    public function setFav3sort($fav3sort)
+    {
+        $this->fav3sort = $fav3sort;
+
+        return $this;
+    }
+
+    /**
+     * Get fav3sort
+     *
+     * @return integer 
+     */
+    public function getFav3sort()
+    {
+        return $this->fav3sort;
+    }
+
+    /**
+     * Set fav4sort
+     *
+     * @param integer $fav4sort
+     * @return ScmChannel
+     */
+    public function setFav4sort($fav4sort)
+    {
+        $this->fav4sort = $fav4sort;
+
+        return $this;
+    }
+
+    /**
+     * Get fav4sort
+     *
+     * @return integer 
+     */
+    public function getFav4sort()
+    {
+        return $this->fav4sort;
+    }
+
+    /**
+     * Set fav5sort
+     *
+     * @param integer $fav5sort
+     * @return ScmChannel
+     */
+    public function setFav5sort($fav5sort)
+    {
+        $this->fav5sort = $fav5sort;
+
+        return $this;
+    }
+
+    /**
+     * Get fav5sort
+     *
+     * @return integer 
+     */
+    public function getFav5sort()
+    {
+        return $this->fav5sort;
+    }
 }

@@ -18,6 +18,21 @@ MM\SamyEditorBundle\Entity\ScmChannel:
         updatedAt:
             type: datetime
             nullable: true
+        fav1sort:
+            type: integer
+            nullable: true
+        fav2sort:
+            type: integer
+            nullable: true
+        fav3sort:
+            type: integer
+            nullable: true
+        fav4sort:
+            type: integer
+            nullable: true
+        fav5sort:
+            type: integer
+            nullable: true
     manyToOne:
         scmFile:
             targetEntity: ScmFile

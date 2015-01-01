@@ -14,11 +14,8 @@ class ScmFileController extends Controller
     {
         $em = $this->get('doctrine');
 
-        // load scmPackage
-        $scmPackage = $em->getRepository('MM\SamyEditorBundle\Entity\ScmPackage')->findOneBy(array('hash' => $hash));
-
         // load scmFile
-        $scmFile = $em->getRepository('MM\SamyEditorBundle\Entity\ScmFile')->find($scmFileId);
+        $scmFile = $em->getRepository('MM\SamyEditorBundle\Entity\ScmFile')->findAndValidateHash($scmFileId, $hash);
 
         // get filemetadata. if not found, its no valid file
         $fileMeta = $this->helperGetFileMetaByName($scmFile->getFilename());
@@ -26,17 +23,11 @@ class ScmFileController extends Controller
             throw new \Exception(sprintf('invalid scm-file=(%s)', $scmFile->getFilename()));
         }
 
-        // check if the requested file-id is allowed for the given hash
-        if ($scmFile->getScmPackage() != $scmPackage)
-        {
-            throw new \Exception('access not allowed');
-        }
-
         // load channels
         $scmChannels = $em->getRepository('MM\SamyEditorBundle\Entity\ScmChannel')->findChannelsByScmFile($scmFile);
 
-        return $this->render('MMSamyEditorBundle:ScmPackage:file.html.twig', array(
-            'scmPackage' => $scmPackage,
+        return $this->render('MMSamyEditorBundle:ScmFile:file.html.twig', array(
+            'scmPackage' => $scmFile->getScmPackage(),
             'scmFile' => $scmFile,
             'scmChannels' => $scmChannels,
             'scmFileMeta' => $fileMeta,
@@ -46,17 +37,8 @@ class ScmFileController extends Controller
     public function fileJsonAction($hash, $scmFileId) {
         $em = $this->get('doctrine');
 
-        // load scmPackage
-        $scmPackage = $em->getRepository('MM\SamyEditorBundle\Entity\ScmPackage')->findOneBy(array('hash' => $hash));
-
         // load scmFile
-        $scmFile = $em->getRepository('MM\SamyEditorBundle\Entity\ScmFile')->find($scmFileId);
-
-        // check if the requested file-id is allowed for the given hash
-        if ($scmFile->getScmPackage() != $scmPackage)
-        {
-            throw new \Exception('access not allowed');
-        }
+        $scmFile = $em->getRepository('MM\SamyEditorBundle\Entity\ScmFile')->findAndValidateHash($scmFileId, $hash);
 
         // load channels
         $scmChannels = $em->getRepository('MM\SamyEditorBundle\Entity\ScmChannel')->findChannelsByScmFile($scmFile);
@@ -67,6 +49,12 @@ class ScmFileController extends Controller
                 'channelId' => $scmChannel->getScmChannelId(),
                 'channelNo' => $scmChannel->getChannelNo(),
                 'name' => $scmChannel->getName(),
+                'fav1sort' => $scmChannel->getFav1sort(),
+                'fav2sort' => $scmChannel->getFav2sort(),
+                'fav3sort' => $scmChannel->getFav3sort(),
+                'fav4sort' => $scmChannel->getFav4sort(),
+                'fav5sort' => $scmChannel->getFav5sort(),
+                'options' => '',
             );
         }
         // json response
@@ -79,17 +67,8 @@ class ScmFileController extends Controller
     public function fileReorderAction($hash, $scmFileId) {
         $em = $this->get('doctrine');
 
-        // load scmPackage
-        $scmPackage = $em->getRepository('MM\SamyEditorBundle\Entity\ScmPackage')->findOneBy(array('hash' => $hash));
-
         // load scmFile
-        $scmFile = $em->getRepository('MM\SamyEditorBundle\Entity\ScmFile')->find($scmFileId);
-
-        // check if the requested file-id is allowed for the given hash
-        if ($scmFile->getScmPackage() != $scmPackage)
-        {
-            throw new \Exception('access not allowed');
-        }
+        $scmFile = $em->getRepository('MM\SamyEditorBundle\Entity\ScmFile')->findAndValidateHash($scmFileId, $hash);
 
         // reorder channels
         $scmOrderer = $this->get('mm_samy_editor.scm_orderer');
@@ -101,7 +80,6 @@ class ScmFileController extends Controller
 
         return $response;
     }
-
 
     /**
      * Embedded Controller um die Sidebar zu bauen
@@ -170,5 +148,80 @@ class ScmFileController extends Controller
         }
 
         return $supportedFiles[$filename];
+    }
+
+    public function favoritesAction($hash, $scmFileId, $favNo, Request $request)
+    {
+        $em = $this->get('doctrine')->getManager();
+
+        // load scmFile
+        $scmFile = $em->getRepository('MM\SamyEditorBundle\Entity\ScmFile')->findAndValidateHash($scmFileId, $hash);
+
+        // get all channels of this file
+        $scmChannels = $em->getRepository('MM\SamyEditorBundle\Entity\ScmChannel')->findChannelsByScmFile($scmFile, 'fav1sort');
+
+        // build data for multiple select
+        $selectData = array();
+        $selectedItems = array();
+        foreach ($scmChannels as $scmChannel) {
+            $selectData[$scmChannel->getScmChannelId()] = $scmChannel->getName();
+
+            if ($scmChannel->{'getFav' . $favNo . 'sort'}() > 0) {
+                $selectedItems[] = $scmChannel->getScmChannelId();
+            }
+        }
+
+        // build form
+        $defaultData = array();
+        $form = $this->createFormBuilder($defaultData)
+            ->add('channels', 'choice', array('multiple' => true, 'choices' => $selectData, 'data' => $selectedItems))
+            ->add('Save', 'submit')
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+
+            // reset all channels of this file and fav-list
+            $field = 'c.fav' . $favNo . 'sort';
+            $q = "UPDATE MM\SamyEditorBundle\Entity\ScmChannel c SET {$field} = -1 WHERE {$field} > 0 AND c.scmFile = :scmFile";
+            $em->createQuery($q)->setParameter('scmFile', $scmFile)->getResult();
+            $em->clear();
+
+            // update channels with new favorit sort
+            $sort = 1;
+            $data = $request->request->all();
+            foreach ($data['form']['channels'] as $scmChannelId) {
+                $scmChannel = $em->getRepository('MM\SamyEditorBundle\Entity\ScmChannel')->find($scmChannelId); // load channel
+                echo $scmChannel->getName() . '<br>';
+                $scmChannel->{'setFav' . $favNo . 'sort'}($sort); // set new sort
+                $em->persist($scmChannel);
+                $sort++;
+            }
+
+            $em->flush();
+
+            // user feedback
+            $request->getSession()->getFlashBag()->add(
+                'success',
+                'Favorites has been saved'
+            );
+
+            return $this->redirectToRoute('mm_samy_editor_scm_file_favorites', array(
+                'hash' => $scmFile->getScmPackage()->getHash(),
+                'scmFileId' => $scmFile->getScmFileId(),
+                'favNo' => $favNo
+            ));
+        }
+
+
+
+        return $this->render('MMSamyEditorBundle:ScmFile:favorites.html.twig', array(
+            'form' => $form->createView(),
+            'scmPackage' => $scmFile->getScmPackage(),
+            'scmFile' => $scmFile,
+            'scmChannels' => $scmChannels,
+            'favNo' => $favNo,
+        ));
     }
 }

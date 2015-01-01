@@ -10,7 +10,7 @@ class ScmChannelRepository extends EntityRepository
      *
      * @return array
      */
-    public function findChannelsByScmFile(ScmFile $scmFile)
+    public function findChannelsByScmFile(ScmFile $scmFile, $order = null)
     {
         $q = "SELECT
                 c
@@ -20,6 +20,7 @@ class ScmChannelRepository extends EntityRepository
                 c.scmFile = :scmFile AND
                 c.channelNo > 0
               ORDER BY
+                " . (isset($order) ? 'c.' . $order . ',' : '') . "
                 c.channelNo";
         $dq = $this->getEntityManager()->createQuery($q);
         $dq->setParameters(array('scmFile' => $scmFile));

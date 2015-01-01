@@ -94,6 +94,7 @@ class ScmPackageController extends Controller
         $navitems = array();
         foreach ($scmPackage->getFiles() as $scmFile) {
 
+            // get metadata of the file (by its name)
             $file = $this->helperGetFileMetaByName($scmFile->getFilename());
 
             // if the scmFile is not supported, we dont display it in the sidebar
@@ -101,15 +102,32 @@ class ScmPackageController extends Controller
                 continue;
             }
 
-            // supported scmFile, go on and generate the nav item
+            // generate the nav item
             $navitem = $file;
             $navitem['path'] = $this->generateUrl('mm_samy_editor_scm_file', array(
                 'hash' => $scmPackage->getHash(),
                 'scmFileId' => $scmFile->getScmFileId(),
             ));
             $navitem['channelCount'] = $this->getChannelCountByScmFile($scmFile);
-
             $navitems[] = $navitem;
+
+            // favorites
+            if ($navitem['channelCount'] > 0) {
+                for ($i = 1; $i <= 5; $i++) {
+                    $navitems[] = array(
+                        'path' => $this->generateUrl('mm_samy_editor_scm_file_favorites', array(
+                            'hash' => $scmPackage->getHash(),
+                            'scmFileId' => $scmFile->getScmFileId(),
+                            'favNo' => $i
+                        )),
+                        'label' => 'Favorites ' . $i,
+                        'icon' => 'fa-star',
+                        'channelCount' => $this->getFavoritesCountByScmFile($scmFile, $i)
+                    );
+                }
+            }
+
+
         }
 
         return $this->render('MMSamyEditorBundle:ScmPackage:sidebar.html.twig', array(
@@ -128,6 +146,21 @@ class ScmPackageController extends Controller
         $em = $this->get('doctrine')->getManager();
 
         $q = $em->createQuery('SELECT COUNT(c.channelNo) FROM MM\SamyEditorBundle\Entity\ScmChannel c WHERE c.scmFile = :scmFile AND c.channelNo > 0');
+        $q->setParameter('scmFile', $scmFile);
+        return (int)$q->getSingleScalarResult();
+    }
+
+    /**
+     * Calculates the channel count of a scmFile
+     *
+     * @param Entity\ScmFile $scmFile
+     * @return integer
+     */
+    public function getFavoritesCountByScmFile(Entity\ScmFile $scmFile, $favNo)
+    {
+        $em = $this->get('doctrine')->getManager();
+
+        $q = $em->createQuery("SELECT COUNT(c.channelNo) FROM MM\SamyEditorBundle\Entity\ScmChannel c WHERE c.scmFile = :scmFile AND c.channelNo > 0 AND c.fav{$favNo}sort > 0");
         $q->setParameter('scmFile', $scmFile);
         return (int)$q->getSingleScalarResult();
     }

@@ -1,0 +1,221 @@
+{% extends 'MMSamyEditorBundle:Layout:base.html.twig' %}
+
+{% block sidebar %}
+    {{ render(controller('MMSamyEditorBundle:ScmPackage:sidebar', {'scmPackage': scmPackage})) }}
+{% endblock %}
+{% block content %}
+    <h2><i class="fa {{ scmFileMeta.icon }}"></i> {{ scmFileMeta.label }}</h2>
+
+    <ul class="button-group">
+        <li><a href="#" class="button" id="reorder-channels">Reorder Channel-Nos (without gap)</a></li>
+    </ul>
+
+    <table role="grid" class="data channels">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>No.</td>
+                <td>Name</td>
+                <td>Fav1</td>
+                <td>Fav2</td>
+                <td>Fav3</td>
+                <td>Fav4</td>
+                <td>Fav5</td>
+                <td>Options</td>
+            </tr>
+        </thead>
+    </table>
+    <style>
+        table.channels {
+            border-collapse: collapse;
+        }
+        table.channels input {
+            border-color: transparent;
+            background: transparent;
+            box-shadow: none;
+            margin-bottom: 0;
+        }
+        table.channels tbody td {
+            padding: 5px;
+        }
+        table.channels td.number {
+            width: 80px;
+        }
+        table.channels .save {
+            display: none;
+        }
+        table.channels tr.active-row input,
+        table.channels tbody tr:hover input {
+            background: #fff;
+        }
+        table.channels tr.active-row,
+        table.channels tbody tr:hover {
+            background: #92ddd7;
+        }
+        table.channels tr.active-row .save {
+            display: inline;
+        }
+        table.channels tr.active-row .edit {
+            display: none;
+        }
+        table.channels td.bool {
+            text-align: center;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+
+            var dataTable = $('.data').dataTable({
+                "paging": false, // disable paging
+                "ordering": false, // disable ordering
+                "ajax": "{{ path('mm_samy_editor_scm_file_json', {'hash': scmPackage.hash, 'scmFileId': scmFile.scmFileId}) }}",
+                "columns": [
+                    { "data": "channelId", "visible": false},
+                    {
+                        "data": "channelNo",
+                        className: "number",
+                        render: function ( data, type, row ) {
+                            return '<input type="number" name="channelNo" value="' + data + '" style="width: 75px;">';
+                        }
+                    },
+                    {
+                        "data": "name",
+                        render: function ( data, type, row ) {
+                            switch (type) {
+                                case 'filter':
+                                    return data;
+
+                                default:
+                                    return '<input type="text" name="name" value="' + data + '">';
+                            }
+                        }
+                    },
+                    {
+                        data: "fav1sort",
+                        className: "bool",
+                        render: function ( data, type, row ) {
+                            return data > 0 ? '<i class="fa fa-check"></i>' : '';
+                        }
+                    },
+                    {
+                        "data": "fav2sort",
+                        className: "bool",
+                        render: function ( data, type, row ) {
+                            return data > 0 ? '<i class="fa fa-check"></i>' : '';
+                        }
+                    },
+                    {
+                        "data": "fav3sort",
+                        className: "bool",
+                        render: function ( data, type, row ) {
+                            return data > 0 ? '<i class="fa fa-check"></i>' : '';
+                        }
+                    },
+                    {
+                        "data": "fav4sort",
+                        className: "bool",
+                        render: function ( data, type, row ) {
+                            return data > 0 ? '<i class="fa fa-check"></i>' : '';
+                        }
+                    },
+                    {
+                        "data": "fav5sort",
+                        className: "bool",
+                        render: function ( data, type, row ) {
+                            return data > 0 ? '<i class="fa fa-check"></i>' : '';
+                        }
+                    },
+                    {
+                        "data": "options",
+                        render: function (data, type, row) {
+                            return '<button class="edit button tiny">Edit</button><button class="save tiny alert">save</button>';
+                        }
+                    }
+                ]
+            });
+
+            // set placeholder for search and remove "search" string (looks cleaner)
+            $('input[type=search]').attr("placeholder", "search...");
+            $(".dataTables_filter label").contents().filter(function(){return this.nodeType !== 1;}).remove();
+
+            // activate row on focus
+            dataTable.on('focus', 'input, button.save', function(event) {
+                $(this).parents('tr').addClass('active-row');
+            });
+            dataTable.on('blur', 'input, button.save', function(event) {
+                $(this).parents('tr').removeClass('active-row');
+            });
+
+            // Keyboard navigation
+            dataTable.on('keydown', 'input', function(event) {
+                var ARROW_LEFT = 37, ARROW_UP = 38, ARROW_RIGHT = 39, ARROW_DOWN = 40, ENTER = 13, ESC = 27, TAB = 9;
+
+                // ENTER = SUBMIT
+                if (event.which == ENTER) {
+                    $(this).parents('tr').find('button.save').click();
+                }
+
+                // ARROW_DOWN = move down
+                if (event.which == ARROW_DOWN) {
+                    var index = $(this).parents('td').index() + 1;
+                    $(this).parents('tr').next().find('td:nth-child(' + index + ')').find('input').focus();
+
+                    return false;
+                }
+
+                // ARROW_UP = move UP
+                if (event.which == ARROW_UP) {
+                    var index = $(this).parents('td').index() + 1;
+                    $(this).parents('tr').prev().find('td:nth-child(' + index + ')').find('input').focus();
+
+                    return false;
+                }
+
+                // ESC
+                if (event.which == ESC) {
+                    $(this).blur();
+                }
+            });
+
+            // edit action
+            dataTable.on('click', 'button.edit', function($event) {
+                // get TR
+                var TR = $(this).parents('tr').find('input:first').focus();
+            });
+
+            // Save action
+            dataTable.on('click', 'button.save', function(event) {
+                // get TR
+                var TR = $(this).parents('tr');
+
+                // get whole row
+                var rowData = dataTable.api().row(TR).data();
+
+                // build ajax url data gets send to
+                var urlTemplate = "{{ path('mm_samy_editor_scm_channel', {'hash': scmPackage.hash, 'scmChannelId': 'placeholder'}) }}";
+                var url = urlTemplate.replace("placeholder", rowData.channelId);
+
+                // build formdata
+                var formData = {};
+                $('input', $(TR)).each(function() {
+                    formData[$(this).attr('name')] = $(this).val();
+                });
+
+                // submit data to server
+                $.post(url, {
+                    'form': formData
+                }, function() {
+                    dataTable.fnReloadAjax();
+                });
+            });
+
+            $("#reorder-channels").on('click', function() {
+                $.get("{{ path('mm_samy_editor_scm_file_reorder', {'hash': scmPackage.hash, 'scmFileId': scmFile.scmFileId}) }}", function() {
+                    dataTable.fnReloadAjax();
+                });
+            });
+
+            $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
+        });
+    </script>
+{% endblock %}
