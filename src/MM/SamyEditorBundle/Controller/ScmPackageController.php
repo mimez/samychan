@@ -12,10 +12,18 @@ class ScmPackageController extends Controller
 {
     public function uploadAction(Request $request)
     {
+
+        // get supported series
+        $supportedSeries = $this->get('mm_samy_editor.scm_config')->getSupportedSeries();
+        $seriesSelector = array('auto' => 'Auto');
+        foreach ($supportedSeries as $series) {
+            $seriesSelector[$series] = $series . '-Series';
+        }
+
         $defaultData = array();
         $form = $this->createFormBuilder($defaultData, array('csrf_protection' => false))
             ->add('file', 'file')
-            ->add('series', 'choice', array('choices' => array('auto' => 'Auto', 'H' => 'H-Series'), 'required' => false))
+            ->add('series', 'choice', array('choices' => $seriesSelector, 'required' => false))
             ->add('send', 'submit')
             ->getForm();
 
@@ -110,24 +118,21 @@ class ScmPackageController extends Controller
             ));
             $navitem['channelCount'] = $this->getChannelCountByScmFile($scmFile);
             $navitems[] = $navitem;
-
-            // favorites
-            if ($navitem['channelCount'] > 0) {
-                for ($i = 1; $i <= 5; $i++) {
-                    $navitems[] = array(
-                        'path' => $this->generateUrl('mm_samy_editor_scm_file_favorites', array(
-                            'hash' => $scmPackage->getHash(),
-                            'scmFileId' => $scmFile->getScmFileId(),
-                            'favNo' => $i
-                        )),
-                        'label' => 'Favorites ' . $i,
-                        'icon' => 'fa-star',
-                        'channelCount' => $this->getFavoritesCountByScmFile($scmFile, $i)
-                    );
-                }
-            }
+        }
 
 
+        // add favorites
+        // favorites
+        for ($i = 1; $i <= 5; $i++) {
+            $navitems[] = array(
+                'path' => $this->generateUrl('mm_samy_editor_scm_favorites', array(
+                    'hash' => $scmPackage->getHash(),
+                    'favNo' => $i
+                )),
+                'label' => 'Favorites ' . $i,
+                'icon' => 'fa-star',
+                'channelCount' => $this->getFavoritesCountByScmPackage($scmPackage, $i)
+            );
         }
 
         return $this->render('MMSamyEditorBundle:ScmPackage:sidebar.html.twig', array(
@@ -156,12 +161,12 @@ class ScmPackageController extends Controller
      * @param Entity\ScmFile $scmFile
      * @return integer
      */
-    public function getFavoritesCountByScmFile(Entity\ScmFile $scmFile, $favNo)
+    public function getFavoritesCountByScmPackage(Entity\ScmPackage $scmPackage, $favNo)
     {
         $em = $this->get('doctrine')->getManager();
 
-        $q = $em->createQuery("SELECT COUNT(c.channelNo) FROM MM\SamyEditorBundle\Entity\ScmChannel c WHERE c.scmFile = :scmFile AND c.channelNo > 0 AND c.fav{$favNo}sort > 0");
-        $q->setParameter('scmFile', $scmFile);
+        $q = $em->createQuery("SELECT COUNT(c.channelNo) FROM MM\SamyEditorBundle\Entity\ScmChannel c JOIN c.scmFile f WHERE f.scmPackage = :scmPackage AND c.channelNo > 0 AND c.fav{$favNo}sort > 0");
+        $q->setParameter('scmPackage', $scmPackage);
         return (int)$q->getSingleScalarResult();
     }
 

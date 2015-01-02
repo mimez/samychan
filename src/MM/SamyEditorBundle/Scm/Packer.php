@@ -13,6 +13,27 @@ class Packer {
     protected $doctrine;
 
     /**
+     * @var Configuration
+     */
+    protected $configuration;
+
+    /**
+     * @return Configuration
+     */
+    public function getConfiguration()
+    {
+        return $this->configuration;
+    }
+
+    /**
+     * @param Configuration $configuration
+     */
+    public function setConfiguration($configuration)
+    {
+        $this->configuration = $configuration;
+    }
+
+    /**
      * @return \Symfony\Bridge\Doctrine\RegistryInterface
      */
     public function getDoctrine()
@@ -33,9 +54,10 @@ class Packer {
      *
      * @param ScmPackage $scmPackage
      */
-    public function __construct(\Symfony\Bridge\Doctrine\RegistryInterface $doctrine)
+    public function __construct(\Symfony\Bridge\Doctrine\RegistryInterface $doctrine, Configuration $configuration)
     {
         $this->setDoctrine($doctrine);
+        $this->setConfiguration($configuration);
     }
 
     /**
@@ -87,7 +109,7 @@ class Packer {
         }
 
         // load Config
-        $fileConfig = $this->getConfigBySeries($scmFile->getScmPackage()->getSeries());
+        $fileConfig = $this->getConfiguration()->getConfigBySeries($scmFile->getScmPackage()->getSeries());
         $fileConfig = $fileConfig[$scmFile->getFilename()];
 
         // update binary data of the channel and return the whole data
@@ -170,36 +192,5 @@ class Packer {
         $checksum = str_pad($checksum, 2, '0', STR_PAD_LEFT);
 
         return hex2bin($checksum);
-    }
-
-    /**
-     * config by series
-     *
-     * @param $series
-     * @return mixed
-     * @throws \Exception
-     */
-    protected function getConfigBySeries($series) {
-        $config = $this->getConfig();
-        if (!isset($config[$series])) {
-            throw new \Exception(sprintf('requested config for series=(%s) does not exist', $series));
-        }
-
-        return $config[$series];
-    }
-
-    /**
-     * get Configuration
-     *
-     * @return mixed
-     */
-    protected function getConfig()
-    {
-        if (!isset($channelParserConfig)) {
-            $yaml = new Yaml\Parser();
-            $value = $yaml->parse(file_get_contents(__DIR__ . '/../Resources/config/channel_format.yml'));
-        }
-
-        return $value['channel_format'];
     }
 }

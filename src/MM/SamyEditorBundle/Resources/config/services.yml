@@ -1,9 +1,10 @@
 services:
     mm_samy_editor.scm_parser:
         class: MM\SamyEditorBundle\Scm\Parser
+        arguments: ["@mm_samy_editor.scm_config"]
     mm_samy_editor.scm_packer:
         class: MM\SamyEditorBundle\Scm\Packer
-        arguments: ["@doctrine"]
+        arguments: ["@doctrine", "@mm_samy_editor.scm_config"]
     mm_samy_editor.scm_orderer:
         class: MM\SamyEditorBundle\Scm\Orderer
         arguments: ["@doctrine"]
@@ -13,3 +14,6 @@ services:
     mm_samy_editor.scm_favorite_manager:
         class: MM\SamyEditorBundle\Scm\FavoriteManager
         arguments: ["@doctrine"]
+    mm_samy_editor.scm_config:
+        class: MM\SamyEditorBundle\Scm\Configuration
+        arguments: ["@kernel"]

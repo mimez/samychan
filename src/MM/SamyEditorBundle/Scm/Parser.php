@@ -5,46 +5,38 @@ namespace MM\SamyEditorBundle\Scm;
 use MM\SamyEditorBundle\Entity\ScmChannel;
 use MM\SamyEditorBundle\Entity\ScmPackage;
 use MM\SamyEditorBundle\Entity\ScmFile;
-use Symfony\Component\Yaml;
 
 class Parser {
 
-    protected $channelParserConfig;
+    /**
+     * @var Configuration
+     */
+    protected $configuration;
 
-/*= array(
-        'D' => array(
-            'map-CableD' => array(
-                'byte_length' => '320',
-                'unpack_format' => 'S1ChannelNo/@64/A200Label'
-            ),
-            'map-SateD' => array(
-                'byte_length' => '172',
-                'unpack_format' => 'S1ChannelNo/@36/A100Label'
-            ),
-            'map-AstraHDPlusD' => array(
-                'byte_length' => '212',
-                'unpack_format' => 'S1ChannelNo/@48/A100Label'
-            )
-        ),
-        'H' => array(
-            'map-CableD' => array(
-                'byte_length' => '320',
-                'unpack_format' => 'S1ChannelNo/@64/A200Label/@262'
-            ),
-            'map-SateD' => array(
-                'byte_length' => '168',
-                'unpack_format' => 'S1ChannelNo/@36/A100Label'
-            ),
-            'map-AstraHDPlusD' => array(
-                'byte_length' => '212',
-                'unpack_format' => 'S1ChannelNo/@48/A100Label'
-            )
-        ),
-    );*/
-
-    public function loadFromPath($path)
+    /**
+     * @return Configuration
+     */
+    public function getConfiguration()
     {
+        return $this->configuration;
+    }
 
+    /**
+     * @param Configuration $configuration
+     */
+    public function setConfiguration($configuration)
+    {
+        $this->configuration = $configuration;
+    }
+
+    /**
+     * Constructor
+     *
+     * @param Configuration $configuration
+     */
+    public function __construct(Configuration $configuration)
+    {
+        $this->setConfiguration($configuration);
     }
 
     /**
@@ -61,7 +53,7 @@ class Parser {
         $series = isset($series) ? $series : $this->detectSeries($zip);
 
         // each series has a own config
-        $config = $this->getConfigBySeries($series);
+        $config = $this->getConfiguration()->getConfigBySeries($series);
 
         // create base scm-package
         $scmPackage = new ScmPackage();
@@ -204,36 +196,5 @@ class Parser {
         }
 
         return $zip;
-    }
-
-    /**
-     * config by series
-     *
-     * @param $series
-     * @return mixed
-     * @throws \Exception
-     */
-    protected function getConfigBySeries($series) {
-        $config = $this->getConfig();
-        if (!isset($config[$series])) {
-            throw new \Exception(sprintf('requested config for series=(%s) does not exist', $series));
-        }
-
-        return $config[$series];
-    }
-
-    /**
-     * get Configuration
-     *
-     * @return mixed
-     */
-    protected function getConfig()
-    {
-        if (!isset($channelParserConfig)) {
-            $yaml = new Yaml\Parser();
-            $value = $yaml->parse(file_get_contents(__DIR__ . '/../Resources/config/channel_format.yml'));
-        }
-
-        return $value['channel_format'];
     }
 }

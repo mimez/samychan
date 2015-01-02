@@ -27,4 +27,28 @@ class ScmChannelRepository extends EntityRepository
 
         return $dq->getResult();
     }
+
+    /**
+     * @param ScmPackage $scmPackage
+     *
+     * @return array
+     */
+    public function findChannelsByScmPackage(ScmPackage $scmPackage, $order = null)
+    {
+        $q = "SELECT
+                c
+              FROM
+                MM\SamyEditorBundle\Entity\ScmChannel c
+                JOIN c.scmFile f
+              WHERE
+                f.scmPackage = :scmPackage AND
+                c.channelNo > 0
+              ORDER BY
+                " . (isset($order) ? 'c.' . $order . ',' : '') . "
+                c.channelNo";
+        $dq = $this->getEntityManager()->createQuery($q);
+        $dq->setParameters(array('scmPackage' => $scmPackage));
+
+        return $dq->getResult();
+    }
 }

@@ -1,6 +1,22 @@
-channel_format:
-    H:
-        map-CableD:
+scm_config:
+    series:
+        E:
+            map-CableD: CableD-320
+            map-AirA: AirA-64
+            map-SateD: SateD-168
+            map-AstraHDPlusD: AstraHDPlusD-212
+        F:
+            map-CableD: CableD-320
+            map-AirA: AirA-64
+            map-SateD: SateD-168
+            map-AstraHDPlusD: AstraHDPlusD-212
+        H:
+            map-CableD: CableD-320
+            map-AirA: AirA-64
+            map-SateD: SateD-168
+            map-AstraHDPlusD: AstraHDPlusD-212
+    file_formats:
+        CableD-320:
             byte_length: 320
             fields:
                 channelNo:
@@ -31,7 +47,38 @@ channel_format:
                     offset: 308
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-        map-SateD:
+        AirA-64:
+            byte_length: 64
+            fields:
+                channelNo:
+                    offset: 9
+                    length: 2
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger16
+                name:
+                    offset: 20
+                    length: 10
+                    type: MM\SamyEditorBundle\Scm\DataType\String
+                fav1sort:
+                    offset: 36
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                fav2sort:
+                    offset: 40
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                fav3sort:
+                    offset: 44
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                fav4sort:
+                    offset: 48
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                fav5sort:
+                    offset: 52
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+        SateD-168:
             byte_length: 168
             fields:
                 channelNo:
@@ -42,14 +89,54 @@ channel_format:
                     offset: 36
                     length: 100
                     type: MM\SamyEditorBundle\Scm\DataType\String
-        map-AstraHDPlusD:
+                fav1sort:
+                    offset: 140
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                fav2sort:
+                    offset: 144
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                fav3sort:
+                    offset: 148
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                fav4sort:
+                    offset: 152
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                fav5sort:
+                    offset: 156
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+        AstraHDPlusD-212:
             byte_length: 212
             fields:
                 channelNo:
                     offset: 0
                     length: 2
-                    type: integer
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger16
                 name:
                     offset: 48
                     length: 100
-                    type: string
+                    type: MM\SamyEditorBundle\Scm\DataType\String
+                fav1sort:
+                    offset: 184
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                fav2sort:
+                    offset: 188
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                fav3sort:
+                    offset: 192
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                fav4sort:
+                    offset: 196
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                fav5sort:
+                    offset: 200
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
