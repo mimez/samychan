@@ -25,6 +25,7 @@ scm_config:
                     length: 2
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger16
                     editable: true
+                    saveable: true;
                     rendering:
                         render: editable
                         className: number
@@ -34,6 +35,7 @@ scm_config:
                     length: 100
                     type: MM\SamyEditorBundle\Scm\DataType\String
                     editable: true
+                    saveable: true;
                     rendering:
                         render: editable
                 vpid:
@@ -89,6 +91,7 @@ scm_config:
                     offset: 292
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
                     rendering:
                         render: boolean
                         className: bool
@@ -97,6 +100,7 @@ scm_config:
                     offset: 296
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
                     rendering:
                         render: boolean
                         className: bool
@@ -105,6 +109,7 @@ scm_config:
                     offset: 300
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
                     rendering:
                         render: boolean
                         className: bool
@@ -113,6 +118,7 @@ scm_config:
                     offset: 304
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
                     rendering:
                         render: boolean
                         className: bool
@@ -121,6 +127,7 @@ scm_config:
                     offset: 308
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
                     rendering:
                         render: boolean
                         className: bool
@@ -164,6 +171,7 @@ scm_config:
                     length: 2
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger16
                     editable: true
+                    saveable: true;
                     rendering:
                         render: editable
                         className: number
@@ -173,6 +181,7 @@ scm_config:
                     length: 100
                     type: MM\SamyEditorBundle\Scm\DataType\String
                     editable: true
+                    saveable: true;
                     rendering:
                         render: editable
                 vpid:
@@ -217,6 +226,7 @@ scm_config:
                     offset: 140
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
                     rendering:
                         render: boolean
                         className: bool
@@ -225,6 +235,7 @@ scm_config:
                     offset: 144
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
                     rendering:
                         render: boolean
                         className: bool
@@ -233,6 +244,7 @@ scm_config:
                     offset: 148
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
                     rendering:
                         render: boolean
                         className: bool
@@ -241,6 +253,7 @@ scm_config:
                     offset: 152
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
                     rendering:
                         render: boolean
                         className: bool
@@ -249,6 +262,7 @@ scm_config:
                     offset: 156
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
                     rendering:
                         render: boolean
                         className: bool
@@ -261,6 +275,7 @@ scm_config:
                     length: 2
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger16
                     editable: true
+                    saveable: true;
                     rendering:
                         render: editable
                         className: number
@@ -270,6 +285,7 @@ scm_config:
                     length: 100
                     type: MM\SamyEditorBundle\Scm\DataType\String
                     editable: true
+                    saveable: true;
                     rendering:
                         render: editable
                 vpid:
@@ -314,6 +330,7 @@ scm_config:
                     offset: 184
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
                     rendering:
                         render: boolean
                         className: bool
@@ -322,6 +339,7 @@ scm_config:
                     offset: 188
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
                     rendering:
                         render: boolean
                         className: bool
@@ -330,6 +348,7 @@ scm_config:
                     offset: 192
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
                     rendering:
                         render: boolean
                         className: bool
@@ -338,6 +357,7 @@ scm_config:
                     offset: 196
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
                     rendering:
                         render: boolean
                         className: bool
@@ -346,6 +366,7 @@ scm_config:
                     offset: 200
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
                     rendering:
                         render: boolean
                         className: bool

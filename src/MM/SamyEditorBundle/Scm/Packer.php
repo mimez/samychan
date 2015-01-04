@@ -146,7 +146,7 @@ class Packer {
         foreach ($fileConfig['fields'] as $fieldName => $fieldConfig) {
 
             // update only editable fields
-            if (!isset($fieldConfig['editable']) || $fieldConfig['editable'] == false) {
+            if (!isset($fieldConfig['saveable']) || $fieldConfig['saveable'] == false) {
                 continue;
             }
 
