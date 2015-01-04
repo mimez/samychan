@@ -26,11 +26,16 @@ class ScmFileController extends Controller
         // load channels
         $scmChannels = $em->getRepository('MM\SamyEditorBundle\Entity\ScmChannel')->findChannelsByScmFile($scmFile);
 
+        // load fields from config
+        $config = $this->get('mm_samy_editor.scm_config')->getConfigBySeries($scmFile->getScmPackage()->getSeries());
+        $fields = $config[$scmFile->getFilename()]['fields'];
+
         return $this->render('MMSamyEditorBundle:ScmFile:file.html.twig', array(
             'scmPackage' => $scmFile->getScmPackage(),
             'scmFile' => $scmFile,
             'scmChannels' => $scmChannels,
             'scmFileMeta' => $fileMeta,
+            'fields' => $fields,
         ));
     }
 
@@ -43,19 +48,24 @@ class ScmFileController extends Controller
         // load channels
         $scmChannels = $em->getRepository('MM\SamyEditorBundle\Entity\ScmChannel')->findChannelsByScmFile($scmFile);
 
+        // load fields from config
+        $config = $this->get('mm_samy_editor.scm_config')->getConfigBySeries($scmFile->getScmPackage()->getSeries());
+        $fieldsConfig = $config[$scmFile->getFilename()]['fields'];
+
         $data = array();
         foreach ($scmChannels as $scmChannel) {
-            $data[] = array(
+            $field = array(
                 'channelId' => $scmChannel->getScmChannelId(),
-                'channelNo' => $scmChannel->getChannelNo(),
-                'name' => $scmChannel->getName(),
-                'fav1sort' => $scmChannel->getFav1sort(),
-                'fav2sort' => $scmChannel->getFav2sort(),
-                'fav3sort' => $scmChannel->getFav3sort(),
-                'fav4sort' => $scmChannel->getFav4sort(),
-                'fav5sort' => $scmChannel->getFav5sort(),
                 'options' => '',
+                'orgChannelNo' => $scmChannel->getChannelNo(),
             );
+
+            foreach ($fieldsConfig as $name => $fieldConfig) {
+                $field[$name] = $scmChannel->{'get' . ucfirst($name)}();
+            }
+
+            $data[] = $field;
+
         }
         // json response
         $response = new Response(json_encode(array('data' => $data)));

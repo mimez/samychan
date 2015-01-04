@@ -304,4 +304,172 @@ class ScmChannel
     {
         return $this->fav5sort;
     }
+    /**
+     * @var integer
+     */
+    private $vpid;
+
+    /**
+     * @var integer
+     */
+    private $pcr;
+
+    /**
+     * @var integer
+     */
+    private $sid;
+
+    /**
+     * @var integer
+     */
+    private $symbolRate;
+
+    /**
+     * @var string
+     */
+    private $serviceType;
+
+
+    /**
+     * Set vpid
+     *
+     * @param integer $vpid
+     * @return ScmChannel
+     */
+    public function setVpid($vpid)
+    {
+        $this->vpid = $vpid;
+
+        return $this;
+    }
+
+    /**
+     * Get vpid
+     *
+     * @return integer 
+     */
+    public function getVpid()
+    {
+        return $this->vpid;
+    }
+
+    /**
+     * Set pcr
+     *
+     * @param integer $pcr
+     * @return ScmChannel
+     */
+    public function setPcr($pcr)
+    {
+        $this->pcr = $pcr;
+
+        return $this;
+    }
+
+    /**
+     * Get pcr
+     *
+     * @return integer 
+     */
+    public function getPcr()
+    {
+        return $this->pcr;
+    }
+
+    /**
+     * Set sid
+     *
+     * @param integer $sid
+     * @return ScmChannel
+     */
+    public function setSid($sid)
+    {
+        $this->sid = $sid;
+
+        return $this;
+    }
+
+    /**
+     * Get sid
+     *
+     * @return integer 
+     */
+    public function getSid()
+    {
+        return $this->sid;
+    }
+
+    /**
+     * Set symbolRate
+     *
+     * @param integer $symbolRate
+     * @return ScmChannel
+     */
+    public function setSymbolRate($symbolRate)
+    {
+        $this->symbolRate = $symbolRate;
+
+        return $this;
+    }
+
+    /**
+     * Get symbolRate
+     *
+     * @return integer 
+     */
+    public function getSymbolRate()
+    {
+        return $this->symbolRate;
+    }
+
+    /**
+     * Set serviceType
+     *
+     * @param string $serviceType
+     * @return ScmChannel
+     */
+    public function setServiceType($serviceType)
+    {
+        $this->serviceType = $serviceType;
+
+        return $this;
+    }
+
+    /**
+     * Get serviceType
+     *
+     * @return string 
+     */
+    public function getServiceType()
+    {
+        return $this->serviceType;
+    }
+    /**
+     * @var boolean
+     */
+    private $encrypted;
+
+
+    /**
+     * Set encrypted
+     *
+     * @param boolean $encrypted
+     * @return ScmChannel
+     */
+    public function setEncrypted($encrypted)
+    {
+        $this->encrypted = $encrypted;
+
+        return $this;
+    }
+
+    /**
+     * Get encrypted
+     *
+     * @return boolean 
+     */
+    public function getEncrypted()
+    {
+        return $this->encrypted;
+    }
 }

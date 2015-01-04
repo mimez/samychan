@@ -145,6 +145,11 @@ class Packer {
         // iterate over fields and write the new value of each into the binaryString
         foreach ($fileConfig['fields'] as $fieldName => $fieldConfig) {
 
+            // update only editable fields
+            if (!isset($fieldConfig['editable']) || $fieldConfig['editable'] == false) {
+                continue;
+            }
+
             // get value from entity
             $fieldValue = $scmChannel->{'get' . ucfirst($fieldName)}();
 

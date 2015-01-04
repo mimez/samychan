@@ -11,6 +11,24 @@ MM\SamyEditorBundle\Entity\ScmChannel:
     fields:
         channelNo:
             type: integer
+        vpid:
+            type: integer
+            nullable: true
+        pcr:
+            type: integer
+            nullable: true
+        sid:
+            type: integer
+            nullable: true
+        symbolRate:
+            type: integer
+            nullable: true
+        serviceType:
+            type: string
+            nullable: true
+        encrypted:
+            type: boolean
+            nullable: true
         name:
             type: string
         data:

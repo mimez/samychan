@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use MM\SamyEditorBundle\Scm;
 use MM\SamyEditorBundle\Entity;
+use Symfony\Component\HttpFoundation\Response;
 
 class ScmChannelController extends Controller
 {
@@ -19,7 +20,6 @@ class ScmChannelController extends Controller
         $form = $this->createFormBuilder($scmChannel, array('csrf_protection' => false))
             ->add('channelNo', 'integer')
             ->add('name', 'text')
-            ->add('save', 'submit')
             ->getForm();
 
         $form->handleRequest($request);
@@ -27,36 +27,19 @@ class ScmChannelController extends Controller
         if ($form->isValid()) {
             $em->getConnection()->beginTransaction();
 
-            // read old channelNo (a bit stupid, old value is not reachable via entity
-            $q = "SELECT c.channelNo FROM MM\SamyEditorBundle\Entity\ScmChannel c WHERE c.scm_channel_id = :scmChannelId";
-            $oldChannelNo = $this->get('doctrine')->getManager()->createQuery($q)
-                ->setParameter('scmChannelId', $scmChannel->getScmChannelId())
-                ->getSingleScalarResult();
-
             // save the channel
             $data = $form->getData();
             $data->setUpdatedAt(new \DateTime());
             $em->persist($data);
             $em->flush();
 
-            // reorder channels if necessary
-            /*$scmOrderer = $this->get('mm_samy_editor.scm_orderer');
-            $scmOrderer->reorderChannels(
-                $scmChannel->getScmFile(),
-                ($oldChannelNo - $data->getChannelNo()) > 0 ? 'bottomup' : 'topdown'
-            );*/
-
             $em->getConnection()->commit();
 
-            $request->getSession()->getFlashBag()->add(
-                'success',
-                'Channel successfully saved'
-            );
+            // json response
+            $response = new Response(json_encode(array('response' => 'success')));
+            $response->headers->set('Content-Type', 'application/json');
 
-            return $this->redirectToRoute('mm_samy_editor_scm_channel', array(
-                'hash' => $scmPackage->getHash(),
-                'scmChannelId' => $scmChannel->getScmChannelId()
-            ));
+            return $response;
         }
 
         return $this->render('MMSamyEditorBundle:ScmPackage:channel.html.twig', array(
