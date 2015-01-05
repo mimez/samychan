@@ -1,22 +1,98 @@
 scm_config:
     series:
+        D:
+            map-CableD: CableD-320
+            map-AirA: AirA-64
+            map-AirD: AirD-320
+            map-SateD: SateD-172
+            map-AstraHDPlusD: AstraHDPlusD-212
         E:
             map-CableD: CableD-320
             map-AirA: AirA-64
+            map-AirD: AirD-320
             map-SateD: SateD-168
             map-AstraHDPlusD: AstraHDPlusD-212
         F:
             map-CableD: CableD-320
             map-AirA: AirA-64
+            map-AirD: AirD-320
             map-SateD: SateD-168
             map-AstraHDPlusD: AstraHDPlusD-212
         H:
             map-CableD: CableD-320
             map-AirA: AirA-64
+            map-AirD: AirD-320
             map-SateD: SateD-168
             map-AstraHDPlusD: AstraHDPlusD-212
     file_formats:
-        CableD-320:
+        AirA-64:
+            byte_length: 64
+            fields:
+                channelNo:
+                    label: No
+                    offset: 9
+                    length: 2
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger16
+                    editable: true
+                    saveable: true;
+                    rendering:
+                        render: editable
+                        className: number
+                name:
+                    label: Name
+                    offset: 20
+                    length: 10
+                    type: MM\SamyEditorBundle\Scm\DataType\String
+                    editable: true
+                    saveable: true;
+                    rendering:
+                        render: editable
+                fav1sort:
+                    label: F1
+                    offset: 36
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
+                    rendering:
+                        render: boolean
+                        className: bool
+                fav2sort:
+                    label: F2
+                    offset: 40
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
+                    rendering:
+                        render: boolean
+                        className: bool
+                fav3sort:
+                    label: F3
+                    offset: 44
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
+                    rendering:
+                        render: boolean
+                        className: bool
+                fav4sort:
+                    label: F4
+                    offset: 48
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
+                    rendering:
+                        render: boolean
+                        className: bool
+                fav5sort:
+                    label: F5
+                    offset: 52
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
+                    rendering:
+                        render: boolean
+                        className: bool
+        AirD-320:
             byte_length: 320
             fields:
                 channelNo:
@@ -59,10 +135,6 @@ scm_config:
                     type: MM\SamyEditorBundle\Scm\DataType\UnsignedInteger16
                     rendering:
                         className: number
-                #modulation:
-                #    offset: 12
-                #    length: 1
-                #    type: MM\SamyEditorBundle\Scm\DataType\Modulation
                 serviceType:
                     label: Type
                     offset: 15
@@ -131,39 +203,223 @@ scm_config:
                     rendering:
                         render: boolean
                         className: bool
-        AirA-64:
-            byte_length: 64
+        CableD-320:
+            byte_length: 320
             fields:
                 channelNo:
-                    offset: 9
+                    label: No
+                    offset: 0
                     length: 2
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger16
+                    editable: true
+                    saveable: true;
+                    rendering:
+                        render: editable
+                        className: number
                 name:
-                    offset: 20
-                    length: 10
+                    label: Name
+                    offset: 64
+                    length: 100
                     type: MM\SamyEditorBundle\Scm\DataType\String
+                    editable: true
+                    saveable: true;
+                    rendering:
+                        render: editable
+                vpid:
+                    label: VPID
+                    offset: 2
+                    length: 2
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger16
+                    rendering:
+                        className: number
+                pcr:
+                    label: PCR
+                    offset: 4
+                    length: 2
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger16
+                    rendering:
+                        className: number
+                sid:
+                    label: SID
+                    offset: 6
+                    length: 2
+                    type: MM\SamyEditorBundle\Scm\DataType\UnsignedInteger16
+                    rendering:
+                        className: number
+                serviceType:
+                    label: Type
+                    offset: 15
+                    length: 1
+                    type: MM\SamyEditorBundle\Scm\DataType\ServiceType
+                    rendering:
+                        className: number
+                        render: serviceType
+                symbolRate:
+                    label: Symbolrate
+                    offset: 28
+                    length: 2
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger16
+                    rendering:
+                        className: small
+                encrypted:
+                    label: Crypt
+                    offset: 24
+                    length: 1
+                    type: MM\SamyEditorBundle\Scm\DataType\Boolean
+                    rendering:
+                        className: bool
+                        render: boolean
                 fav1sort:
-                    offset: 36
+                    label: F1
+                    offset: 292
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
+                    rendering:
+                        render: boolean
+                        className: bool
                 fav2sort:
-                    offset: 40
+                    label: F2
+                    offset: 296
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
+                    rendering:
+                        render: boolean
+                        className: bool
                 fav3sort:
-                    offset: 44
+                    label: F3
+                    offset: 300
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
+                    rendering:
+                        render: boolean
+                        className: bool
                 fav4sort:
-                    offset: 48
+                    label: F4
+                    offset: 304
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
+                    rendering:
+                        render: boolean
+                        className: bool
                 fav5sort:
-                    offset: 52
+                    label: F5
+                    offset: 308
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
+                    rendering:
+                        render: boolean
+                        className: bool
         SateD-168:
             byte_length: 168
+            fields:
+                channelNo:
+                    label: No
+                    offset: 0
+                    length: 2
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger16
+                    editable: true
+                    saveable: true;
+                    rendering:
+                        render: editable
+                        className: number
+                name:
+                    label: Name
+                    offset: 36
+                    length: 100
+                    type: MM\SamyEditorBundle\Scm\DataType\String
+                    editable: true
+                    saveable: true;
+                    rendering:
+                        render: editable
+                vpid:
+                    label: VPID
+                    offset: 2
+                    length: 2
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger16
+                    rendering:
+                        className: number
+                pcr:
+                    label: PCR
+                    offset: 4
+                    length: 2
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger16
+                    rendering:
+                        className: number
+                sid:
+                    label: SID
+                    offset: 16
+                    length: 2
+                    type: MM\SamyEditorBundle\Scm\DataType\UnsignedInteger16
+                    rendering:
+                        className: number
+                serviceType:
+                    label: Type
+                    offset: 14
+                    length: 1
+                    type: MM\SamyEditorBundle\Scm\DataType\ServiceType
+                    rendering:
+                        className: number
+                        render: serviceType
+                encrypted:
+                    label: Crypt
+                    offset: 136
+                    length: 1
+                    type: MM\SamyEditorBundle\Scm\DataType\Boolean
+                    rendering:
+                        className: bool
+                        render: boolean
+                fav1sort:
+                    label: F1
+                    offset: 140
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
+                    rendering:
+                        render: boolean
+                        className: bool
+                fav2sort:
+                    label: F2
+                    offset: 144
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
+                    rendering:
+                        render: boolean
+                        className: bool
+                fav3sort:
+                    label: F3
+                    offset: 148
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
+                    rendering:
+                        render: boolean
+                        className: bool
+                fav4sort:
+                    label: F4
+                    offset: 152
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
+                    rendering:
+                        render: boolean
+                        className: bool
+                fav5sort:
+                    label: F5
+                    offset: 156
+                    length: 4
+                    type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
+                    saveable: true;
+                    rendering:
+                        render: boolean
+                        className: bool
+        SateD-172:
+            byte_length: 172
             fields:
                 channelNo:
                     label: No

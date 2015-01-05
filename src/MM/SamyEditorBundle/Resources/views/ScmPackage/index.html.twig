@@ -1,5 +1,7 @@
 {% extends 'MMSamyEditorBundle:Layout:base.html.twig' %}
 
+{% set meta_title = scmPackage.filename %}
+
 {% block sidebar %}
     {{ render(controller('MMSamyEditorBundle:ScmPackage:sidebar', {'scmPackage': scmPackage})) }}
 {% endblock %}

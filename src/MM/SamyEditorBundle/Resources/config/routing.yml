@@ -6,6 +6,10 @@ mm_samy_editor_scm_package_upload:
     path:     /upload/
     defaults: { _controller: MMSamyEditorBundle:ScmPackage:upload }
 
+mm_samy_editor_content_imprint:
+    path:     /imprint/
+    defaults: { _controller: MMSamyEditorBundle:Content:imprint }
+
 mm_samy_editor_scm_package:
     path:     /{hash}/
     defaults: { _controller: MMSamyEditorBundle:ScmPackage:index }
