@@ -1,5 +1,5 @@
 
-<header class="sticky">
+<header>
     <nav class="top-bar" data-topbar role="navigation">
         <ul class="title-area">
             <li class="name">
@@ -25,8 +25,6 @@
                         <a href="{{ path('mm_samy_editor_scm_package_download', {'hash': scmPackage.hash}) }}"><i class="fa fa-cloud-download"></i> Download .scm</a>
                     </li>
                 {% endif %}
-            </ul>
-            <ul class="right">
                 {% if scm_recent_manager.recentScmPackages|length > 0 %}
                     <li class="has-dropdown">
                         <a href="#">Recent files</a>
@@ -39,6 +37,20 @@
                         </ul>
                     </li>
                 {% endif %}
+            </ul>
+            <ul class="right">
+
+                <li class="has-dropdown">
+                    <a href="#"><i class="fa fa-question"></i> Help</a>
+                    <ul class="dropdown">
+                        <li>
+                            <a href="{{ path('mm_samy_editor_content_exportscm') }}">How to Export .SCM</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('mm_samy_editor_content_imprint') }}">Imprint</a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </section>
     </nav>

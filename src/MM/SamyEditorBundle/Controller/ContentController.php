@@ -14,4 +14,9 @@ class ContentController extends Controller
     {
         return $this->render('MMSamyEditorBundle:Content:imprint.html.twig');
     }
+
+    public function exportscmAction()
+    {
+        return $this->render('MMSamyEditorBundle:Content:exportscm.html.twig');
+    }
 }

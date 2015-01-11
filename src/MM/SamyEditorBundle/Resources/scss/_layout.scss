@@ -1,10 +1,53 @@
-body {
-    background: #f2f5f7;
-}
 .layout {
-
+    margin-top: 45px;
 
     .content {
-        padding: 2rem 2rem 2rem 340px;
+        padding: 0 0 0 300px;
+
+        .top-bar {
+            background: $topbar-content-bg-color;
+            border-bottom: 1px solid #5c5c5c;
+        }
+
+        .top-bar-section li:not(.has-form) a:not(.button) {
+            background: $topbar-content-bg-color;
+            height: 44px;
+        }
+
+        .top-bar-section li:not(.has-form) a:not(.button):hover {
+            background: $topbar-link-bg-hover;
+        }
+
+        .top-bar-section ul li {
+            background: $topbar-content-bg-color;
+        }
     }
+    input[type="text"], input[type="password"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"], input[type="color"], textarea:focus {
+        background: $input-bg-color;
+    }
+}
+.content-padding {
+    padding: 2rem;
+}
+header {
+    position: fixed;
+    height: 20px;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 100;
+}
+/* fix offset bug of tooltips*/
+.tooltip {
+    margin-top: -45px;
+}
+
+footer {
+    border-top: 1px solid #444;
+    padding-top: 1em;
+    text-align: center;
+}
+
+footer a {
+    color: $body-font-color;
 }

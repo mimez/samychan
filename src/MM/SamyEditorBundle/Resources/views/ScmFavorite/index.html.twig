@@ -4,17 +4,19 @@
     {{ render(controller('MMSamyEditorBundle:ScmPackage:sidebar', {'scmPackage': scmPackage})) }}
 {% endblock %}
 {% block content %}
-    <h1>Favs</h1>
+    <div class="content-padding">
+        <h1>Favorites #{{ favNo }}</h1>
 
-    <div id="channels">
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        {{ form_end(form) }}
+        <div id="channels">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+
+        <script>
+            $().ready(function() {
+                $('#channels select').multiselect2side({'search': 'on', labeldx: ''});
+            });
+        </script>
     </div>
-
-    <script>
-        $().ready(function() {
-            $('#channels select').multiselect2side({'search': 'on', labeldx: ''});
-        });
-    </script>
 {% endblock %}

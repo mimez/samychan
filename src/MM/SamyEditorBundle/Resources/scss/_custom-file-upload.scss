@@ -4,6 +4,7 @@ label.file-upload input[type="file"] {
 }
 
 .top-bar-section ul li label {
+    background: $topbar-bg-color;
     display: block;
     width: 100%;
     color: #fff;

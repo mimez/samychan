@@ -6,112 +6,65 @@
     {{ render(controller('MMSamyEditorBundle:ScmPackage:sidebar', {'scmPackage': scmPackage})) }}
 {% endblock %}
 {% block content %}
-    <h2><i class="fa {{ scmFileMeta.icon }}"></i> {{ scmFileMeta.label }}</h2>
-
-
     <div ng-app="SamyChanApp">
         <div ng-controller="ChannelCtrl">
-            <ul class="button-group">
-                <li><a href="#" class="button" id="reorder-channels" ng-click="reorderChannels()">Reorder Channel-Nos (without gap)</a></li>
-            </ul>
+            <div st-table="displayedChannels" st-safe-src="channels">
+                <nav class="top-bar" data-topbar role="navigation">
+                    <ul class="title-area">
+                        <li class="name">
+                            <h1><i class="fa {{ scmFileMeta.icon }}"></i> {{ scmFileMeta.label }}&nbsp;</h1>
+                        </li>
+                    </ul>
 
-        <table st-table="displayedChannels" class="data channels" st-safe-src="channels">
-            <thead>
-                <tr>
-                    {% for name,field in fields %}
-                        <td class="{{ field.rendering.className is defined ? field.rendering.className : '' }}">{{ field.label is defined ? field.label : name }}</td>
-                    {% endfor %}
-                    <td class="options">Options</td>
-                </tr>
-                <tr><td colspan="{{ fields|length + 1 }}"><input st-search placeholder="global search" class="input-sm form-control" type="search"/></td></tr>
-            </thead>
-            <tbody ng-keyboardnav>
-                <tr ng-repeat="channel in displayedChannels" ng-class="channel.className">
-                    {% for name,field in fields %}
-                        <td class="{{ field.rendering.className is defined ? field.rendering.className : '' }}">
-                            {% if field.editable is defined %}
-                                <input type="text" value="[[ channel.{{ name }} ]]" ng-model="channel.{{ name }}">
-                            {% else %}
-                                {% if (field.rendering.render is defined) and (field.rendering.render == 'boolean') %}
-                                    <i class="fa fa-check" ng-if="channel.{{ name }} > 0"></i>
-                                {% else %}
-                                    [[ channel.{{ name }} {{ field.rendering.render is defined ? '|' ~ field.rendering.render : '' }} ]]
-                                {% endif %}
-                            {% endif %}
-                        </td>
-                    {% endfor %}
-                    <td class="options">
-                        <button class="tiny edit" onclick="$(this).parents('tr:first').find('input:first').focus();"><i class="fa fa-pencil-square-o"></i> Edit</button>
-                        <button class="tiny alert save" ng-click="saveChannel($index)"><i class="fa fa-floppy-o"></i> Save</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                    <section class="top-bar-section">
+                        <ul class="right">
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#" id="reorder-channels" ng-click="reorderChannels()" data-tooltip title="Reorder all channel-numbers without any gap">
+                                    <i class="fa fa-sort-amount-asc"></i> Reorder
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li style="padding: 0 10px">
+                                <input type="search" st-search placeholder="search...">
+                            </li>
+                        </ul>
+                    </section>
+                </nav>
+                <table class="data channels" >
+                    <thead>
+                        <tr>
+                            {% for name,field in fields %}
+                                <td class="{{ field.rendering.className is defined ? field.rendering.className : '' }}">{{ field.label is defined ? field.label : name }}</td>
+                            {% endfor %}
+                            <td class="options">Options</td>
+                        </tr>
+                    </thead>
+                    <tbody ng-keyboardnav>
+                        <tr ng-repeat="channel in displayedChannels" ng-class="channel.className">
+                            {% for name,field in fields %}
+                                <td class="{{ field.rendering.className is defined ? field.rendering.className : '' }}">
+                                    {% if field.editable is defined %}
+                                        <input type="text" value="[[ channel.{{ name }} ]]" ng-model="channel.{{ name }}">
+                                    {% else %}
+                                        {% if (field.rendering.render is defined) and (field.rendering.render == 'boolean') %}
+                                            <i class="fa fa-check" ng-if="channel.{{ name }} > 0"></i>
+                                        {% else %}
+                                            [[ channel.{{ name }} {{ field.rendering.render is defined ? '|' ~ field.rendering.render : '' }} ]]
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                            <td class="options">
+                                <button class="tiny edit" onclick="$(this).parents('tr:first').find('input:first').focus();"><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                <button class="tiny alert save" ng-click="saveChannel($index)"><i class="fa fa-floppy-o"></i> Save</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-    </div>
-    <style>
-        table.channels {
-            border-collapse: collapse;
-            table-layout: fixed;
-        }
-        table.channels button {
-            margin: 0;
-            padding: 5px 10px;
-        }
-        table.channels td {
-            border: 1px solid #ccc;
-        }
-        table.channels input {
-            border-color: transparent;
-            background: transparent;
-            box-shadow: none;
-            margin-bottom: 0;
-            padding: 0;
-            height: 25px;
-        }
-        table.channels tbody td {
-            padding: 5px;
-        }
-        table.channels tr.saving td {
-            background: red !important;
-        }
-        table.channels td.number {
-            width: 60px;
-        }
-        table.channels td.bool {
-            width: 50px;
-            text-align: center;
-        }
-        table.channels td.small {
-            width: 100px;
-        }
-        table.channels td.options {
-            width: 100px;
-            text-align: right;
-        }
-        table.channels .save {
-            display: none;
-        }
-        table.channels tr.active-row input,
-        table.channels tbody tr:hover input {
-            background: #fff;
-        }
-        table.channels tbody tr:hover {
-            background: #ddd;
-        }
-        table.channels tbody tr.active-row {
-            background: #92ddd7;
-        }
-        table.channels tr.active-row .save {
-            display: inline;
-        }
-        table.channels tr.active-row .edit {
-            display: none;
-        }
-        table.channels td.bool {
-            text-align: center;
-        }
-    </style>
     <script>
         var app = angular.module('SamyChanApp', ['smart-table']);
         app.config(function($interpolateProvider) {

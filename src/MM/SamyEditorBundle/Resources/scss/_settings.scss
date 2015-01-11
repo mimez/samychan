@@ -1,6 +1,33 @@
-$topbar-link-bg-hover: lighten(#217dbb, 30%);;
-$sidebar-background: #217dbb;
+$primary-color: #008CBA;
+
+$body-bg: #222;
+$body-font-color: #eee;
+$header-font-color: $body-font-color;
+
+$table-border-size: 0;
+$table-layout: fixed;
+$table-bg: #222;
+$table-head-bg: #777;
+$table-head-font-color: $body-font-color;
+$table-even-row-bg: #333;
+$table-border-color: #333;
+$table-row-font-color: $body-font-color;
+
+/*$topbar-link-bg-hover: lighten(#217dbb, 30%);;*/
+$sidebar-background: $body-bg;
 $sidebar-background-hover: lighten($sidebar-background, 30%);
 $isdebar-border-bottom: lighten($sidebar-background, 30%);
+
 $input-disabled-bg: #fff;
 $input-include-glowing-effect: false;
+$input-focus-bg-color: #fff;
+$input-font-color: #eee;
+$input-bg-color: #555;
+$input-focus-bg-color: $input-bg-color;
+$form-label-font-color: $body-font-color;
+$select-bg-color: $input-bg-color;
+$input-border-width: 0;
+
+$topbar-bg-color: #444;
+$topbar-link-bg-hover: $primary-color;
+$topbar-content-bg-color: #777;

@@ -1,0 +1,36 @@
+{% extends 'MMSamyEditorBundle:Layout:base.html.twig' %}
+
+{% block raw %}
+    <div class="row">
+        <div class="small-12 column">
+            <h1>Export Channel list on Samsung TVs</h1>
+            <p>
+                Have you just bought a brandnew hightech samsung television? Congratulations.
+                Sorting the favorite channels is probably one of the first things you do. Nowadays, specially with hundreds or thounds of
+                channels, this task can be a very cumbersome. Moving channels by using the remote, e.g. from #343 to #23, takes some
+                time. To make things easier, i have written this tool. With SamyCHAN you can edit and sort your channel list very comfortable.
+            </p>
+            <h2>Export your channel list as .SCM</h2>
+            <p>
+                Want to start now? No problem. Basically the procedure is the following:
+            </p>
+            <ol>
+                <li>Export channel list (.scm) to a usb-stick</li>
+                <li>Open it with SamyCHAN, edit and save it</li>
+                <li>Import channel list (.scm) from usb-stick</li>
+            </ol>
+            <h2>Where do i find the export-option?</h2>
+            <p>
+                Every SAMSUNG television (at least since the b-series) has the posibility to export the channels. The magic option
+                is <code>transfer channel list</code>. This options is sometimes a bit hidden.
+            </p>
+            <ol>
+                <li>Open the <code>Menu</code></li>
+                <li>Go to the main item <code>Broadcasting</code></li>
+                <li>Open <code>channel settings</code> (last item)</li>
+                <li>choose <code>transfer channel list</code></li>
+                <li>enter your pin (default: 0000)</li>
+            </ol>
+        </div>
+    </div>
+{% endblock %}

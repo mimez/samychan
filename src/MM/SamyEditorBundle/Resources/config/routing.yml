@@ -10,6 +10,11 @@ mm_samy_editor_content_imprint:
     path:     /imprint/
     defaults: { _controller: MMSamyEditorBundle:Content:imprint }
 
+mm_samy_editor_content_exportscm:
+    path:     /export-channel-list-samsung/
+    defaults: { _controller: MMSamyEditorBundle:Content:exportscm }
+
+
 mm_samy_editor_scm_package:
     path:     /{hash}/
     defaults: { _controller: MMSamyEditorBundle:ScmPackage:index }
