@@ -187,6 +187,10 @@ class ScmPackageController extends Controller
                 'label' => 'Terrestrial Analog',
                 'icon' => 'fa-globe',
             ),
+            'map-AirD' => array(
+                'label' => 'Terrestrial Digital',
+                'icon' => 'fa-globe',
+            ),
             'map-SateD' => array(
                 'label' => 'Satelite Digital',
                 'icon' => 'fa-globe',
