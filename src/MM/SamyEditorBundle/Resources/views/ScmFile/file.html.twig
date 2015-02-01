@@ -41,7 +41,7 @@
                         </tr>
                     </thead>
                     <tbody ng-keyboardnav>
-                        <tr ng-repeat="channel in displayedChannels" ng-class="channel.className">
+                        <tr ng-repeat="channel in displayedChannels" ng-class="channel.className" ng-class-even="'even'">
                             {% for name,field in fields %}
                                 <td class="{{ field.rendering.className is defined ? field.rendering.className : '' }}">
                                     {% if field.editable is defined %}

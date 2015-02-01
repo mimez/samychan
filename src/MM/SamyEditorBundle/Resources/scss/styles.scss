@@ -34,7 +34,8 @@ $base-path: "../../../../../vendor/zurb/foundation/scss/";
 @import $base-path + "foundation/components/split-buttons";
 @import $base-path + "foundation/components/sub-nav";
 @import $base-path + "foundation/components/switches";
-@import $base-path + "foundation/components/tables";
+/*@import $base-path + "foundation/components/tables";*/
+@import "tables2";
 @import $base-path + "foundation/components/tabs";
 @import $base-path + "foundation/components/thumbs";
 @import $base-path + "foundation/components/tooltips";
@@ -43,7 +44,7 @@ $base-path: "../../../../../vendor/zurb/foundation/scss/";
 //@import $base-path + "foundation/components/offcanvas";
 @import $base-path + "foundation/components/visibility";
 
-// custom files3333
+// custom files3333535
 @import "hero";
 @import "sidebar";
 @import "layout";
