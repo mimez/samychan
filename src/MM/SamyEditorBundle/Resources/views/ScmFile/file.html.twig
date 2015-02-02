@@ -41,11 +41,11 @@
                         </tr>
                     </thead>
                     <tbody ng-keyboardnav>
-                        <tr ng-repeat="channel in displayedChannels" ng-class="channel.className" ng-class-even="'even'">
+                        <tr ng-repeat="channel in displayedChannels" ng-class="channel.className" ng-class-even="'even'" class="[[ channel.changed ? 'unsaved' : '' ]]">
                             {% for name,field in fields %}
                                 <td class="{{ field.rendering.className is defined ? field.rendering.className : '' }}">
                                     {% if field.editable is defined %}
-                                        <input type="text" value="[[ channel.{{ name }} ]]" ng-model="channel.{{ name }}">
+                                        <input type="text" value="[[ channel.{{ name }} ]]" ng-model="channel.{{ name }}" ng-change="channel.changed = true">
                                     {% else %}
                                         {% if (field.rendering.render is defined) and (field.rendering.render == 'boolean') %}
                                             <i class="fa fa-check" ng-if="channel.{{ name }} > 0"></i>
@@ -57,7 +57,7 @@
                             {% endfor %}
                             <td class="options">
                                 <button class="tiny edit" onclick="$(this).parents('tr:first').find('input:first').focus();"><i class="fa fa-pencil-square-o"></i> Edit</button>
-                                <button class="tiny alert save" ng-click="saveChannel($index)"><i class="fa fa-floppy-o"></i> Save</button>
+                                <button class="tiny alert save" ng-click="saveChannelAll()"><i class="fa fa-floppy-o"></i> Save (all)</button>
                             </td>
                         </tr>
                     </tbody>
@@ -134,6 +134,7 @@
             {% endfor %}
 
             var loadData = function() {
+                $.blockUI();
                 $http.get('{{ path('mm_samy_editor_scm_file_json', {'hash': scmPackage.hash, 'scmFileId': scmFile.scmFileId}) }}').then(function(res) {
                     $scope.channels = res.data.data;
                     $.unblockUI();
@@ -151,16 +152,23 @@
                 $scope.channels[$index].className = 'active-row';
             }
 
-            $scope.saveChannel = function($index) {
+            $scope.saveChannelAll = function() {
                 $.blockUI();
+
+                for (i in $scope.channels) {
+                    if ($scope.channels[i].changed == true) {
+                        $scope.channels[i].channelNo = parseInt($scope.channels[i].channelNo);
+                        $scope.saveChannel($scope.channels[i]);
+                        $scope.channels[i].changed = false;
+                    }
+                }
+
+                $scope.channels = $filter('orderBy')($scope.channels, 'channelNo');
+            }
+
+            $scope.saveChannel = function(channelData) {
+
                 $timeout(function() {
-                    // get channel data
-                    var channelData = $scope.channels[$index];
-
-                    // update ordering
-                    channelData.channelNo = parseInt(channelData.channelNo);
-                    $scope.channels = $filter('orderBy')($scope.channels, 'channelNo');
-
                     // build ajax url data gets send to
                     var urlTemplate = "{{ path('mm_samy_editor_scm_channel', {'hash': scmPackage.hash, 'scmChannelId': 'placeholder'}) }}";
                     var url = urlTemplate.replace("placeholder", channelData.channelId);
