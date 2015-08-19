@@ -44,7 +44,7 @@
                         <tr ng-repeat="channel in displayedChannels" ng-class="channel.className" ng-class-even="'even'" class="[[ channel.changed ? 'unsaved' : '' ]]">
                             {% for name,field in fields %}
                                 <td class="{{ field.rendering.className is defined ? field.rendering.className : '' }}">
-                                    {% if field.editable is defined %}
+                                    {% if field.editable is defined and field.editable%}
                                         <input type="text" value="[[ channel.{{ name }} ]]" ng-model="channel.{{ name }}" ng-change="channel.changed = true">
                                     {% else %}
                                         {% if (field.rendering.render is defined) and (field.rendering.render == 'boolean') %}
@@ -128,7 +128,7 @@
             var editableFields = [];
             {% for name,field in fields %}
 
-                {% if field.editable is defined %}
+                {% if field.editable is defined and field.editable %}
                     editableFields.push("{{ name }}");
                 {% endif %}
             {% endfor %}

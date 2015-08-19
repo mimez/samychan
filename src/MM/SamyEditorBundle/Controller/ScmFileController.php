@@ -154,6 +154,10 @@ class ScmFileController extends Controller
                 'label' => 'AstraHDPlus Digital',
                 'icon' => 'fa-globe',
             ),
+            'dvbc' => array(
+                'label' => 'Cable Digital',
+                'icon' => 'fa-signal',
+            ),
 
         );
 

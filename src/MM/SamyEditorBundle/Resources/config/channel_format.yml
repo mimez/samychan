@@ -1,31 +1,115 @@
 scm_config:
     series:
         D:
-            map-CableD: CableD-320
-            map-AirA: AirA-64
-            map-AirD: AirD-320
-            map-SateD: SateD-172
-            map-AstraHDPlusD: AstraHDPlusD-212
+            files:
+                map-CableD: CableD-320
+                map-AirA: AirA-64
+                map-AirD: AirD-320
+                map-SateD: SateD-172
+                map-AstraHDPlusD: AstraHDPlusD-212
         E:
-            map-CableD: CableD-320
-            map-AirA: AirA-64
-            map-AirD: AirD-320
-            map-SateD: SateD-168
-            map-AstraHDPlusD: AstraHDPlusD-212
+            files:
+                map-CableD: CableD-320
+                map-AirA: AirA-64
+                map-AirD: AirD-320
+                map-SateD: SateD-168
+                map-AstraHDPlusD: AstraHDPlusD-212
         F:
-            map-CableD: CableD-320
-            map-AirA: AirA-64
-            map-AirD: AirD-320
-            map-SateD: SateD-168
-            map-AstraHDPlusD: AstraHDPlusD-212
+            files:
+                map-CableD: CableD-320
+                map-AirA: AirA-64
+                map-AirD: AirD-320
+                map-SateD: SateD-168
+                map-AstraHDPlusD: AstraHDPlusD-212
         H:
-            map-CableD: CableD-320
-            map-AirA: AirA-64
-            map-AirD: AirD-320
-            map-SateD: SateD-168
-            map-AstraHDPlusD: AstraHDPlusD-212
+            files:
+                map-CableD: CableD-320
+                map-AirA: AirA-64
+                map-AirD: AirD-320
+                map-SateD: SateD-168
+                map-AstraHDPlusD: AstraHDPlusD-212
+        J:
+            files:
+                dvbc: dvbc-sqlite
     file_formats:
+        dvbc-sqlite:
+            type: sqlite3
+            channelSqlQuery: SELECT s.srvId AS identifier, s.progNum AS channelNo, CAST(s.srvName AS BLOB) AS name, fav1.pos AS fav1sort, fav2.pos AS fav2sort, fav3.pos AS fav3sort, fav4.pos AS fav4sort, fav5.pos AS fav5sort FROM SRV s LEFT JOIN SRV_FAV fav1 ON (fav1.srvId = s.srvId AND fav1.fav = 1) LEFT JOIN SRV_FAV fav2 ON (fav2.srvId = s.srvId AND fav2.fav = 2) LEFT JOIN SRV_FAV fav3 ON (fav3.srvId = s.srvId AND fav3.fav = 3) LEFT JOIN SRV_FAV fav4 ON (fav4.srvId = s.srvId AND fav4.fav = 4) LEFT JOIN SRV_FAV fav5 ON (fav5.srvId = s.srvId AND fav5.fav = 5)
+            updateSqlQuery: UPDATE SRV SET progNum = :channelNo, srvName = CAST(:name AS BLOB) WHERE srvId = :identifier
+            fields:
+                channelNo:
+                    label: No
+                    type: MM\SamyEditorBundle\Scm\DataType\Plain
+                    editable: true
+                    saveable: true
+                    rendering:
+                        render: editable
+                        className: number
+                name:
+                    label: Name
+                    type: MM\SamyEditorBundle\Scm\DataType\StringSqlite3
+                    editable: true
+                    saveable: true
+                    rendering:
+                        render: editable
+                fav1sort:
+                    label: F1
+                    type: MM\SamyEditorBundle\Scm\DataType\Plain
+                    saveable: true
+                    rendering:
+                        render: boolean
+                        className: bool
+                    savehandler: MM\SamyEditorBundle\Scm\SaveHandler\Sqlite3Favorite
+                    additional_data:
+                        favno: 1
+                fav2sort:
+                    label: F2
+                    type: MM\SamyEditorBundle\Scm\DataType\Plain
+                    saveable: true
+                    rendering:
+                        render: boolean
+                        className: bool
+                    savehandler: MM\SamyEditorBundle\Scm\SaveHandler\Sqlite3Favorite
+                    additional_data:
+                        favno: 2
+                fav3sort:
+                    label: F3
+                    type: MM\SamyEditorBundle\Scm\DataType\Plain
+                    saveable: true
+                    rendering:
+                        render: boolean
+                        className: bool
+                    savehandler: MM\SamyEditorBundle\Scm\SaveHandler\Sqlite3Favorite
+                    additional_data:
+                        favno: 3
+                fav4sort:
+                    label: F4
+                    type: MM\SamyEditorBundle\Scm\DataType\Plain
+                    saveable: true
+                    rendering:
+                        render: boolean
+                        className: bool
+                    savehandler: MM\SamyEditorBundle\Scm\SaveHandler\Sqlite3Favorite
+                    additional_data:
+                        favno: 4
+                fav5sort:
+                    label: F5
+                    type: MM\SamyEditorBundle\Scm\DataType\Plain
+                    saveable: true
+                    rendering:
+                        render: boolean
+                        className: bool
+                    savehandler: MM\SamyEditorBundle\Scm\SaveHandler\Sqlite3Favorite
+                    additional_data:
+                        favno: 5
+                identifier:
+                    label: identifier
+                    saveable: true
+                    type: MM\SamyEditorBundle\Scm\DataType\Plain
+
+
         AirA-64:
+            type: binary
             byte_length: 64
             fields:
                 channelNo:
@@ -34,7 +118,7 @@ scm_config:
                     length: 2
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger16
                     editable: true
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: editable
                         className: number
@@ -44,7 +128,7 @@ scm_config:
                     length: 10
                     type: MM\SamyEditorBundle\Scm\DataType\String
                     editable: true
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: editable
                 fav1sort:
@@ -52,7 +136,7 @@ scm_config:
                     offset: 36
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
@@ -61,7 +145,7 @@ scm_config:
                     offset: 40
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
@@ -70,7 +154,7 @@ scm_config:
                     offset: 44
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
@@ -79,7 +163,7 @@ scm_config:
                     offset: 48
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
@@ -88,11 +172,12 @@ scm_config:
                     offset: 52
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
         AirD-320:
+            type: binary
             byte_length: 320
             fields:
                 channelNo:
@@ -101,7 +186,7 @@ scm_config:
                     length: 2
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger16
                     editable: true
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: editable
                         className: number
@@ -111,7 +196,7 @@ scm_config:
                     length: 100
                     type: MM\SamyEditorBundle\Scm\DataType\String
                     editable: true
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: editable
                 vpid:
@@ -163,7 +248,7 @@ scm_config:
                     offset: 292
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
@@ -172,7 +257,7 @@ scm_config:
                     offset: 296
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
@@ -181,7 +266,7 @@ scm_config:
                     offset: 300
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
@@ -190,7 +275,7 @@ scm_config:
                     offset: 304
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
@@ -199,11 +284,12 @@ scm_config:
                     offset: 308
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
         CableD-320:
+            type: binary
             byte_length: 320
             fields:
                 channelNo:
@@ -212,7 +298,7 @@ scm_config:
                     length: 2
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger16
                     editable: true
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: editable
                         className: number
@@ -222,7 +308,7 @@ scm_config:
                     length: 100
                     type: MM\SamyEditorBundle\Scm\DataType\String
                     editable: true
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: editable
                 vpid:
@@ -274,7 +360,7 @@ scm_config:
                     offset: 292
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
@@ -283,7 +369,7 @@ scm_config:
                     offset: 296
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
@@ -292,7 +378,7 @@ scm_config:
                     offset: 300
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
@@ -301,7 +387,7 @@ scm_config:
                     offset: 304
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
@@ -310,11 +396,12 @@ scm_config:
                     offset: 308
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
         SateD-168:
+            type: binary
             byte_length: 168
             fields:
                 channelNo:
@@ -323,7 +410,7 @@ scm_config:
                     length: 2
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger16
                     editable: true
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: editable
                         className: number
@@ -333,7 +420,7 @@ scm_config:
                     length: 100
                     type: MM\SamyEditorBundle\Scm\DataType\String
                     editable: true
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: editable
                 vpid:
@@ -378,7 +465,7 @@ scm_config:
                     offset: 140
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
@@ -387,7 +474,7 @@ scm_config:
                     offset: 144
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
@@ -396,7 +483,7 @@ scm_config:
                     offset: 148
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
@@ -405,7 +492,7 @@ scm_config:
                     offset: 152
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
@@ -414,11 +501,12 @@ scm_config:
                     offset: 156
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
         SateD-172:
+            type: binary
             byte_length: 172
             fields:
                 channelNo:
@@ -427,7 +515,7 @@ scm_config:
                     length: 2
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger16
                     editable: true
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: editable
                         className: number
@@ -437,7 +525,7 @@ scm_config:
                     length: 100
                     type: MM\SamyEditorBundle\Scm\DataType\String
                     editable: true
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: editable
                 vpid:
@@ -482,7 +570,7 @@ scm_config:
                     offset: 140
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
@@ -491,7 +579,7 @@ scm_config:
                     offset: 144
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
@@ -500,7 +588,7 @@ scm_config:
                     offset: 148
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
@@ -509,7 +597,7 @@ scm_config:
                     offset: 152
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
@@ -518,11 +606,12 @@ scm_config:
                     offset: 156
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
         AstraHDPlusD-212:
+            type: binary
             byte_length: 212
             fields:
                 channelNo:
@@ -531,7 +620,7 @@ scm_config:
                     length: 2
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger16
                     editable: true
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: editable
                         className: number
@@ -541,7 +630,7 @@ scm_config:
                     length: 100
                     type: MM\SamyEditorBundle\Scm\DataType\String
                     editable: true
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: editable
                 vpid:
@@ -586,7 +675,7 @@ scm_config:
                     offset: 184
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
@@ -595,7 +684,7 @@ scm_config:
                     offset: 188
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
@@ -604,7 +693,7 @@ scm_config:
                     offset: 192
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
@@ -613,7 +702,7 @@ scm_config:
                     offset: 196
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool
@@ -622,7 +711,7 @@ scm_config:
                     offset: 200
                     length: 4
                     type: MM\SamyEditorBundle\Scm\DataType\SignedInteger32
-                    saveable: true;
+                    saveable: true
                     rendering:
                         render: boolean
                         className: bool

@@ -472,4 +472,32 @@ class ScmChannel
     {
         return $this->encrypted;
     }
+    /**
+     * @var string
+     */
+    private $identifier;
+
+
+    /**
+     * Set identifier
+     *
+     * @param string $identifier
+     * @return ScmChannel
+     */
+    public function setIdentifier($identifier)
+    {
+        $this->identifier = $identifier;
+
+        return $this;
+    }
+
+    /**
+     * Get identifier
+     *
+     * @return string 
+     */
+    public function getIdentifier()
+    {
+        return $this->identifier;
+    }
 }

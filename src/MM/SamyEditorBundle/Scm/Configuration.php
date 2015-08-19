@@ -36,8 +36,11 @@ class Configuration {
         $yaml = new Yaml\Parser();
         $value = $yaml->parse(file_get_contents($kernel->locateResource('@MMSamyEditorBundle/Resources/config/channel_format.yml')));
 
-        foreach ($value['scm_config']['series'] as $series => $files) {
-            foreach ($files as $fileName => $fileConfigReference) {
+        foreach ($value['scm_config']['series'] as $series => $seriesData) {
+            if (!is_array($seriesData['files'])) {
+                continue;
+            }
+            foreach ($seriesData['files'] as $fileName => $fileConfigReference) {
                 $value['scm_config']['series'][$series][$fileName] = $value['scm_config']['file_formats'][$fileConfigReference];
             }
         }
@@ -56,7 +59,7 @@ class Configuration {
     public function getConfigBySeries($series) {
         $config = $this->getConfig();
 
-        if (!isset($config['series'][$series])) {
+        if (!array_key_exists($series, $config['series'])) {
             throw new \Exception(sprintf('requested config for series=(%s) does not exist', $series));
         }
 

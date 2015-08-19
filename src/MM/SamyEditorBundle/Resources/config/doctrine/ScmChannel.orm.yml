@@ -51,6 +51,9 @@ MM\SamyEditorBundle\Entity\ScmChannel:
         fav5sort:
             type: integer
             nullable: true
+        identifier:
+            type: string
+            nullable: true
     manyToOne:
         scmFile:
             targetEntity: ScmFile

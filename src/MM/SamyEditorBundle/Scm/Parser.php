@@ -5,6 +5,7 @@ namespace MM\SamyEditorBundle\Scm;
 use MM\SamyEditorBundle\Entity\ScmChannel;
 use MM\SamyEditorBundle\Entity\ScmPackage;
 use MM\SamyEditorBundle\Entity\ScmFile;
+use MM\SamyEditorBundle\Database\StringLoader;
 
 class Parser {
 
@@ -12,6 +13,27 @@ class Parser {
      * @var Configuration
      */
     protected $configuration;
+
+    /**
+     * @var SeriesDetector
+     */
+    protected $seriesDetector;
+
+    /**
+     * @return SeriesDetector
+     */
+    public function getSeriesDetector()
+    {
+        return $this->seriesDetector;
+    }
+
+    /**
+     * @param SeriesDetector $seriesDetector
+     */
+    public function setSeriesDetector($seriesDetector)
+    {
+        $this->seriesDetector = $seriesDetector;
+    }
 
     /**
      * @return Configuration
@@ -34,9 +56,10 @@ class Parser {
      *
      * @param Configuration $configuration
      */
-    public function __construct(Configuration $configuration)
+    public function __construct(Configuration $configuration, SeriesDetector $seriesDetector)
     {
         $this->setConfiguration($configuration);
+        $this->setSeriesDetector($seriesDetector);
     }
 
     /**
@@ -50,51 +73,152 @@ class Parser {
         $zip = $this->openArchive($file->getRealPath());
 
         // detect the series (by cloneInfo)
-        $series = isset($series) ? $series : $this->detectSeries($zip);
+        $series = isset($series) ? $series : $this->getSeriesDetector()->detectSeries($zip);
 
         // each series has a own config
         $config = $this->getConfiguration()->getConfigBySeries($series);
 
+        return $this->buildScmPackage($zip, $config, $file->getFilename(), $series);
+    }
+
+    /**
+     * ScmPackage bauen
+     *
+     * @param \ZipArchive $zip
+     * @param array $config
+     * @param string $packageFilename
+     * @param string $series
+     *
+     * @return ScmPackage
+     */
+    protected function buildScmPackage(\ZipArchive $zip, array $config, $packageFilename, $series)
+    {
         // create base scm-package
         $scmPackage = new ScmPackage();
         $scmPackage->setHash(uniqid()); // unique hash as access-token
-        $scmPackage->setFilename($file->getFilename());
+        $scmPackage->setFilename($packageFilename);
         $scmPackage->setSeries($series);
 
-        for ($index = 0; $zip->getFromIndex($index); $index++)
-        {
+        // loop over the files of the zip and add them to the scmPackage
+        for ($index = 0; $zip->getFromIndex($index); $index++) {
+
             $filename = $zip->getNameIndex($index);
+
+            // create scmFile and link it to scmPackage
             $scmFile = new ScmFile();
             $scmFile->setFilename($filename);
             $scmFile->setData($zip->getFromIndex($index));
             $scmFile->setScmPackage($scmPackage);
             $scmPackage->addFile($scmFile);
 
+            // if we dont have a config for this file, skip further parsing
             if (!isset($config[$filename])) {
                 continue;
             }
 
-            $fileConfig = $config[$filename];
+            // parse the Channels of this file
+            $scmChannels = $this->getChannelsByFile($zip->getFromIndex($index), $config[$filename]);
 
-            $temp = new \SplTempFileObject();
-            $temp->fwrite($scmFile->getData());
-            $temp->rewind();
-            while ($data = $temp->fread($fileConfig['byte_length']))
-            {
-                $scmChannel = new ScmChannel();
-                $scmChannel->setData($data);
+            foreach ($scmChannels as $scmChannel) {
                 $scmChannel->setScmFile($scmFile);
                 $scmFile->addChannel($scmChannel);
-
-                foreach ($fileConfig['fields'] as $fieldName => $fieldConfig) {
-                    $value = $this->getValueFromByteString($data, $fieldConfig['offset'], $fieldConfig['length'], $fieldConfig['type']);
-                    $setterMethod = 'set' . ucfirst($fieldName);
-                    $scmChannel->{$setterMethod}($value);
-                }
             }
         }
 
         return $scmPackage;
+    }
+
+    /**
+     * Get all Channels from a binaryString
+     *
+     * @param string $binaryFile
+     * @param array $fileConfig
+     *
+     * @return array with ScmChannel Objects
+     *
+     * @throws \Exception
+     */
+    protected function getChannelsByFile($binaryFile, $fileConfig)
+    {
+        switch ($fileConfig['type']) {
+            case 'sqlite3':
+
+                return $this->getChannelsFromSqlite($binaryFile, $fileConfig);
+
+            case 'binary':
+
+                return $this->getChannelsFromBinary($binaryFile, $fileConfig);
+
+            default:
+                throw new \Exception(sprintf('type=(%s) not supported', $fileConfig['type']));
+        }
+    }
+
+    /**
+     * Channels from binary
+     *
+     * @param string $binary
+     * @param array $fileConfig
+     *
+     * @return array ScmChannel Objects
+     */
+    protected function getChannelsFromBinary($binary, $fileConfig)
+    {
+        $scmChannels = array();
+
+        $temp = new \SplTempFileObject();
+        $temp->fwrite($binary);
+        $temp->rewind();
+        while ($data = $temp->fread($fileConfig['byte_length'])) {
+            $scmChannel = new ScmChannel();
+            $scmChannel->setData($data);
+
+            foreach ($fileConfig['fields'] as $fieldName => $fieldConfig) {
+                $value = $this->getValueFromByteString($data, $fieldConfig['offset'], $fieldConfig['length'], $fieldConfig['type']);
+                $setterMethod = 'set' . ucfirst($fieldName);
+                $scmChannel->{$setterMethod}($value);
+            }
+
+            $scmChannels[] = $scmChannel;
+        }
+
+        return $scmChannels;
+    }
+
+    /**
+     * Channels from Sqlite3
+     *
+     * @param string $binarySqlite
+     * @param array $fileConfig
+     * @return array ScmChannel Objects
+     */
+    protected function getChannelsFromSqlite($binarySqlite, $fileConfig)
+    {
+        $scmChannels = array();
+
+        // load database
+        $db = new Sqlite3Database($binarySqlite);
+        $pdo = $db->getPdo();
+
+        // query database
+        $sth = $pdo->query($fileConfig['channelSqlQuery']);
+
+        // iterate over the channels and create ScmChannel-Objects
+        foreach ($sth->fetchAll() as $channel) {
+            $scmChannel = new ScmChannel();
+            $scmChannel->setData(json_encode($channel));
+
+            foreach ($fileConfig['fields'] as $fieldName => $fieldConfig) {
+                $type = new $fieldConfig['type'];
+                $value = $type->fromBinary($channel[$fieldName]);
+                $setterMethod = 'set' . ucfirst($fieldName);
+                $scmChannel->{$setterMethod}($value);
+            }
+
+            $scmChannels[] = $scmChannel;
+        }
+
+        return $scmChannels;
     }
 
     /**
@@ -117,65 +241,6 @@ class Parser {
         $value = $dataType->fromBinary($value);
 
         return $value;
-    }
-
-
-    /**
-     * Detect the Series-Char
-     *
-     * @param \ZipArchive $archive
-     * @return bool|string $seriesChar
-     */
-    protected function detectSeries(\ZipArchive $archive)
-    {
-        $series = $this->detectSeriesByCloneInfo($archive);
-
-        if (false == $series) {
-            throw new \Exception('cannot detect series');
-        }
-
-        return $series;
-    }
-
-    /**
-     * Detect the series by the cloneinfo
-     *
-     * @param \ZipArchive $archive
-     * @return bool|string
-     */
-    protected function detectSeriesByCloneInfo(\ZipArchive $archive)
-    {
-        $cloneInfo = $archive->getFromName('CloneInfo');
-
-        // cloneInfo not found
-        if (false == $cloneInfo) {
-            return false;
-        }
-
-        // wir brauchen mind. 9 bytes
-        if (strlen($cloneInfo) < 9) {
-            return false;
-        }
-
-        // 8th char is the series
-        $series = strtoupper($cloneInfo[8]);
-
-        if ($series == 'B') {
-            // 2013 B-series uses E/F-series format
-            $series = 'F';
-        }
-
-        return $series;
-    }
-
-    /**
-     * String konvertieren
-     * @param $string
-     * @return string
-     */
-    protected function convertString($string)
-    {
-        return trim(mb_convert_encoding($string, 'utf-8', 'utf-16'));
     }
 
     /**

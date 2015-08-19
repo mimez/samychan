@@ -199,7 +199,10 @@ class ScmPackageController extends Controller
                 'label' => 'AstraHDPlus Digital',
                 'icon' => 'fa-globe',
             ),
-
+            'dvbc' => array(
+                'label' => 'Cable Digital',
+                'icon' => 'fa-signal',
+            ),
         );
 
         if (!isset($supportedFiles[$filename])) {
