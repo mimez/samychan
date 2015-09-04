@@ -97,6 +97,7 @@ class ScmPackage
     {
         return $this->files;
     }
+
     /**
      * @var integer
      */
@@ -167,5 +168,22 @@ class ScmPackage
     public function getSeries()
     {
         return $this->series;
+    }
+
+
+    /**
+     * @param $filename
+     *
+     * @return mixed|ScmFile
+     */
+    public function getFileByFilename($filename)
+    {
+        foreach ($this->getFiles() as $scmFile) {
+            if ($scmFile->getFilename() == $filename) {
+                return $scmFile;
+            }
+        }
+
+        return false;
     }
 }

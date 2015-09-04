@@ -168,4 +168,21 @@ class ScmFile
     {
         return $this->channels;
     }
+
+    /**
+     * Channel by Channel-No
+     *
+     * @param integer $channelNo
+     * @return bool|ScmChannel
+     */
+    public function getChannelByChannelNo($channelNo)
+    {
+        foreach ($this->getChannels() as $scmChannel) {
+            if ($scmChannel->getChannelNo() == $channelNo) {
+                return $scmChannel;
+            }
+        }
+
+        return false;
+    }
 }

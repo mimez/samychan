@@ -14,3 +14,17 @@ web_profiler:
 
 swiftmailer:
     disable_delivery: true
+
+doctrine:
+    dbal:
+        driver: pdo_sqlite
+        memory: true
+        charset: UTF8
+        host: ~
+        port: ~
+        dbname: ~
+        user: ~
+        password: ~
+        charset: UTF8
+        driver_class: ~
+        options: ~

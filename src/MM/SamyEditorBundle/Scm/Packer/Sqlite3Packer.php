@@ -16,14 +16,11 @@ class Sqlite3Packer extends AbstractPacker {
      */
     protected function assambleFileData(Entity\ScmFile $scmFile)
     {
-        $scmChannels = $this->getDoctrine()->getRepository('MM\SamyEditorBundle\Entity\ScmChannel')->findBy(
-            array('scmFile' => $scmFile),
-            array('scm_channel_id' => 'ASC')
-        );
+        $fileBinaryData = is_resource($scmFile->getData()) ? stream_get_contents($scmFile->getData()) : $scmFile->getData();
 
         // if we dont have any channels, return the original binary data
-        if (count($scmChannels) == 0) {
-            return stream_get_contents($scmFile->getData());
+        if (count($scmFile->getChannels()) == 0) {
+            return $fileBinaryData;
         }
 
         // load Config
@@ -31,9 +28,9 @@ class Sqlite3Packer extends AbstractPacker {
         $fileConfig = $fileConfig[$scmFile->getFilename()];
 
         // open sqlite-db
-        $db = new Sqlite3Database(stream_get_contents($scmFile->getData()));
+        $db = new Sqlite3Database($fileBinaryData);
 
-        foreach ($scmChannels as $scmChannel) {
+        foreach ($scmFile->getChannels() as $scmChannel) {
             $this->updateChannelData($scmChannel, $fileConfig, $db->getSqlite3());
         }
 

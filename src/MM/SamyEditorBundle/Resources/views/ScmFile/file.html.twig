@@ -8,7 +8,7 @@
     <div ng-app="SamyChanApp">
         <div ng-controller="ChannelCtrl">
             <form class="form-inline">
-                <input type="search" style="float: right; width: 200px;" ng-keyup="filterChannel($event)" placeholder="search channels...">
+                <input type="search" style="float: right; width: 200px;" ng-model="searchTerm" ng-click="filterChannel()" ng-keyup="filterChannel()" placeholder="search channels...">
                 <button type="button" class="btn btn-default" ng-click="reorderChannels()"><i class="fa fa-sort-amount-asc"></i> Reorder</button>
                 <button type="button" class="btn btn-success" ng-click="saveChannels()"><i class="fa fa-floppy-o"></i> Save [[ getModifiedChannelsCount() > 0 ? " (" + getModifiedChannelsCount() + " unsaved channels)" : ""]]</button>
             </form>
@@ -29,7 +29,7 @@
                 <hot-column data="channelId" title="'channelId'" renderer="renderFav" readonly="readonly"></hot-column>
             </hot-table>
             </div>
-            <div id="grid" data-url="{{ path('mm_samy_editor_scm_file_json', {'hash': scmPackage.hash, 'scmFileId': scmFile.scmFileId}) }}" reorder-url="{{ path('mm_samy_editor_scm_file_reorder', {'hash': scmPackage.hash, 'scmFileId': scmFile.scmFileId}) }}"></div>
+            <div id="grid" data-url="{{ path('mm_samy_editor_scm_file_json', {'hash': scmPackage.hash, 'scmFileId': scmFile.scmFileId}) }}"></div>
         </div>
     </div>
 {% endblock %}

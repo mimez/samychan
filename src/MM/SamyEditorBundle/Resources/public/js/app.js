@@ -8,6 +8,7 @@ app.controller('ChannelCtrl', function ($scope, $http) {
     $scope.modifiedChannels = {};
     $scope.saveableColumns = ["channelNo", "name"];
     $scope.channelData = {};
+    $scope.searchTerm = null;
 
     $scope.getModifiedChannelsCount = function() {
         return Object.keys($scope.modifiedChannels).length;
@@ -37,15 +38,14 @@ app.controller('ChannelCtrl', function ($scope, $http) {
         return true;
     }
 
-    $scope.filterChannel = function(event) {
-        var searchTerm = $(event.target).val().toLowerCase();
+    $scope.filterChannel = function() {
         var newData = $.grep($scope.channelData, function(item, index) {
             if (item["name"] == null) {
                 return false;
             }
             return (
-                item["name"].toString().toLowerCase().indexOf(searchTerm) >= 0 ||
-                item["channelNo"].toString() == searchTerm
+                item["name"].toString().toLowerCase().indexOf($scope.searchTerm.toLowerCase()) >= 0 ||
+                item["channelNo"].toString() == $scope.searchTerm.toLowerCase()
             );
         });
         $scope.hotInstance.loadData(newData);
