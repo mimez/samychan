@@ -1,0 +1,25 @@
+.features {
+    text-align: center;
+    padding-top: 85px;
+    .round-icon {
+        background-color: $primary-color;
+        border-radius: 50%;
+        display: table;
+        height: 100px;
+        margin: -61px auto 1rem;
+        width: 100px;
+        font-size: 3rem;
+        line-height: 100px;
+        span {
+            color: #fff;
+            display: table-cell;
+            text-align: center;
+            vertical-align: middle;
+        }
+    }
+    @media only screen and (max-width: 40em) {
+        .columns {
+            margin-bottom: 5rem;
+        }
+    }
+}

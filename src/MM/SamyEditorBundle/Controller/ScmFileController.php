@@ -39,7 +39,7 @@ class ScmFileController extends Controller
         ));
     }
 
-    public function fileJsonAction($hash, $scmFileId) {
+    public function fileJsonAction($hash, $scmFileId, Request $request) {
         $em = $this->get('doctrine');
 
         // load scmFile
@@ -51,6 +51,10 @@ class ScmFileController extends Controller
         // load fields from config
         $config = $this->get('mm_samy_editor.scm_config')->getConfigBySeries($scmFile->getScmPackage()->getSeries());
         $fieldsConfig = $config[$scmFile->getFilename()]['fields'];
+
+        if ('POST' == $request->getMethod()) {
+            return $this->handleFileActionPost($request->get('channels'));
+        }
 
         $data = array();
         foreach ($scmChannels as $scmChannel) {
@@ -67,6 +71,7 @@ class ScmFileController extends Controller
             $data[] = $field;
 
         }
+
         // json response
         $response = new Response(json_encode(array('data' => $data)));
         $response->headers->set('Content-Type', 'application/json');
@@ -74,7 +79,33 @@ class ScmFileController extends Controller
         return $response;
     }
 
+    protected function handleFileActionPost($channels)
+    {
+        $em = $this->get('doctrine')->getManager();
+
+        $em->getConnection()->beginTransaction();
+
+        foreach ($channels as $scmChannelId => $channel) {
+            $scmChannel = $em->getRepository('MM\SamyEditorBundle\Entity\ScmChannel')->find($scmChannelId);
+            $scmChannel->setUpdatedAt(new \DateTime());
+            $scmChannel->setName($channel['name']);
+            $scmChannel->setChannelNo($channel['channelNo']);
+            $em->persist($scmChannel);
+        }
+
+        $em->flush();
+        $em->getConnection()->commit();
+
+        // json response
+        $response = new Response(json_encode(array('response' => 'success')));
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
+    }
+
+
     public function fileReorderAction($hash, $scmFileId) {
+
         $em = $this->get('doctrine');
 
         // load scmFile
@@ -157,6 +188,10 @@ class ScmFileController extends Controller
             'dvbc' => array(
                 'label' => 'Cable Digital',
                 'icon' => 'fa-signal',
+            ),
+            'dvbs' => array(
+                'label' => 'Satelite Digital',
+                'icon' => 'fa-globe',
             ),
 
         );

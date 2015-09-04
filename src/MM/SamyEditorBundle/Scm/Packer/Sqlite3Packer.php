@@ -34,8 +34,10 @@ class Sqlite3Packer extends AbstractPacker {
         $db = new Sqlite3Database(stream_get_contents($scmFile->getData()));
 
         foreach ($scmChannels as $scmChannel) {
-            $this->updateChannelData($scmChannel, $fileConfig, $db->getPdo());
+            $this->updateChannelData($scmChannel, $fileConfig, $db->getSqlite3());
         }
+
+        $db->disconnect();
 
         return $db->getBinary();
     }
@@ -45,9 +47,9 @@ class Sqlite3Packer extends AbstractPacker {
      *
      * @param ScmChannel $scmChannel
      * @param array $fileConfig
-     * @param \PDO $pdo
+     * @param \SQLite3 $sqlite3
      */
-    protected function updateChannelData(Entity\ScmChannel $scmChannel, array $fileConfig, \PDO $pdo)
+    protected function updateChannelData(Entity\ScmChannel $scmChannel, array $fileConfig, \SQLite3 $sqlite3)
     {
         // iterate over fields and write the new value of each into the binaryString
         $values = [];
@@ -61,7 +63,7 @@ class Sqlite3Packer extends AbstractPacker {
             // custom save-handler? skip this field...
             if (isset($fieldConfig['savehandler'])) {
                 $saveHandler = new $fieldConfig['savehandler']();
-                $saveHandler->save($fieldName, $fieldConfig, $scmChannel, $pdo);
+                $saveHandler->save($fieldName, $fieldConfig, $scmChannel, $sqlite3);
                 continue;
             }
 
@@ -76,11 +78,11 @@ class Sqlite3Packer extends AbstractPacker {
         }
 
         // update channel
-        $sth = $pdo->prepare($fileConfig['updateSqlQuery']);
+        $sth = $sqlite3->prepare($fileConfig['updateSqlQuery']);
 
         foreach ($values as $column => $value) {
 
-            $sth->bindParam($column, $value, $column == ':name' ? \PDO::PARAM_LOB : null);
+            $sth->bindValue($column, $value, $column == ':name' ? SQLITE3_BLOB : SQLITE3_INTEGER); // @todo: type-handling
         }
 
         $sth->execute();

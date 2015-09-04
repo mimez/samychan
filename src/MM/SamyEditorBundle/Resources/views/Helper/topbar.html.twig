@@ -1,4 +1,3 @@
-
 <header>
     <nav class="top-bar" data-topbar role="navigation">
         <ul class="title-area">
@@ -14,20 +13,16 @@
                 <li>
                     <form method="post" enctype="multipart/form-data" action="{{ path('mm_samy_editor_scm_package_upload') }}">
                         <label class="file-upload">
-                            <i class="fa fa-folder-open"></i> Open .scm</a>
+                            <i class="fa fa-folder-open"></i> Open channel list</a>
                             <input type="file" name="form[file]" onchange="this.form.submit();"/>
                         </label>
                         <input type="hidden" name="form[series]" value="auto" />
                     </form>
                 </li>
-                {% if scmPackage is defined %}
-                    <li>
-                        <a href="{{ path('mm_samy_editor_scm_package_download', {'hash': scmPackage.hash}) }}"><i class="fa fa-cloud-download"></i> Download .scm</a>
-                    </li>
-                {% endif %}
+
                 {% if scm_recent_manager.recentScmPackages|length > 0 %}
                     <li class="has-dropdown">
-                        <a href="#">Recent files</a>
+                        <a href="#"><i class="fa fa-history"></i> Recent files</a>
                         <ul class="dropdown">
                             {% for scmPackage in scm_recent_manager.recentScmPackages %}
                                 <li>
@@ -37,8 +32,6 @@
                         </ul>
                     </li>
                 {% endif %}
-            </ul>
-            <ul class="right">
 
                 <li class="has-dropdown">
                     <a href="#"><i class="fa fa-question"></i> Help</a>
@@ -51,6 +44,14 @@
                         </li>
                     </ul>
                 </li>
+
+            </ul>
+            <ul class="right">
+                {% if scmPackage is defined %}
+                    <li class="has-form show-for-large-up">
+                        <a href="{{ path('mm_samy_editor_scm_package_download', {'hash': scmPackage.hash}) }}" class="button"><i class="fa fa-cloud-download"></i> Download channel list</a>
+                    </li>
+                {% endif %}
             </ul>
         </section>
     </nav>

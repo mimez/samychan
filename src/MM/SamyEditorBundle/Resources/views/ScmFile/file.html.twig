@@ -1,202 +1,35 @@
-{% extends 'MMSamyEditorBundle:Layout:base.html.twig' %}
+{% extends 'MMSamyEditorBundle:Layout:scmpackage.html.twig' %}
 
 {% set meta_title = scmPackage.filename ~ ' ' ~ scmFileMeta.label %}
-
 {% block sidebar %}
-    {{ render(controller('MMSamyEditorBundle:ScmPackage:sidebar', {'scmPackage': scmPackage})) }}
+    {{ render(controller('MMSamyEditorBundle:ScmPackage:subNav', {'scmPackage': scmPackage, 'scmFileId': scmFile.scmFileId})) }}
 {% endblock %}
 {% block content %}
     <div ng-app="SamyChanApp">
         <div ng-controller="ChannelCtrl">
-            <div st-table="displayedChannels" st-safe-src="channels">
-                <nav class="top-bar" data-topbar role="navigation">
-                    <ul class="title-area">
-                        <li class="name">
-                            <h1><i class="fa {{ scmFileMeta.icon }}"></i> {{ scmFileMeta.label }}&nbsp;</h1>
-                        </li>
-                    </ul>
-
-                    <section class="top-bar-section">
-                        <ul class="right">
-                            <li class="divider"></li>
-                            <li>
-                                <a href="#" id="reorder-channels" ng-click="reorderChannels()" data-tooltip title="Reorder all channel-numbers without any gap">
-                                    <i class="fa fa-sort-amount-asc"></i> Reorder
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li style="padding: 0 10px">
-                                <input type="search" st-search placeholder="search...">
-                            </li>
-                        </ul>
-                    </section>
-                </nav>
-                <table class="data channels" >
-                    <thead>
-                        <tr>
-                            {% for name,field in fields %}
-                                <td class="{{ field.rendering.className is defined ? field.rendering.className : '' }}">{{ field.label is defined ? field.label : name }}</td>
-                            {% endfor %}
-                            <td class="options">Options</td>
-                        </tr>
-                    </thead>
-                    <tbody ng-keyboardnav>
-                        <tr ng-repeat="channel in displayedChannels" ng-class="channel.className" ng-class-even="'even'" class="[[ channel.changed ? 'unsaved' : '' ]]">
-                            {% for name,field in fields %}
-                                <td class="{{ field.rendering.className is defined ? field.rendering.className : '' }}">
-                                    {% if field.editable is defined and field.editable%}
-                                        <input type="text" value="[[ channel.{{ name }} ]]" ng-model="channel.{{ name }}" ng-change="channel.changed = true">
-                                    {% else %}
-                                        {% if (field.rendering.render is defined) and (field.rendering.render == 'boolean') %}
-                                            <i class="fa fa-check" ng-if="channel.{{ name }} > 0"></i>
-                                        {% else %}
-                                            [[ channel.{{ name }} {{ field.rendering.render is defined ? '|' ~ field.rendering.render : '' }} ]]
-                                        {% endif %}
-                                    {% endif %}
-                                </td>
-                            {% endfor %}
-                            <td class="options">
-                                <button class="tiny edit" onclick="$(this).parents('tr:first').find('input:first').focus();"><i class="fa fa-pencil-square-o"></i> Edit</button>
-                                <button class="tiny alert save" ng-click="saveChannelAll()"><i class="fa fa-floppy-o"></i> Save (all)</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <form class="form-inline">
+                <input type="search" style="float: right; width: 200px;" ng-keyup="filterChannel($event)" placeholder="search channels...">
+                <button type="button" class="btn btn-default" ng-click="reorderChannels()"><i class="fa fa-sort-amount-asc"></i> Reorder</button>
+                <button type="button" class="btn btn-success" ng-click="saveChannels()"><i class="fa fa-floppy-o"></i> Save [[ getModifiedChannelsCount() > 0 ? " (" + getModifiedChannelsCount() + " unsaved channels)" : ""]]</button>
+            </form>
+            <div class="to-bottom" style="overflow: hidden; border-bottom: 1px solid #ccc;">
+            <hot-table
+                    settings="{colHeaders: colHeaders, contextMenu: false, afterChange: afterChange, stretchH: 'all', afterInit: afterInit, afterChange: afterChange, columnSorting: {column: 0, sortOrder: true} }"
+                    minSpareRows="1"
+                    datarows="channels">
+                {% for name,field in fields %}
+                    <hot-column
+                        data="{{ name }}"
+                        title="'{{ field.label is defined ? field.label : name }}'"
+                        {{ field.editable is not defined or not field.editable ? 'readonly="readonly"' : '' }}
+                        {{ field.rendering.type is defined and field.rendering.type == 'boolean' ? 'type="\'checkbox\'"' : '' }}
+                    >
+                    </hot-column>
+                {% endfor %}
+                <hot-column data="channelId" title="'channelId'" renderer="renderFav" readonly="readonly"></hot-column>
+            </hot-table>
             </div>
+            <div id="grid" data-url="{{ path('mm_samy_editor_scm_file_json', {'hash': scmPackage.hash, 'scmFileId': scmFile.scmFileId}) }}" reorder-url="{{ path('mm_samy_editor_scm_file_reorder', {'hash': scmPackage.hash, 'scmFileId': scmFile.scmFileId}) }}"></div>
         </div>
     </div>
-    <script>
-        var app = angular.module('SamyChanApp', ['smart-table']);
-        app.config(function($interpolateProvider) {
-            $interpolateProvider.startSymbol('[[');
-            $interpolateProvider.endSymbol(']]');
-        });
-
-        // filter/renderer for ServiceType
-        app.filter('serviceType', function () {
-            return function (item) {
-                switch (item) {
-                    case '01':
-                        return 'SD-TV';
-                    case '19':
-                        return 'HD-TV';
-                    case '02':
-                        return 'RADIO';
-                    default:
-                        return 'UNKNOWN';
-                }
-            };
-        });
-
-        app.directive('ngKeyboardnav', function($timeout) {
-            return {
-                restrict: 'A',
-                link: function(scope, element, attrs) {
-                    element.on('keydown', 'input', function(event) {
-                        var ARROW_LEFT = 37, ARROW_UP = 38, ARROW_RIGHT = 39, ARROW_DOWN = 40, ENTER = 13, ESC = 27, TAB = 9;
-
-                        // ENTER = SUBMIT
-                        if (event.which == ENTER) {
-                            $(this).parents('tr').find('button.save').click();
-                        }
-
-                        // ARROW_DOWN = move down
-                        if (event.which == ARROW_DOWN) {
-                            var index = $(this).parents('td').index() + 1;
-                            $(this).parents('tr').next().find('td:nth-child(' + index + ')').find('input').focus();
-
-                            return false;
-                        }
-
-                        // ARROW_UP = move UP
-                        if (event.which == ARROW_UP) {
-                            var index = $(this).parents('td').index() + 1;
-                            $(this).parents('tr').prev().find('td:nth-child(' + index + ')').find('input').focus();
-
-                            return false;
-                        }
-
-                        // ESC
-                        if (event.which == ESC) {
-                            $(this).blur();
-                        }
-                    });
-                }
-            };
-        });
-        app.controller('ChannelCtrl', function ($scope, $http, $timeout, $filter) {
-            var editableFields = [];
-            {% for name,field in fields %}
-
-                {% if field.editable is defined and field.editable %}
-                    editableFields.push("{{ name }}");
-                {% endif %}
-            {% endfor %}
-
-            var loadData = function() {
-                $.blockUI();
-                $http.get('{{ path('mm_samy_editor_scm_file_json', {'hash': scmPackage.hash, 'scmFileId': scmFile.scmFileId}) }}').then(function(res) {
-                    $scope.channels = res.data.data;
-                    $.unblockUI();
-                });
-            }
-
-            loadData();
-
-            $scope.reorderChannels = function() {
-                $.blockUI();
-                $.get("{{ path('mm_samy_editor_scm_file_reorder', {'hash': scmPackage.hash, 'scmFileId': scmFile.scmFileId}) }}", loadData);
-            }
-
-            $scope.editChannel = function($index) {
-                $scope.channels[$index].className = 'active-row';
-            }
-
-            $scope.saveChannelAll = function() {
-                $.blockUI();
-
-                for (i in $scope.channels) {
-                    if ($scope.channels[i].changed == true) {
-                        $scope.channels[i].channelNo = parseInt($scope.channels[i].channelNo);
-                        $scope.saveChannel($scope.channels[i]);
-                        $scope.channels[i].changed = false;
-                    }
-                }
-
-                $scope.channels = $filter('orderBy')($scope.channels, 'channelNo');
-            }
-
-            $scope.saveChannel = function(channelData) {
-
-                $timeout(function() {
-                    // build ajax url data gets send to
-                    var urlTemplate = "{{ path('mm_samy_editor_scm_channel', {'hash': scmPackage.hash, 'scmChannelId': 'placeholder'}) }}";
-                    var url = urlTemplate.replace("placeholder", channelData.channelId);
-
-                    // build formdata
-                    var formData = {};
-                    $(editableFields).each(function(index, name) {
-                        formData[name] = channelData[name];
-                    });
-
-                    // submit data to server
-                    $.post(url, {
-                        'form': formData
-                    }, function() {
-                        $.unblockUI();
-                    });
-                }, 1)
-
-            }
-        });
-
-        // activate row on focus
-        $("table.channels").on('focus', 'input, button.save', function(event) {
-            $(this).parents('tr').addClass('active-row');
-            $(this).select();
-        });
-        $("table.channels").on('blur', 'input, button.save', function(event) {
-            $(this).parents('tr').removeClass('active-row');
-        });
-    </script>
 {% endblock %}

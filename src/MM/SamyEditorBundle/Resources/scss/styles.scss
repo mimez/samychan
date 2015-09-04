@@ -26,28 +26,25 @@ $base-path: "../../../../../vendor/zurb/foundation/scss/";
 @import $base-path + "foundation/components/orbit";
 @import $base-path + "foundation/components/pagination";
 @import $base-path + "foundation/components/panels";
-//@import $base-path + "foundation/components/pricing-tables";
-//@import $base-path + "foundation/components/progress-bars";
-//@import $base-path + "foundation/components/range-slider";
+@import $base-path + "foundation/components/pricing-tables";
+@import $base-path + "foundation/components/progress-bars";
+@import $base-path + "foundation/components/range-slider";
 @import $base-path + "foundation/components/reveal";
 @import $base-path + "foundation/components/side-nav";
 @import $base-path + "foundation/components/split-buttons";
 @import $base-path + "foundation/components/sub-nav";
 @import $base-path + "foundation/components/switches";
-/*@import $base-path + "foundation/components/tables";*/
-@import "tables2";
+@import $base-path + "foundation/components/tables";
 @import $base-path + "foundation/components/tabs";
 @import $base-path + "foundation/components/thumbs";
 @import $base-path + "foundation/components/tooltips";
 @import $base-path + "foundation/components/top-bar";
 @import $base-path + "foundation/components/type";
-//@import $base-path + "foundation/components/offcanvas";
+@import $base-path + "foundation/components/offcanvas";
 @import $base-path + "foundation/components/visibility";
 
-// custom files2
+@import "features";
 @import "hero";
-@import "sidebar";
 @import "layout";
-@import "tables";
 @import "custom-file-upload";
 @import "multiselect";

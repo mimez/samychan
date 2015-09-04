@@ -1,5 +1,5 @@
 <?php
-
+ini_set('memory_limit', '256M');
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Debug\Debug;
 

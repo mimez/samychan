@@ -1,9 +1,9 @@
-{% extends 'MMSamyEditorBundle:Layout:base.html.twig' %}
+{% extends 'MMSamyEditorBundle:Layout:scmpackage.html.twig' %}
 
 {% set meta_title = scmPackage.filename %}
 
 {% block sidebar %}
-    {{ render(controller('MMSamyEditorBundle:ScmPackage:sidebar', {'scmPackage': scmPackage})) }}
+    {{ render(controller('MMSamyEditorBundle:ScmPackage:subNav', {'scmPackage': scmPackage})) }}
 {% endblock %}
 {% block content %}
     <div class="content-padding">

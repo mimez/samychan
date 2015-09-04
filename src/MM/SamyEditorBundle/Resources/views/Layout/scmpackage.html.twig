@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% include 'MMSamyEditorBundle:Helper:head.html.twig' %}
+    <body style="overflow: hidden;">
+        {% include 'MMSamyEditorBundle:Helper:topbar.html.twig' %}
+        <div class="layout">
+            {% block raw %}{% endblock %}
+            {% block sidebar %}{% endblock %}
+            <div class="content" style="padding: 20px;">
+                {% block content %}
+
+                {% endblock %}
+            </div>
+        </div>
+        <script>
+            $(document).foundation();
+        </script>
+    </body>
+</html>

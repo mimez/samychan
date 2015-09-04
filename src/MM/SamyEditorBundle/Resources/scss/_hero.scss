@@ -1,14 +1,22 @@
 .hero {
-    background: url("/bundles/mmsamyeditor/images/hero.jpg") no-repeat;
-    height: 750px;
-    padding: 100px 20px 0;
+    background: radial-gradient(circle at center, #53415F 0%, #27222B 73%);
+    padding: 150px 20px;
     position: relative;
     text-align: left;
     background-size: 100%;
-    margin-bottom: 3em;
+    font-family: 'PT Sans Narrow', sans-serif;
 }
 
+.hero-slogan {
+    background: url(/bundles/mmsamyeditor/images/logo.svg) no-repeat;
+    padding: 60px 0 0 230px;
+
+    h3 {
+        margin-bottom: 50px;
+    }
+}
 .hero h1 {
+
     color: #FFFFFF;
     font-size: 4em;
     font-weight: 500;
@@ -19,3 +27,14 @@
 .hero h3 {
     color:#fff;
 }
+
+section.secondary {
+    background: #5B4C64;
+    padding: 50px 0;
+}
+section.primary {
+    background: #413346;
+    color: #fff;
+    padding: 50px 0;
+}
+

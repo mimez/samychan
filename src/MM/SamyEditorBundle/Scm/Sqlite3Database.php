@@ -2,6 +2,7 @@
 namespace MM\SamyEditorBundle\Scm;
 
 use PDO;
+use SQLite3;
 
 class Sqlite3Database
 {
@@ -9,6 +10,16 @@ class Sqlite3Database
      * @var string
      */
     protected $filepath;
+
+    /**
+     * @var PDO
+     */
+    protected $pdo;
+
+    /**
+     * @var SQLite3
+     */
+    protected $sqlite3;
 
     /**
      * @return string
@@ -37,7 +48,7 @@ class Sqlite3Database
 
     public function __destruct()
     {
-        unlink($this->getFilepath());
+        #unlink($this->getFilepath());
     }
 
     /**
@@ -45,10 +56,37 @@ class Sqlite3Database
      */
     public function getPdo()
     {
-        $pdo = new \PDO('sqlite:' . $this->getFilepath());
-        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        if (!isset($this->pdo)) {
+            $this->pdo = new \PDO('sqlite:' . $this->getFilepath());
+            $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
-        return $pdo;
+            // After endless debugging: the db has WAL enabled by default. therefore
+            // all modifications gets written to a WAL file. the original db-file
+            // has no modifications. disable this behavoir
+            $this->pdo->query("PRAGMA journal_mode=DELETE");
+        }
+
+        return $this->pdo;
+    }
+
+    /**
+     * @return SQLite3
+     */
+    public function getSqlite3()
+    {
+        if (!isset($this->sqlite3)) {
+            $this->sqlite3 = new SQLite3($this->getFilepath());
+        }
+
+        return $this->sqlite3;
+    }
+
+    /**
+     * @return bool
+     */
+    public function disconnect()
+    {
+        return $this->getSqlite3()->close();
     }
 
     /**

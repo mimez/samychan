@@ -1,0 +1,13 @@
+<div class="content" style="padding: 20px;">
+    {% for type in ['success', 'error', 'notice'] %}
+        {% for flashMessage in app.session.flashbag.get(type) %}
+            <div data-alert class="alert-box {{ type }} radius">
+                {{ flashMessage }}
+                <a href="#" class="close">&times;</a>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% block content %}
+
+    {% endblock %}
+</div>

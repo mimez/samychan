@@ -34,20 +34,20 @@ class Configuration {
     public function __construct($kernel)
     {
         $yaml = new Yaml\Parser();
-        $value = $yaml->parse(file_get_contents($kernel->locateResource('@MMSamyEditorBundle/Resources/config/channel_format.yml')));
+        $value = $yaml->parse(file_get_contents($kernel->locateResource('@MMSamyEditorBundle/Resources/config/channellists/config.yml')));
 
         foreach ($value['scm_config']['series'] as $series => $seriesData) {
             if (!is_array($seriesData['files'])) {
                 continue;
             }
             foreach ($seriesData['files'] as $fileName => $fileConfigReference) {
-                $value['scm_config']['series'][$series][$fileName] = $value['scm_config']['file_formats'][$fileConfigReference];
+                $fileYaml = $yaml->parse(file_get_contents($kernel->locateResource('@MMSamyEditorBundle/Resources/config/channellists/' . $fileConfigReference . '.yml')));
+                $value['scm_config']['series'][$series][$fileName] = $fileYaml[$fileConfigReference];
             }
         }
 
         $this->setConfig($value['scm_config']);
     }
-
 
     /**
      * config by series

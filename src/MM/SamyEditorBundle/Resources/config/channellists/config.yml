@@ -1,0 +1,43 @@
+# http://helpdesk.kdgforum.de/wiki/DVB_Service-Informationen
+scm_config:
+    series:
+        D:
+            files:
+                map-CableD: CableD-320
+                map-AirA: AirA-64
+                map-AirD: AirD-320
+                map-SateD: SateD-172
+                map-AstraHDPlusD: AstraHDPlusD-212
+        E:
+            files:
+                map-CableD: CableD-320
+                map-AirA: AirA-64
+                map-AirD: AirD-320
+                map-SateD: SateD-168
+                map-AstraHDPlusD: AstraHDPlusD-212
+        F:
+            files:
+                map-CableD: CableD-320
+                map-AirA: AirA-64
+                map-AirD: AirD-320
+                map-SateD: SateD-168
+                map-AstraHDPlusD: AstraHDPlusD-212
+        H:
+            files:
+                map-CableD: CableD-320
+                map-AirA: AirA-64
+                map-AirD: AirD-320
+                map-SateD: SateD-168
+                map-AstraHDPlusD: AstraHDPlusD-212
+        J:
+            files:
+                dvbc: dvbc-sqlite
+                dvbs: dvbc-sqlite
+
+
+
+
+
+
+
+

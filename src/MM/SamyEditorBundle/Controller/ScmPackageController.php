@@ -96,7 +96,7 @@ class ScmPackageController extends Controller
      * @param Entity\ScmPackage $scmPackage
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function sidebarAction(Entity\ScmPackage $scmPackage)
+    public function subNavAction(Entity\ScmPackage $scmPackage, $scmFileId = null, $favNo = null)
     {
         // Generate Navitems
         $navitems = array();
@@ -117,6 +117,7 @@ class ScmPackageController extends Controller
                 'scmFileId' => $scmFile->getScmFileId(),
             ));
             $navitem['channelCount'] = $this->getChannelCountByScmFile($scmFile);
+            $navitem['active'] = $scmFile->getScmFileId() == $scmFileId;
             $navitems[] = $navitem;
         }
 
@@ -131,6 +132,7 @@ class ScmPackageController extends Controller
                 )),
                 'label' => 'Favorites ' . $i,
                 'icon' => 'fa-star',
+                'active' => $i == $favNo,
                 'channelCount' => $this->getFavoritesCountByScmPackage($scmPackage, $i)
             );
         }
@@ -202,6 +204,10 @@ class ScmPackageController extends Controller
             'dvbc' => array(
                 'label' => 'Cable Digital',
                 'icon' => 'fa-signal',
+            ),
+            'dvbs' => array(
+                'label' => 'Satelite Digital',
+                'icon' => 'fa-globe',
             ),
         );
 
