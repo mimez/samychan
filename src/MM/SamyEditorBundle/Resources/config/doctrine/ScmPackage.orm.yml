@@ -17,6 +17,8 @@ MM\SamyEditorBundle\Entity\ScmPackage:
         series:
             type: string
             length: 1
+        demo:
+            type: boolean
     oneToMany:
         files:
             targetEntity: ScmFile

@@ -67,12 +67,27 @@ class ScmPackageController extends Controller
 
     public function indexAction($hash)
     {
+        // load scmPackage
         $em = $this->get('doctrine');
         $scmPackage = $em->getRepository('MM\SamyEditorBundle\Entity\ScmPackage')->findOneBy(array('hash' => $hash));
 
-        return $this->render('MMSamyEditorBundle:ScmPackage:index.html.twig', array(
-            'scmPackage' => $scmPackage,
-        ));
+        foreach ($scmPackage->getFiles() as $scmFile) {
+
+            // get metadata of the file (by its name)
+            $file = $this->helperGetFileMetaByName($scmFile->getFilename());
+
+            // if the scmFile is not supported, we dont display it in the sidebar
+            if (false !== $file) {
+                break;
+            }
+
+        }
+
+        // create redirect response
+        return new RedirectResponse($this->generateUrl('mm_samy_editor_scm_file', array(
+            'hash' => $scmPackage->getHash(),
+            'scmFileId' => $scmFile->getScmFileId()
+        )));
     }
 
     public function downloadAction($hash)

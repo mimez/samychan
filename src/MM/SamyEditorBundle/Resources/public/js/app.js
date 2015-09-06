@@ -52,7 +52,12 @@ app.controller('ChannelCtrl', function ($scope, $http) {
     }
 
     $scope.reorderChannels = function() {
-        console.log($scope);
+
+        // if we have modified channels, we have to save the channels before
+        if ($scope.getModifiedChannelsCount() > 0) {
+            alert($scope.getModifiedChannelsCount() + ' unsaved channel(s). Please save before reordering.');
+            return;
+        }
         $.blockUI();
         $.get($('#grid').attr('reorder-url'), $scope.loadChannels);
     }

@@ -63,6 +63,7 @@ class ScmPackage
     public function __construct()
     {
         $this->files = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->setDemo(false);
     }
 
     /**
@@ -185,5 +186,33 @@ class ScmPackage
         }
 
         return false;
+    }
+
+    /**
+     * @var boolean
+     */
+    private $demo;
+
+    /**
+     * Set demo
+     *
+     * @param boolean $demo
+     * @return ScmPackage
+     */
+    public function setDemo($demo)
+    {
+        $this->demo = $demo;
+
+        return $this;
+    }
+
+    /**
+     * Get demo
+     *
+     * @return boolean 
+     */
+    public function getDemo()
+    {
+        return $this->demo;
     }
 }

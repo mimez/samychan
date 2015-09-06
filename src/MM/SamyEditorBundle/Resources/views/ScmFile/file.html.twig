@@ -1,6 +1,6 @@
 {% extends 'MMSamyEditorBundle:Layout:scmpackage.html.twig' %}
 
-{% set meta_title = scmPackage.filename ~ ' ' ~ scmFileMeta.label %}
+{% set meta_title = 'SamyCHAN: ' ~ scmPackage.filename ~ ' ' ~ scmFileMeta.label %}
 {% block sidebar %}
     {{ render(controller('MMSamyEditorBundle:ScmPackage:subNav', {'scmPackage': scmPackage, 'scmFileId': scmFile.scmFileId})) }}
 {% endblock %}
@@ -14,7 +14,7 @@
             </form>
             <div class="to-bottom" style="overflow: hidden; border-bottom: 1px solid #ccc;">
             <hot-table
-                    settings="{colHeaders: colHeaders, contextMenu: false, afterChange: afterChange, stretchH: 'all', afterInit: afterInit, afterChange: afterChange, columnSorting: {column: 0, sortOrder: true} }"
+                    settings="{colHeaders: colHeaders, contextMenu: false, stretchH: 'all', afterInit: afterInit, afterChange: afterChange, columnSorting: {column: 0, sortOrder: true} }"
                     minSpareRows="1"
                     datarows="channels">
                 {% for name,field in fields %}
@@ -29,7 +29,7 @@
                 <hot-column data="channelId" title="'channelId'" renderer="renderFav" readonly="readonly"></hot-column>
             </hot-table>
             </div>
-            <div id="grid" data-url="{{ path('mm_samy_editor_scm_file_json', {'hash': scmPackage.hash, 'scmFileId': scmFile.scmFileId}) }}"></div>
+            <div id="grid" reorder-url="{{ path('mm_samy_editor_scm_file_reorder', {'hash': scmPackage.hash, 'scmFileId': scmFile.scmFileId}) }}" data-url="{{ path('mm_samy_editor_scm_file_json', {'hash': scmPackage.hash, 'scmFileId': scmFile.scmFileId}) }}"></div>
         </div>
     </div>
 {% endblock %}

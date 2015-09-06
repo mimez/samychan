@@ -14,7 +14,6 @@ mm_samy_editor_content_exportscm:
     path:     /export-channel-list-samsung/
     defaults: { _controller: MMSamyEditorBundle:Content:exportscm }
 
-
 mm_samy_editor_scm_package:
     path:     /{hash}/
     defaults: { _controller: MMSamyEditorBundle:ScmPackage:index }
@@ -42,3 +41,7 @@ mm_samy_editor_scm_file_reorder:
 mm_samy_editor_scm_channel:
     path:     /{hash}/channel/{scmChannelId}/
     defaults: { _controller: MMSamyEditorBundle:ScmChannel:channel }
+
+mm_samy_editor_demo_load:
+    path:     /demo/load/
+    defaults: { _controller: MMSamyEditorBundle:Demo:load }
