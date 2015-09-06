@@ -17,6 +17,11 @@ class Sqlite3PackerTest extends WebTestCase
     public function testPackingJSeriesWorks()
     {
         $scmPackage = $this->loadPackage('j_cable.zip');
+        $dvbc = $scmPackage->getFileByFilename('dvbc');
+        $channelArd = $dvbc->getChannelByChannelNo(1);
+        $channelRtl = $dvbc->getChannelByChannelNo(3);
+        $channelArd->setChannelNo(3);
+        $channelRtl->setChannelNo(1);
 
         $packer = static::$kernel->getContainer()->get('mm_samy_editor.scm_packer');
         $binaryScmPackage = $packer->pack($scmPackage);
