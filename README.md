@@ -24,3 +24,14 @@ SamyCHAN is available on www.samychan.com. You don't need to download anything. 
 immediatly. Since it completly web based, SamyCHAN support all modern browsers and operating systems, including
 Mac OS and Linux based Systems.
 
+License (GPLv3)
+---------------
+
+GNU General Public Licence, Version 3: http://www.gnu.org/licenses/gpl.html
+Source code is available on https://github.com/mimez/SamyCHAN
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+
+IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
