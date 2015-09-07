@@ -1,8 +1,8 @@
 {
-    "name": "symfony/framework-standard-edition",
-    "license": "MIT",
+    "name": "mimez/SamyCHAN",
+    "license": "GPLv3",
     "type": "project",
-    "description": "The \"Symfony Standard Edition\" distribution",
+    "description": "Channel editor for SAMSUNG televisions",
     "autoload": {
         "psr-0": { "": "src/", "SymfonyStandard": "app/" }
     },
@@ -50,7 +50,7 @@
     },
     "extra": {
         "symfony-app-dir": "app",
-        "symfony-web-dir": "web",
+        "symfony-web-dir": "webroot",
         "symfony-assets-install": "relative",
         "incenteev-parameters": {
             "file": "app/config/parameters.yml"
