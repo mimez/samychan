@@ -1,0 +1,10 @@
+{% extends 'MMSamyChanBackendBundle:Layout:base.html.twig' %}
+{% block raw %}
+    {% include 'MMSamyChanBackendBundle:Helper:topbar.html.twig' %}
+    <div class="row">
+        <div class="column" role="main" id="content">
+            {% include 'MMSamyChanBackendBundle:Helper:flashmessages.html.twig' %}
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}

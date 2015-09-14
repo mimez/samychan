@@ -1,0 +1,4 @@
+services:
+#    mm_samy_chan_frontend.example:
+#        class: MM\SamyChan\FrontendBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

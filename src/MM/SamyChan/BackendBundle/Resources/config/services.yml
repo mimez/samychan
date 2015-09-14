@@ -1,0 +1,21 @@
+services:
+    mm_samy_editor.scm_parser:
+        class: MM\SamyChan\BackendBundle\Scm\Parser
+        arguments: ["@mm_samy_editor.scm_config", "@mm_samy_editor.scm_series_detector"]
+    mm_samy_editor.scm_packer:
+        class: MM\SamyChan\BackendBundle\Scm\Packer\Packer
+        arguments: ["@doctrine", "@mm_samy_editor.scm_config"]
+    mm_samy_editor.scm_orderer:
+        class: MM\SamyChan\BackendBundle\Scm\Orderer
+        arguments: ["@doctrine"]
+    mm_samy_editor.scm_recent_manager:
+        class: MM\SamyChan\BackendBundle\Scm\RecentManager
+        arguments: ["@service_container"]
+    mm_samy_editor.scm_favorite_manager:
+        class: MM\SamyChan\BackendBundle\Scm\FavoriteManager
+        arguments: ["@doctrine"]
+    mm_samy_editor.scm_config:
+        class: MM\SamyChan\BackendBundle\Scm\Configuration
+        arguments: ["@kernel"]
+    mm_samy_editor.scm_series_detector:
+        class: MM\SamyChan\BackendBundle\Scm\SeriesDetector

@@ -1,0 +1,106 @@
+CableD-320:
+    type: binary
+    byte_length: 320
+    fields:
+        channelNo:
+            label: No
+            offset: 0
+            length: 2
+            type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger16
+            editable: true
+            saveable: true
+            rendering:
+                render: editable
+                className: number
+        name:
+            label: Name
+            offset: 64
+            length: 100
+            type: MM\SamyChan\BackendBundle\Scm\DataType\String
+            editable: true
+            saveable: true
+            rendering:
+                render: editable
+        vpid:
+            label: VPID
+            offset: 2
+            length: 2
+            type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger16
+            rendering:
+                className: number
+        pcr:
+            label: PCR
+            offset: 4
+            length: 2
+            type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger16
+            rendering:
+                className: number
+        sid:
+            label: SID
+            offset: 6
+            length: 2
+            type: MM\SamyChan\BackendBundle\Scm\DataType\UnsignedInteger16
+            rendering:
+                className: number
+        serviceType:
+            label: Type
+            offset: 15
+            length: 1
+            type: MM\SamyChan\BackendBundle\Scm\DataType\ServiceType
+            rendering:
+                className: number
+                render: serviceType
+        symbolRate:
+            label: Symbolrate
+            offset: 28
+            length: 2
+            type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger16
+            rendering:
+                className: small
+        encrypted:
+            label: Crypt
+            offset: 24
+            length: 1
+            type: MM\SamyChan\BackendBundle\Scm\DataType\Boolean
+            rendering:
+                type: boolean
+        fav1sort:
+            label: F1
+            offset: 292
+            length: 4
+            type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger32
+            saveable: true
+            rendering:
+                type: boolean
+        fav2sort:
+            label: F2
+            offset: 296
+            length: 4
+            type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger32
+            saveable: true
+            rendering:
+                type: boolean
+        fav3sort:
+            label: F3
+            offset: 300
+            length: 4
+            type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger32
+            saveable: true
+            rendering:
+                type: boolean
+        fav4sort:
+            label: F4
+            offset: 304
+            length: 4
+            type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger32
+            saveable: true
+            rendering:
+                type: boolean
+        fav5sort:
+            label: F5
+            offset: 308
+            length: 4
+            type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger32
+            saveable: true
+            rendering:
+                type: boolean

@@ -1,0 +1,3 @@
+mm_samy_chan_frontend_homepage:
+    path:     /{hash}.html
+    defaults: { _controller: MMSamyChanFrontendBundle:Default:index }

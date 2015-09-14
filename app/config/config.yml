@@ -36,7 +36,7 @@ twig:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        ["MMSamyEditorBundle"]
+    bundles:        ["MMSamyChanBackendBundle"]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~

@@ -1,0 +1,70 @@
+dvbc-sqlite:
+    type: sqlite3
+    channelSqlQuery: SELECT s.srvId AS identifier, s.major AS channelNo, CAST(s.srvName AS BLOB) AS name, s.vidPid AS vpid, s.pcr, s.tsid as sid, fav1.pos AS fav1sort, fav2.pos AS fav2sort, fav3.pos AS fav3sort, fav4.pos AS fav4sort, fav5.pos AS fav5sort FROM SRV s LEFT JOIN SRV_FAV fav1 ON (fav1.srvId = s.srvId AND fav1.fav = 1) LEFT JOIN SRV_FAV fav2 ON (fav2.srvId = s.srvId AND fav2.fav = 2) LEFT JOIN SRV_FAV fav3 ON (fav3.srvId = s.srvId AND fav3.fav = 3) LEFT JOIN SRV_FAV fav4 ON (fav4.srvId = s.srvId AND fav4.fav = 4) LEFT JOIN SRV_FAV fav5 ON (fav5.srvId = s.srvId AND fav5.fav = 5)
+    updateSqlQuery: UPDATE SRV SET major = :channelNo, srvName = CAST(:name AS BLOB) WHERE srvId = :identifier
+    fields:
+        channelNo:
+            label: No
+            type: MM\SamyChan\BackendBundle\Scm\DataType\Plain
+            editable: true
+            saveable: true
+            rendering:
+                type: number
+        name:
+            label: Name
+            type: MM\SamyChan\BackendBundle\Scm\DataType\StringSqlite3
+            editable: true
+            saveable: true
+            rendering:
+                render: editable
+        fav1sort:
+            label: F1
+            type: MM\SamyChan\BackendBundle\Scm\DataType\Plain
+            saveable: true
+            rendering:
+                type: boolean
+            savehandler: MM\SamyChan\BackendBundle\Scm\SaveHandler\Sqlite3Favorite
+            additional_data:
+                favno: 1
+        fav2sort:
+            label: F2
+            type: MM\SamyChan\BackendBundle\Scm\DataType\Plain
+            saveable: true
+            rendering:
+                type: boolean
+            savehandler: MM\SamyChan\BackendBundle\Scm\SaveHandler\Sqlite3Favorite
+            additional_data:
+                favno: 2
+        fav3sort:
+            label: F3
+            type: MM\SamyChan\BackendBundle\Scm\DataType\Plain
+            saveable: true
+            rendering:
+                type: boolean
+            savehandler: MM\SamyChan\BackendBundle\Scm\SaveHandler\Sqlite3Favorite
+            additional_data:
+                favno: 3
+        fav4sort:
+            label: F4
+            type: MM\SamyChan\BackendBundle\Scm\DataType\Plain
+            saveable: true
+            rendering:
+                type: boolean
+            savehandler: MM\SamyChan\BackendBundle\Scm\SaveHandler\Sqlite3Favorite
+            additional_data:
+                favno: 4
+        fav5sort:
+            label: F5
+            type: MM\SamyChan\BackendBundle\Scm\DataType\Plain
+            saveable: true
+            rendering:
+                type: boolean
+            savehandler: MM\SamyChan\BackendBundle\Scm\SaveHandler\Sqlite3Favorite
+            additional_data:
+                favno: 5
+        identifier:
+            label: identifier
+            saveable: true
+            type: MM\SamyChan\BackendBundle\Scm\DataType\Plain
+            rendering:
+                render: false

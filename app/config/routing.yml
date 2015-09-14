@@ -1,3 +1,7 @@
-mm_samy_editor:
-    resource: "@MMSamyEditorBundle/Resources/config/routing.yml"
+mm_samychan_frontend:
+    resource: "@MMSamyChanFrontendBundle/Resources/config/routing.yml"
     prefix:   /
+
+mm_samychan_backend:
+    resource: "@MMSamyChanBackendBundle/Resources/config/routing.yml"
+    prefix:   /backend

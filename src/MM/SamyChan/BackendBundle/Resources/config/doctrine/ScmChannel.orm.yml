@@ -1,0 +1,65 @@
+MM\SamyChan\BackendBundle\Entity\ScmChannel:
+    type: entity
+    table: scm_channels
+    repositoryClass: MM\SamyChan\BackendBundle\Entity\ScmChannelRepository
+    id:
+        scm_channel_id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        channelNo:
+            type: integer
+        vpid:
+            type: integer
+            nullable: true
+        pcr:
+            type: integer
+            nullable: true
+        sid:
+            type: integer
+            nullable: true
+        symbolRate:
+            type: integer
+            nullable: true
+        serviceType:
+            type: string
+            nullable: true
+        encrypted:
+            type: boolean
+            nullable: true
+        name:
+            type: string
+        data:
+            type: binary
+        updatedAt:
+            type: datetime
+            nullable: true
+        fav1sort:
+            type: integer
+            nullable: true
+        fav2sort:
+            type: integer
+            nullable: true
+        fav3sort:
+            type: integer
+            nullable: true
+        fav4sort:
+            type: integer
+            nullable: true
+        fav5sort:
+            type: integer
+            nullable: true
+        identifier:
+            type: string
+            nullable: true
+    manyToOne:
+        scmFile:
+            targetEntity: ScmFile
+            inversedBy: channels
+            joinColumn:
+                name: scm_file_id
+                nullable: false
+                referencedColumnName: scm_file_id
+    lifecycleCallbacks: {  }
