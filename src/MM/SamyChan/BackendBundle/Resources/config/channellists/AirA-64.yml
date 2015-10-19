@@ -28,7 +28,7 @@ AirA-64:
             type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger32
             saveable: true
             rendering:
-                type: boolean
+                type: checkbox
         fav2sort:
             label: F2
             offset: 40
@@ -36,7 +36,7 @@ AirA-64:
             type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger32
             saveable: true
             rendering:
-                type: boolean
+                type: checkbox
         fav3sort:
             label: F3
             offset: 44
@@ -44,7 +44,7 @@ AirA-64:
             type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger32
             saveable: true
             rendering:
-                type: boolean
+                type: checkbox
         fav4sort:
             label: F4
             offset: 48
@@ -52,7 +52,7 @@ AirA-64:
             type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger32
             saveable: true
             rendering:
-                type: boolean
+                type: checkbox
         fav5sort:
             label: F5
             offset: 52
@@ -60,4 +60,4 @@ AirA-64:
             type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger32
             saveable: true
             rendering:
-                type: boolean
+                type: checkbox

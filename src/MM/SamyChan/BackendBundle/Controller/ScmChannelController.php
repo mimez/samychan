@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use MM\SamyChan\BackendBundle\Scm;
 use MM\SamyChan\BackendBundle\Entity;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ScmChannelController extends Controller
 {
@@ -47,5 +48,37 @@ class ScmChannelController extends Controller
             'scmPackage' => $scmPackage,
             'form' => $form->createView(),
         ));
+    }
+
+    public function channelsAction($hash)
+    {
+        $em = $this->get('doctrine')->getManager();
+
+        // load scmPackage
+        $scmPackage = $em->getRepository('MM\SamyChan\BackendBundle\Entity\ScmPackage')->findOneBy(array('hash' => $hash));
+
+        // get all channels of this file
+        $scmChannels = $em->getRepository('MM\SamyChan\BackendBundle\Entity\ScmChannel')->findChannelsByScmPackage($scmPackage);
+
+        $data = array();
+        foreach ($scmChannels as $scmChannel) {
+            $channelData = array(
+                'scmChannelId' => $scmChannel->getScmChannelId(),
+                'channelNo' => $scmChannel->getChannelNo(),
+                'name' => $scmChannel->getName(),
+                'filename' => $scmChannel->getScmFile()->getFilename()
+            );
+
+            foreach ([1,2,3,4,5] as $favNo) {
+                $channelData['fav' . $favNo . 'sort'] = $scmChannel->{'getFav' . $favNo . 'sort'}();
+            }
+
+            $data[$scmChannel->getScmChannelId()] = $channelData;
+        }
+
+        $response = new JsonResponse();
+        $response->setData($data);
+
+        return $response;
     }
 }

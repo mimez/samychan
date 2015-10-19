@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use MM\SamyChan\BackendBundle\Scm;
 use MM\SamyChan\BackendBundle\Entity;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ScmPackageController extends Controller
 {
@@ -46,7 +47,7 @@ class ScmPackageController extends Controller
                 $em->flush();
 
                 // create redirect response
-                $response = new RedirectResponse($this->generateUrl('mm_samy_editor_scm_package', array('hash' => $scmPackage->getHash())));
+                $response = new RedirectResponse($this->generateUrl('mm_samychan_frontend_package', array('hash' => $scmPackage->getHash())));
 
                 // add scm-package to recent packages (via COOKIES)
                 $this->get('mm_samy_editor.scm_recent_manager')->addScmPackage($scmPackage, $response);
@@ -60,7 +61,7 @@ class ScmPackageController extends Controller
             }
         }
 
-        return $this->render('MMSamyChanBackendBundle:Default:uploadscm.html.twig', array(
+        return $this->render('MMSamyChanFrontendBundle:Default:uploadscm.html.twig', array(
             'form' => $form->createView(),
         ));
     }
@@ -75,9 +76,42 @@ class ScmPackageController extends Controller
             throw new \Exception(sprintf('scm-package with hash=(%s) does not exist', $hash));
         }
 
-        return $this->render('MMSamyChanBackendBundle:ScmPackage:index.html.twig', array(
-            'scmPackage' =>$scmPackage
-        ));
+        $data = array(
+            'hash' => $scmPackage->getHash(),
+            'scmPackageId' => $scmPackage->getScmPackageId(),
+            'filename' => $scmPackage->getFilename(),
+            'files' => array(),
+            'favorites' => array(),
+        );
+
+        foreach ($scmPackage->getFiles() as $scmFile) {
+
+            $file = $this->helperGetFileMetaByName($scmFile->getFilename());
+
+            // if the scmFile is not supported, we dont display it in the sidebar
+            if (false === $file) {
+                continue;
+            }
+
+            $file['scmFileId'] = $scmFile->getScmFileId();
+            $file['channelCount'] = $this->getChannelCountByScmFile($scmFile);
+
+            $data['files'][] = $file;
+        }
+
+        // add favorites
+        // favorites
+        for ($i = 1; $i <= 5; $i++) {
+            $data['favorites'][] = array(
+                'favNo' => $i,
+                'channelCount' => $this->getFavoritesCountByScmPackage($scmPackage, $i)
+            );
+        }
+
+        $response = new JsonResponse();
+        $response->setData($data);
+
+        return $response;
     }
 
     public function downloadAction($hash)
@@ -93,58 +127,6 @@ class ScmPackageController extends Controller
         header(sprintf('Content-Disposition: attachment; filename="%s"', $scmPackage->getFilename()));
         echo $scmBinaryData;
         die();
-    }
-
-    /**
-     * Embedded Controller um die Sidebar zu bauen
-     *
-     * @param Entity\ScmPackage $scmPackage
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function subNavAction(Entity\ScmPackage $scmPackage, $scmFileId = null, $favNo = null)
-    {
-        // Generate Navitems
-        $navitems = array();
-        foreach ($scmPackage->getFiles() as $scmFile) {
-
-            // get metadata of the file (by its name)
-            $file = $this->helperGetFileMetaByName($scmFile->getFilename());
-
-            // if the scmFile is not supported, we dont display it in the sidebar
-            if (false === $file) {
-                continue;
-            }
-
-            // generate the nav item
-            $navitem = $file;
-            $navitem['path'] = $this->generateUrl('mm_samy_editor_scm_file', array(
-                'hash' => $scmPackage->getHash(),
-                'scmFileId' => $scmFile->getScmFileId(),
-            ));
-            $navitem['channelCount'] = $this->getChannelCountByScmFile($scmFile);
-            $navitem['active'] = $scmFile->getScmFileId() == $scmFileId;
-            $navitems[] = $navitem;
-        }
-
-
-        // add favorites
-        // favorites
-        for ($i = 1; $i <= 5; $i++) {
-            $navitems[] = array(
-                'path' => $this->generateUrl('mm_samy_editor_scm_favorites', array(
-                    'hash' => $scmPackage->getHash(),
-                    'favNo' => $i
-                )),
-                'label' => 'Favorites ' . $i,
-                'icon' => 'fa-star',
-                'active' => $i == $favNo,
-                'channelCount' => $this->getFavoritesCountByScmPackage($scmPackage, $i)
-            );
-        }
-
-        return $this->render('MMSamyChanBackendBundle:ScmPackage:sidebar.html.twig', array(
-            'navitems' => $navitems
-        ));
     }
 
     /**

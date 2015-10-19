@@ -6,17 +6,32 @@
 <meta name="apple-touch-fullscreen" content="yes">
 <meta name="description" content="Avalon Admin Theme">
 <meta name="author" content="Michael Mezger">
-<link rel="icon apple-touch-icon" sizes="16x16 32x32 64x64" href="/bundles/mmsamyeditor/images/favicons/64x64.png" type="image/png">
-<link rel="icon apple-touch-icon apple-touch-startup-icon" sizes="144x144" href="/bundles/mmsamyeditor/images/favicons/144x144.png" type="image/png">
-<link rel="icon apple-touch-icon apple-touch-startup-icon" sizes="114x114" href="/bundles/mmsamyeditor/images/favicons/114x114.png" type="image/png">
-<link rel="icon apple-touch-icon apple-touch-startup-icon" sizes="72x72" href="/bundles/mmsamyeditor/images/favicons/64x64.png" type="image/png">
-<link rel="icon apple-touch-icon apple-touch-startup-icon" sizes="72x72" href="/bundles/mmsamyeditor/images/favicons/72x72.png" type="image/png">
+<link rel="icon apple-touch-icon" sizes="16x16 32x32 64x64" href="/bundles/mmsamychanfrontend/images/favicons/64x64.png" type="image/png">
+<link rel="icon apple-touch-icon apple-touch-startup-icon" sizes="144x144" href="/bundles/mmsamychanfrontend/images/favicons/144x144.png" type="image/png">
+<link rel="icon apple-touch-icon apple-touch-startup-icon" sizes="114x114" href="/bundles/mmsamychanfrontend/images/favicons/114x114.png" type="image/png">
+<link rel="icon apple-touch-icon apple-touch-startup-icon" sizes="72x72" href="/bundles/mmsamychanfrontend/images/favicons/64x64.png" type="image/png">
+<link rel="icon apple-touch-icon apple-touch-startup-icon" sizes="72x72" href="/bundles/mmsamychanfrontend/images/favicons/72x72.png" type="image/png">
 <link href='http://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700' rel='stylesheet' type='text/css'>
 
+{% stylesheets '@MMSamyChanFrontendBundle/Resources/scss/styles.scss' %}
+<link rel="stylesheet" href="{{ asset_url }}">
+{% endstylesheets %}
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.5/angular.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.5/angular-route.min.js"></script>
-<script src="   //handsontable.com/dist/handsontable.full.js"></script>
-<link rel="stylesheet" media="screen" href="//handsontable.com/dist/handsontable.full.css">
-<script src="/bundles/mmsamychanfrontend/js/app.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/handsontable/0.18.0/handsontable.full.min.js"></script>
+<link rel="stylesheet" media="screen" href="//cdnjs.cloudflare.com/ajax/libs/handsontable/0.18.0/handsontable.full.min.css">
+<script src="{{ asset('bundles/mmsamychanfrontend/js/foundation.js') }}"></script>
+<script src="{{ asset('bundles/mmsamychanfrontend/js/foundation.clearing.js') }}"></script>
+<script src="{{ asset('bundles/mmsamychanfrontend/js/foundation.magellan.js') }}"></script>
+<script src="{{ asset('bundles/mmsamychanfrontend/js/foundation.topbar.js') }}"></script>
+<script src="{{ asset('bundles/mmsamychanfrontend/js/jquery.blockUI.js') }}"></script>
+<script src="{{ asset('bundles/mmsamychanfrontend/js/ngHandsontable.js') }}"></script>
+<script src="{{ asset('bundles/mmsamychanfrontend/js/modernizr.js') }}"></script>
+<script src="{{ asset('bundles/mmsamychanfrontend/js/app.js') }}"></script>
+<script src="{{ asset('bundles/mmsamychanfrontend/js/services/nav.js') }}"></script>
+<script src="{{ asset('bundles/mmsamychanfrontend/js/services/backendUrlGenerator.js') }}"></script>
+<script src="{{ asset('bundles/mmsamychanfrontend/js/controllers/ScmFavoriteCtrl.js') }}"></script>
+<script src="{{ asset('bundles/mmsamychanfrontend/js/controllers/ScmFileCtrl.js') }}"></script>
+<script src="{{ asset('bundles/mmsamychanfrontend/js/controllers/HeaderCtrl.js') }}"></script>

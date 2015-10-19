@@ -3,11 +3,37 @@
 namespace MM\SamyChan\FrontendBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
-    public function indexAction($hash)
+    public function indexAction(Request $request)
     {
-        return $this->render('MMSamyChanFrontendBundle:Application:application.html.twig');
+        $defaultData = array();
+        $form = $this->createFormBuilder($defaultData)
+            ->add('file', 'file')
+            ->add('send', 'submit')
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            // data is an array with "name", "email", and "message" keys
+            $data = $form->getData();
+            $em = $this->get('doctrine')->getManager();
+            $scmArchiveLoader = $this->get('mm_samy_editor.scm_parser');
+            $scmPackage = $scmArchiveLoader->load($data['file']->openFile());
+            $scmPackage->setFilename($data['file']->getClientOriginalName());
+            $em->persist($scmPackage);
+            $em->flush();
+
+            return $this->redirectToRoute('mm_samychan_frontend_package', array('hash' => $scmPackage->getHash()));
+        }
+
+        return $this->render('MMSamyChanFrontendBundle:Default:index.html.twig', array(
+            'form' => $form->createView(),
+        ));
     }
+
+    
 }

@@ -1,0 +1,20 @@
+<button type="button" class="btn btn-success" ng-click="save()"><i class="fa fa-floppy-o"></i> Save</button>
+<br class="clear" />
+<div style="width: 50%; float: left;">
+    <div class="clearfix">
+        <h4 style="float: left;">Unassigned channels</h4>
+        <input type="search" style="float: right; width: 200px;" id="unselected-channels-filter" placeholder="search channels...">
+    </div>
+    <div class="to-bottom hot-border" id="foo" style="overflow: hidden; border: 1px solid #ccc;" >
+        <div id="unselected-channels"></div>
+    </div>
+</div>
+<div style="width: 49%; float: right;">
+    <div class="clearfix">
+        <h4 style="float: left;">favorite list #{{favNo}}</h4>
+        <input type="search" style="float: right; width: 200px;" id="selected-channels-filter" placeholder="search channels...">
+    </div>
+    <div class="to-bottom hot-border" id="selected-channels-container" style="overflow: hidden; border: 1px solid #ccc;" >
+        <div id="selected-channels"></div>
+    </div>
+</div>

@@ -5,6 +5,7 @@ namespace MM\SamyChan\BackendBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use MM\SamyChan\BackendBundle\Scm;
 use MM\SamyChan\BackendBundle\Entity;
 
@@ -75,6 +76,7 @@ class ScmFileController extends Controller
         $scmFileData = array(
             'scmFileId' => $scmFile->getScmFileId(),
             'filename' => $scmFile->getFilename(),
+            'fields' => $fieldsConfig,
             'channels' => $channels
         );
 
@@ -149,7 +151,7 @@ class ScmFileController extends Controller
 
             // supported scmFile, go on and generate the nav item
             $navitem = $file;
-            $navitem['path'] = $this->generateUrl('mm_samy_editor_scm_file', array(
+            $navitem['path'] = $this->generateUrl('mm_samychan_backend_file', array(
                 'hash' => $scmPackage->getHash(),
                 'scmFileId' => $scmFile->getScmFileId(),
             ));

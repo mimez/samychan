@@ -63,7 +63,7 @@ AirD-320:
             length: 1
             type: MM\SamyChan\BackendBundle\Scm\DataType\Boolean
             rendering:
-                type: boolean
+                type: checkbox
         fav1sort:
             label: F1
             offset: 292
@@ -71,7 +71,7 @@ AirD-320:
             type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger32
             saveable: true
             rendering:
-                type: boolean
+                type: checkbox
         fav2sort:
             label: F2
             offset: 296
@@ -79,7 +79,7 @@ AirD-320:
             type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger32
             saveable: true
             rendering:
-                type: boolean
+                type: checkbox
         fav3sort:
             label: F3
             offset: 300
@@ -87,7 +87,7 @@ AirD-320:
             type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger32
             saveable: true
             rendering:
-                type: boolean
+                type: checkbox
         fav4sort:
             label: F4
             offset: 304
@@ -95,7 +95,7 @@ AirD-320:
             type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger32
             saveable: true
             rendering:
-                type: boolean
+                type: checkbox
         fav5sort:
             label: F5
             offset: 308
@@ -103,4 +103,4 @@ AirD-320:
             type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger32
             saveable: true
             rendering:
-                type: boolean
+                type: checkbox

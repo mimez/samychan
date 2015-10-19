@@ -1,0 +1,50 @@
+<header ng-controller="HeaderCtrl">
+    <nav class="top-bar" data-topbar role="navigation">
+        <ul class="title-area">
+            <li class="name">
+                <h1><a href="/"><i class="fa fa-wrench"></i> SamyCHAN</a></h1>
+            </li>
+        </ul>
+
+        <section class="top-bar-section">
+            <ul>
+                <li>
+                    <form method="post" enctype="multipart/form-data" action="{{ uploadUrl }}">
+                        <label class="file-upload">
+                            <i class="fa fa-folder-open"></i> Open channel list</a>
+                            <input type="file" name="form[file]" onchange="this.form.submit();"/>
+                        </label>
+                        <input type="hidden" name="form[series]" value="auto" />
+                    </form>
+                </li>
+
+                <li class="has-dropdown">
+                    <a href=""><i class="fa fa-question"></i> Help</a>
+                    <ul class="dropdown">
+                        <li>
+                            <a href="/export-channel-list-samsung/">How to Export .SCM</a>
+                        </li>
+                        <li>
+                            <a href="/imprint/">Imprint</a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+            <ul class="right">
+                <li class="has-form show-for-large-up">
+                    <a href="{{ downloadUrl }}" class="button"><i class="fa fa-cloud-download"></i> Download channel list</a>
+                </li>
+            </ul>
+        </section>
+    </nav>
+    <ul class="tabs">
+        <li ng-repeat="(key, navItem) in navItems" class="tab-title {{ navItem.active ? 'active' : '' }}">
+            <a href="{{ navItem.url }}">
+                <i class="fa {{ navItem.icon }}"></i>
+                <span>{{ navItem.label }}</span>
+                <span class="radius label">{{ navItem.channelCount }}</span>
+            </a>
+        </li>
+    </ul>
+</header>

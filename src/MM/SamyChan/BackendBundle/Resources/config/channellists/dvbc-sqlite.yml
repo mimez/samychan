@@ -9,7 +9,7 @@ dvbc-sqlite:
             editable: true
             saveable: true
             rendering:
-                type: number
+                type: numeric
         name:
             label: Name
             type: MM\SamyChan\BackendBundle\Scm\DataType\StringSqlite3
@@ -22,7 +22,7 @@ dvbc-sqlite:
             type: MM\SamyChan\BackendBundle\Scm\DataType\Plain
             saveable: true
             rendering:
-                type: boolean
+                type: checkbox
             savehandler: MM\SamyChan\BackendBundle\Scm\SaveHandler\Sqlite3Favorite
             additional_data:
                 favno: 1
@@ -31,7 +31,7 @@ dvbc-sqlite:
             type: MM\SamyChan\BackendBundle\Scm\DataType\Plain
             saveable: true
             rendering:
-                type: boolean
+                type: checkbox
             savehandler: MM\SamyChan\BackendBundle\Scm\SaveHandler\Sqlite3Favorite
             additional_data:
                 favno: 2
@@ -40,7 +40,7 @@ dvbc-sqlite:
             type: MM\SamyChan\BackendBundle\Scm\DataType\Plain
             saveable: true
             rendering:
-                type: boolean
+                type: checkbox
             savehandler: MM\SamyChan\BackendBundle\Scm\SaveHandler\Sqlite3Favorite
             additional_data:
                 favno: 3
@@ -49,7 +49,7 @@ dvbc-sqlite:
             type: MM\SamyChan\BackendBundle\Scm\DataType\Plain
             saveable: true
             rendering:
-                type: boolean
+                type: checkbox
             savehandler: MM\SamyChan\BackendBundle\Scm\SaveHandler\Sqlite3Favorite
             additional_data:
                 favno: 4
@@ -58,7 +58,7 @@ dvbc-sqlite:
             type: MM\SamyChan\BackendBundle\Scm\DataType\Plain
             saveable: true
             rendering:
-                type: boolean
+                type: checkbox
             savehandler: MM\SamyChan\BackendBundle\Scm\SaveHandler\Sqlite3Favorite
             additional_data:
                 favno: 5

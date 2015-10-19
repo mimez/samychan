@@ -56,7 +56,7 @@ AstraHDPlusD-212:
             length: 1
             type: MM\SamyChan\BackendBundle\Scm\DataType\Boolean
             rendering:
-                type: boolean
+                type: checkbox
         fav1sort:
             label: F1
             offset: 184
@@ -64,7 +64,7 @@ AstraHDPlusD-212:
             type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger32
             saveable: true
             rendering:
-                type: boolean
+                type: checkbox
         fav2sort:
             label: F2
             offset: 188
@@ -72,7 +72,7 @@ AstraHDPlusD-212:
             type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger32
             saveable: true
             rendering:
-                type: boolean
+                type: checkbox
         fav3sort:
             label: F3
             offset: 192
@@ -80,7 +80,7 @@ AstraHDPlusD-212:
             type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger32
             saveable: true
             rendering:
-                type: boolean
+                type: checkbox
         fav4sort:
             label: F4
             offset: 196
@@ -88,7 +88,7 @@ AstraHDPlusD-212:
             type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger32
             saveable: true
             rendering:
-                type: boolean
+                type: checkbox
         fav5sort:
             label: F5
             offset: 200
@@ -96,4 +96,4 @@ AstraHDPlusD-212:
             type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger32
             saveable: true
             rendering:
-                type: boolean
+                type: checkbox

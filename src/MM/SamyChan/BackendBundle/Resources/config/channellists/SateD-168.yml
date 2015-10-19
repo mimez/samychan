@@ -56,7 +56,7 @@ SateD-168:
             length: 1
             type: MM\SamyChan\BackendBundle\Scm\DataType\Boolean
             rendering:
-                type: boolean
+                type: checkbox
         fav1sort:
             label: F1
             offset: 140
@@ -64,7 +64,7 @@ SateD-168:
             type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger32
             saveable: true
             rendering:
-                type: boolean
+                type: checkbox
         fav2sort:
             label: F2
             offset: 144
@@ -72,7 +72,7 @@ SateD-168:
             type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger32
             saveable: true
             rendering:
-                type: boolean
+                type: checkbox
         fav3sort:
             label: F3
             offset: 148
@@ -89,7 +89,7 @@ SateD-168:
             type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger32
             saveable: true
             rendering:
-                type: boolean
+                type: checkbox
         fav5sort:
             label: F5
             offset: 156
@@ -97,4 +97,4 @@ SateD-168:
             type: MM\SamyChan\BackendBundle\Scm\DataType\SignedInteger32
             saveable: true
             rendering:
-                type: boolean
+                type: checkbox

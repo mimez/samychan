@@ -11,7 +11,7 @@
         <section class="top-bar-section">
             <ul>
                 <li>
-                    <form method="post" enctype="multipart/form-data" action="{{ path('mm_samy_editor_scm_package_upload') }}">
+                    <form method="post" enctype="multipart/form-data" action="{{ path('mm_samychan_backend_package_upload') }}">
                         <label class="file-upload">
                             <i class="fa fa-folder-open"></i> Open channel list</a>
                             <input type="file" name="form[file]" onchange="this.form.submit();"/>
@@ -26,7 +26,7 @@
                         <ul class="dropdown">
                             {% for scmPackage in scm_recent_manager.recentScmPackages %}
                                 <li>
-                                    <a href="{{ path('mm_samy_editor_scm_package', {'hash': scmPackage.hash}) }}">{{ scmPackage.filename }}</a>
+                                    <a href="{{ path('mm_samychan_frontend_package', {'hash': scmPackage.hash}) }}">{{ scmPackage.filename }}</a>
                                 </li>
                             {% endfor %}
                         </ul>
@@ -37,10 +37,10 @@
                     <a href="#"><i class="fa fa-question"></i> Help</a>
                     <ul class="dropdown">
                         <li>
-                            <a href="{{ path('mm_samy_editor_content_exportscm') }}">How to Export .SCM</a>
+                            <a href="{{ path('mm_samychan_frontend_exportscm') }}">How to Export .SCM</a>
                         </li>
                         <li>
-                            <a href="{{ path('mm_samy_editor_content_imprint') }}">Imprint</a>
+                            <a href="{{ path('mm_samychan_frontend_imprint') }}">Imprint</a>
                         </li>
                     </ul>
                 </li>
@@ -49,7 +49,7 @@
             <ul class="right">
                 {% if scmPackage is defined %}
                     <li class="has-form show-for-large-up">
-                        <a href="{{ path('mm_samy_editor_scm_package_download', {'hash': scmPackage.hash}) }}" class="button"><i class="fa fa-cloud-download"></i> Download channel list</a>
+                        <a href="{{ path('mm_samychan_backend_package', {'hash': scmPackage.hash}) }}" class="button"><i class="fa fa-cloud-download"></i> Download channel list</a>
                     </li>
                 {% endif %}
             </ul>

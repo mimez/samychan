@@ -48,11 +48,24 @@ footer a {
     }
 }
 
-.handsontable-container input {
+input.htCheckboxRendererInput {
     margin-bottom: 0 !important;
 }
-
+.hot-border {
+    .handsontable th:first-child,
+    .handsontable td:first-child {
+        border-left: 0;
+    }
+    .handsontable thead tr:first-child th {
+        border-top: 0;
+    }
+}
+.hot-border .handsontable .manualRowMover {
+    height: 22px;
+    opacity: 0.5;
+}
 .shadow {
     text-shadow: 1px 1px #999;
 }
+
 

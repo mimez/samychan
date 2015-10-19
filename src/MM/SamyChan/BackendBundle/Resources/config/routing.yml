@@ -1,47 +1,41 @@
-mm_samy_editor_homepage:
-    path:     /
-    defaults: { _controller: MMSamyChanBackendBundle:Default:index }
-
-mm_samy_editor_scm_package_upload:
+mm_samychan_backend_package_upload:
     path:     /upload/
     defaults: { _controller: MMSamyChanBackendBundle:ScmPackage:upload }
 
-mm_samy_editor_content_imprint:
-    path:     /imprint/
-    defaults: { _controller: MMSamyChanBackendBundle:Content:imprint }
-
-mm_samy_editor_content_exportscm:
-    path:     /export-channel-list-samsung/
-    defaults: { _controller: MMSamyChanBackendBundle:Content:exportscm }
-
-mm_samy_editor_scm_package:
-    path:     /{hash}.html
+mm_samychan_backend_package:
+    path:     /{hash}.json
     defaults: { _controller: MMSamyChanBackendBundle:ScmPackage:index }
 
-mm_samy_editor_scm_package_download:
+mm_samychan_backend_package_download:
     path:     /{hash}/download/
     defaults: { _controller: MMSamyChanBackendBundle:ScmPackage:download }
 
-mm_samy_editor_scm_file:
+mm_samychan_backend_file:
     path:     /{hash}/file/{scmFileId}/
     defaults: { _controller: MMSamyChanBackendBundle:ScmFile:file }
 
-mm_samy_editor_scm_favorites:
-    path:     /{hash}/favorites/{favNo}/
+mm_samychan_backend_favorites:
+    path:     /{hash}/favorites/{favNo}.json
+    methods:  [GET]
     defaults: { _controller: MMSamyChanBackendBundle:ScmFavorite:index }
 
-mm_samy_editor_scm_file_json:
+mm_samychan_backend_favorites_post:
+    path:     /{hash}/favorites/{favNo}.json
+    methods:  [POST]
+    defaults: { _controller: MMSamyChanBackendBundle:ScmFavorite:indexPost, _format: json }
+
+mm_samychan_backend_file_json:
     path:     /{hash}/file/{scmFileId}/json/
     defaults: { _controller: MMSamyChanBackendBundle:ScmFile:fileJson }
 
-mm_samy_editor_scm_file_reorder:
+mm_samychan_backend_file_reorder:
     path:     /{hash}/file/{scmFileId}/reorder/
     defaults: { _controller: MMSamyChanBackendBundle:ScmFile:fileReorder }
 
-mm_samy_editor_scm_channel:
-    path:     /{hash}/channel/{scmChannelId}/
-    defaults: { _controller: MMSamyChanBackendBundle:ScmChannel:channel }
+mm_samychan_backend_channels:
+    path:     /{hash}/channels.json
+    defaults: { _controller: MMSamyChanBackendBundle:ScmChannel:channels }
 
-mm_samy_editor_demo_load:
+mm_samychan_backend_demo_load:
     path:     /demo/load/
     defaults: { _controller: MMSamyChanBackendBundle:Demo:load }

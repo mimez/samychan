@@ -4,7 +4,7 @@
 @import "settings";
 
 // foundation
-$base-path: "../../../../../vendor/zurb/foundation/scss/";
+$base-path: "../../../../../../vendor/zurb/foundation/scss/";
 @import $base-path + "foundation/components/grid";
 @import $base-path + "foundation/components/accordion";
 @import $base-path + "foundation/components/alert-boxes";

@@ -1,3 +1,15 @@
-mm_samy_chan_frontend_homepage:
-    path:     /{hash}.html
+mm_samychan_frontend_homepage:
+    path:     /
     defaults: { _controller: MMSamyChanFrontendBundle:Default:index }
+
+mm_samychan_frontend_imprint:
+    path:     /imprint/
+    defaults: { _controller: MMSamyChanFrontendBundle:Content:imprint }
+
+mm_samychan_frontend_exportscm:
+    path:     /export-channel-list-samsung/
+    defaults: { _controller: MMSamyChanFrontendBundle:Content:exportscm }
+
+mm_samychan_frontend_package:
+    path:     /{hash}.html
+    defaults: { _controller: MMSamyChanFrontendBundle:App:index }

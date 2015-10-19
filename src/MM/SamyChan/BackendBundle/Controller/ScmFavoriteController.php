@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use MM\SamyChan\BackendBundle\Scm;
 use MM\SamyChan\BackendBundle\Entity;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ScmFavoriteController extends Controller
 {
@@ -30,48 +31,14 @@ class ScmFavoriteController extends Controller
             }
         }
 
-        // build form
-        $defaultData = array();
-        $form = $this->createFormBuilder($defaultData)
-            ->add('channels', 'choice', array('multiple' => true, 'choices' => $selectData, 'data' => $selectedItems))
-            ->add('Save', 'submit')
-            ->getForm();
+        $response = new JsonResponse();
+        $response->setData(array(
+            'selectedChannels' => $selectedItems,
+            'channels' => $selectData,
+            'favNo' => $favNo,
+        ));
 
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-
-            // reset all channels of this file and fav-list
-            $field = 'c.fav' . $favNo . 'sort';
-            foreach ($scmPackage->getFiles() as $scmFile) {
-                $q = "UPDATE MM\SamyChan\BackendBundle\Entity\ScmChannel c SET {$field} = -1 WHERE {$field} > 0 AND c.scmFile = :scmFile";
-                $em->createQuery($q)->setParameter('scmFile', $scmFile)->getResult();
-                $em->clear();
-            }
-
-            // update channels with new favorit sort
-            $sort = 1;
-            $data = $request->request->all();
-            foreach ($data['form']['channels'] as $scmChannelId) {
-                $scmChannel = $em->getRepository('MM\SamyChan\BackendBundle\Entity\ScmChannel')->find($scmChannelId); // load channel
-                $scmChannel->{'setFav' . $favNo . 'sort'}($sort); // set new sort
-                $em->persist($scmChannel);
-                $sort++;
-            }
-
-            $em->flush();
-
-            // user feedback
-            $request->getSession()->getFlashBag()->add(
-                'success',
-                'Favorites has been saved'
-            );
-
-            return $this->redirectToRoute('mm_samy_editor_scm_favorites', array(
-                'hash' => $scmFile->getScmPackage()->getHash(),
-                'favNo' => $favNo
-            ));
-        }
+        return $response;
 
         return $this->render('MMSamyChanBackendBundle:ScmFavorite:index.html.twig', array(
             'form' => $form->createView(),
@@ -79,5 +46,38 @@ class ScmFavoriteController extends Controller
             'scmChannels' => $scmChannels,
             'favNo' => $favNo,
         ));
+    }
+
+    public function indexPostAction($hash, $favNo, Request $request)
+    {
+
+        $em = $this->get('doctrine')->getManager();
+
+        // load scmPackage
+        $scmPackage = $em->getRepository('MM\SamyChan\BackendBundle\Entity\ScmPackage')->findOneBy(array('hash' => $hash));
+
+        // reset all channels of this file and fav-list
+        $field = 'c.fav' . $favNo . 'sort';
+        foreach ($scmPackage->getFiles() as $scmFile) {
+            $q = "UPDATE MM\SamyChan\BackendBundle\Entity\ScmChannel c SET {$field} = -1 WHERE {$field} > 0 AND c.scmFile = :scmFile";
+            $em->createQuery($q)->setParameter('scmFile', $scmFile)->getResult();
+            $em->clear();
+        }
+
+        // update channels with new favorit sort
+        $sort = 1;
+        $channels = $request->get('scmChannels');
+
+        foreach ($channels as $scmChannelData) {
+            $scmChannel = $em->getRepository('MM\SamyChan\BackendBundle\Entity\ScmChannel')->find($scmChannelData['scmChannelId']); // load channel
+            $scmChannel->{'setFav' . $favNo . 'sort'}($sort); // set new sort
+            $em->persist($scmChannel);
+            $sort++;
+        }
+
+        $em->flush();
+
+        return new JsonResponse(array('msgs' => [['msg' => 'Favorites has been saved']]));
+
     }
 }

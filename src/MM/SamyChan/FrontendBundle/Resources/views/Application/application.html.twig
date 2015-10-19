@@ -1,7 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="SamyChanApp">
     {% include 'MMSamyChanFrontendBundle:Helper:head.html.twig' %}
-    <body>
-        <div ng-view></div>
+    <body data-scm-package-hash="{{ hash }}" data-first-scm-file-id="{{ firstScmFileId }}">
+        <div ng-include="'/bundles/mmsamychanfrontend/partials/header.html'"></div>
+        <div class="content" style="padding: 20px;">
+            <div ng-view></div>
+        </div>
+        <script>
+            $(document).foundation();
+            $(document).foundation('magellan');
+            $(document).foundation('clearing');
+        </script>
     </body>
 </html>

@@ -23,7 +23,7 @@ class DemoController extends Controller
         $em->flush();
 
         // create redirect response
-        $response = new RedirectResponse($this->generateUrl('mm_samy_editor_scm_package', array('hash' => $scmPackage->getHash())));
+        $response = new RedirectResponse($this->generateUrl('mm_samychan_frontend_package', array('hash' => $scmPackage->getHash())));
 
         // add scm-package to recent packages (via COOKIES)
         $this->get('mm_samy_editor.scm_recent_manager')->addScmPackage($scmPackage, $response);
