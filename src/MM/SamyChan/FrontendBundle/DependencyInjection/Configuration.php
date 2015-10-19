@@ -17,6 +17,9 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        return new TreeBuilder();
+        $treeBuilder = new TreeBuilder();
+        $treeBuilder->root('mm_samy_chan_frontend');
+
+        return $treeBuilder;
     }
 }
