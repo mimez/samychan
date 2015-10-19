@@ -31,6 +31,7 @@ twig:
     strict_variables: "%kernel.debug%"
     globals:
         scm_recent_manager: "@mm_samy_editor.scm_recent_manager"
+        ga_tracking_id: "%ga_tracking_id%"
 
 # Assetic Configuration
 assetic:
