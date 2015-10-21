@@ -98,8 +98,11 @@ samyChanApp.controller('ScmFavoriteCtrl', function ($scope, $http, $routeParams,
         });
 
         // filter
-        $("#unselected-channels-filter").keyup(function() {
-            filterChannel($(this).val(), $scope.hotInstances.unselectedChannels, $scope.unselectedChannels);
+        $("#unselected-channels-filter").bind("keyup mouseup", function() {
+            var input = $(this);
+            setTimeout(function() {
+                filterChannel(input.val(), $scope.hotInstances.unselectedChannels, $scope.unselectedChannels);
+            }, 1);
         });
     }
 
@@ -159,8 +162,11 @@ samyChanApp.controller('ScmFavoriteCtrl', function ($scope, $http, $routeParams,
         });
 
         // filter
-        $("#selected-channels-filter").keyup(function() {
-            filterChannel($(this).val(), $scope.hotInstances.selectedChannels, $scope.selectedChannels);
+        $("#selected-channels-filter").bind("keyup mouseup", function() {
+            var input = $(this);
+            setTimeout(function() {
+                filterChannel(input.val(), $scope.hotInstances.selectedChannels, $scope.selectedChannels);
+            }, 1);
         });
     }
 

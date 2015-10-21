@@ -135,24 +135,26 @@ samyChanApp.controller('ScmFileCtrl', function ($scope, $http, $routeParams, bac
      * Filter channels
      */
     $scope.filterChannel = function() {
-        var newData = $.grep($scope.channelData, function(item, index) {
+        setTimeout(function() {
+            var newData = $.grep($scope.channelData, function(item, index) {
 
-            // if we have no search term, we show all channels
-            if ($scope.searchTerm == null || $scope.searchTerm.length == 0) {
-                return true;
-            }
+                // if we have no search term, we show all channels
+                if ($scope.searchTerm == null || $scope.searchTerm.length == 0) {
+                    return true;
+                }
 
-            if (item["name"] == null) {
-                return false;
-            }
+                if (item["name"] == null) {
+                    return false;
+                }
 
-            return (
-                item["name"].toString().toLowerCase().indexOf($scope.searchTerm.toLowerCase()) >= 0 ||
-                item["channelNo"].toString() == $scope.searchTerm.toLowerCase()
-            );
-        });
+                return (
+                    item["name"].toString().toLowerCase().indexOf($scope.searchTerm.toLowerCase()) >= 0 ||
+                    item["channelNo"].toString() == $scope.searchTerm.toLowerCase()
+                );
+            });
 
-        $scope.hotInstance.loadData(newData);
+            $scope.hotInstance.loadData(newData);
+        }, 1);
     }
 
     /**
