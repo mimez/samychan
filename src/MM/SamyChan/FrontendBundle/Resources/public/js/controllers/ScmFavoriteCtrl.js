@@ -210,18 +210,21 @@ samyChanApp.controller('ScmFavoriteCtrl', function ($scope, $http, $routeParams,
         var channelIndex;
 
         if (channelIndex = getIndexByScmChannelId(channelIdToMove, $scope.unselectedChannels)) {
+            console.log(channelIndex);
             var newChannel = angular.copy($scope.unselectedChannels[channelIndex]);
             newChannel["favSort"] = $scope.selectedChannels.length + 1;
             $scope.selectedChannels.push(newChannel);
             $scope.hotInstances.selectedChannels.loadData($scope.selectedChannels);
-            //$scope.hotInstances.unselectedChannels.sort(1, true); // force sort in unselected channels
-            hotInstance.alter("remove_row", row);
+            hotInstance.alter("remove_row", row); // remove row from the current HOT-View
+            $scope.unselectedChannels.splice(channelIndex, 1); // and remove the channel from the data array
             $scope.hotInstances.selectedChannels.selectCell($scope.selectedChannels.length - 1, 0);
 
         } else if (channelIndex = getIndexByScmChannelId(channelIdToMove, $scope.selectedChannels)) {
+            console.log(channelIndex);
             var newChannel = angular.copy($scope.selectedChannels[channelIndex]);
             $scope.unselectedChannels.push(newChannel);
             hotInstance.alter("remove_row", row);
+            $scope.selectedChannels.splice(channelIndex, 1);
             $scope.hotInstances.unselectedChannels.loadData($scope.unselectedChannels);
             reorderSelectedChannels();
         }
