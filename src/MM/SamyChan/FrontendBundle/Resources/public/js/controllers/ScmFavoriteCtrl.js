@@ -40,7 +40,7 @@ samyChanApp.controller('ScmFavoriteCtrl', function ($scope, $http, $routeParams,
         $scope.lastReorderRequestStamp = new Date();
         setTimeout(function() {
             var stamp = new Date();
-            if (stamp - $scope.lastReorderRequestStamp < 100) {
+            if (stamp - $scope.lastReorderRequestStamp < 300) {
                 return;
             }
 
@@ -53,10 +53,10 @@ samyChanApp.controller('ScmFavoriteCtrl', function ($scope, $http, $routeParams,
     var initHotUnselectedChannels = function(targetElementSelector, data, isSelectedHot) {
         $scope.hotInstances.unselectedChannels = new Handsontable(document.getElementById('unselected-channels'), {
             columns: [
-                {data: "filename", editor: false},
-                {data: "channelNo", type: "numeric", editor: false, className: "channelNo"},
-                {data: "name", editor: false},
-                {data: "scmChannelId", editor: false},
+                {data: "filename", readOnly: true},
+                {data: "channelNo", type: "numeric", readOnly: true, className: "channelNo"},
+                {data: "name", readOnly: true},
+                {data: "scmChannelId", readOnly: true},
                 {data: "Move", renderer: function (instance, td, row, col, prop, value, cellProperties) {
                     if (typeof td.rendered == 'undefined') {
                         var a = document.createElement('a');
@@ -75,6 +75,8 @@ samyChanApp.controller('ScmFavoriteCtrl', function ($scope, $http, $routeParams,
             ],
             colHeaders: ["Type", "No", "name", "channelId", "Add"],
             stretchH: 'all',
+            multiSelect: false,
+            fillHandle: false,
             columnSorting: {
                 column: 1,
                 sortOrder: true
@@ -102,11 +104,11 @@ samyChanApp.controller('ScmFavoriteCtrl', function ($scope, $http, $routeParams,
     }
 
     var initHotSelectedChannels = function() {
-        window.hot = $scope.hotInstances.selectedChannels = new Handsontable(document.getElementById("selected-channels"), {
+        $scope.hotInstances.selectedChannels = new Handsontable(document.getElementById("selected-channels"), {
             columns: [
                 {data: "favSort", type: "numeric"},
-                {data: "name", editor: false},
-                {data: "scmChannelId", editor: false},
+                {data: "name", readOnly: true},
+                {data: "scmChannelId", readOnly: true},
                 {data: "Move", renderer: function (instance, td, row, col, prop, value, cellProperties) {
                     if (typeof td.rendered == 'undefined') {
                         var a = document.createElement('a');
@@ -129,6 +131,7 @@ samyChanApp.controller('ScmFavoriteCtrl', function ($scope, $http, $routeParams,
             columnSorting: false,
             data: $scope.selectedChannels,
             multiSelect: false,
+            fillHandle: false,
             afterChange: changeCell,
             manualRowMove: true,
             rowHeaders: function(col) {

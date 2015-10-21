@@ -11,6 +11,8 @@ samyChanApp.controller('ScmFileCtrl', function ($scope, $http, $routeParams, bac
     $scope.searchTerm = null;
     $scope.hotInstance = null;
 
+
+
     var init = function() {
         nav.setItemActive('scmFile', $routeParams.scmFileId);
         $scope.loadChannels();
@@ -65,11 +67,14 @@ samyChanApp.controller('ScmFileCtrl', function ($scope, $http, $routeParams, bac
             }
 
             var container = document.getElementById('channel-list');
-            $scope.hotInstance = new Handsontable(container, {
+            window.hot = $scope.hotInstance = new Handsontable(container, {
                 columns: columns,
                 colHeaders: colHeaders,
                 stretchH: 'all',
                 afterChange: $scope.afterChange,
+                multiSelect: false,
+                fillHandle: false,
+                outsideClickDeselects: false,
                 columnSorting: {
                     column: 0,
                     sortOrder: true
@@ -115,7 +120,15 @@ samyChanApp.controller('ScmFileCtrl', function ($scope, $http, $routeParams, bac
             $scope.$apply();
         });
 
-        this.sort(0, true);
+        if (source == 'noresort') {
+            return;
+        }
+
+        sort();
+    }
+
+    var sort = function() {
+        $scope.hotInstance.sort(0, true);
     }
 
     /**
@@ -179,6 +192,61 @@ samyChanApp.controller('ScmFileCtrl', function ($scope, $http, $routeParams, bac
         $.blockUI();
         $.get(url, $scope.loadChannels);
     }
+
+    $scope.channelUp = function() {
+        moveChannel('up');
+    }
+
+    $scope.channelDown = function() {
+        moveChannel('down');
+    }
+
+    moveChannel = function(type) {
+        var selectedCell,
+            selectedRow,
+            selectedChannelNo,
+            nextRowChannelNo,
+            offset;
+
+        // get the selected cell
+        selectedCell = $scope.hotInstance.getSelected();
+
+        // nothing selected? return
+        if (typeof selectedCell == "undefined") {
+            return;
+        }
+
+        // determine offset by type
+        offset = type == 'up' ? -1 : 1;
+
+        selectedRow = selectedCell[0];
+
+        // if we have selected the first row and want to move up, then return
+        if (selectedRow == 0 && type == 'up') {
+            return;
+        }
+
+        // get the channel No
+        selectedChannelNo = $scope.hotInstance.getDataAtRowProp(selectedRow, "channelNo");
+
+        // increment / decrement the channelNo
+        $scope.hotInstance.setDataAtRowProp(selectedRow, "channelNo", selectedChannelNo + offset, "noresort");
+
+        // get channelno of the next row
+        nextRowChannelNo = $scope.hotInstance.getDataAtRowProp(selectedRow + offset, "channelNo");
+
+        // special logic for gaps between channelNos. if we a gap, than do nothing more
+        if (nextRowChannelNo != selectedChannelNo + offset) {
+            return;
+        }
+
+        // no gap, than increment / decrement the next row
+        $scope.hotInstance.setDataAtRowProp(selectedRow + offset, "channelNo", selectedChannelNo);
+
+        // select the next row
+        $scope.hotInstance.selectCell(selectedRow + offset, selectedCell[1]);
+    };
+
 
     init();
 });
