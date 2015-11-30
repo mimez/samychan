@@ -1,6 +1,10 @@
 mm_samychan_backend_package_upload:
     path:     /upload/
-    defaults: { _controller: MMSamyChanBackendBundle:ScmPackage:upload }
+    defaults: { _controller: MMSamyChanBackendBundle:Upload:upload }
+
+mm_samychan_backend_package_upload_json:
+    path:     /upload.json
+    defaults: { _controller: MMSamyChanBackendBundle:Upload:uploadJson }
 
 mm_samychan_backend_package:
     path:     /{hash}.json
