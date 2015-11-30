@@ -22,7 +22,7 @@
 }
 header {
     position: relative;
-    z-index: 9999; /* to push the header over the handsontable header */
+    z-index: 100; /* to push the header over the handsontable header */
 }
 footer {
     border-top: 1px solid #444;
