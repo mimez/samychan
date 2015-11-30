@@ -33,7 +33,7 @@
             </ul>
             <ul class="right">
                 <li class="has-form show-for-large-up">
-                    <a href="{{ downloadUrl }}" class="button"><i class="fa fa-cloud-download"></i> Download channel list</a>
+                    <a ng-click="download()" data-reveal-id="myModal" class="button"><i class="fa fa-cloud-download"></i> Download channel list</a>
                 </li>
             </ul>
         </section>
@@ -47,4 +47,12 @@
             </a>
         </li>
     </ul>
+    <div id="modal-download" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+        <h2 id="modalTitle"><i class="fa fa-cloud-download" /> Download</h2>
+        <p class="lead">Thank you for using SamyCHAN. Click the download button and save the file to your usb-stick. Afterwards you can import the file into your SAMSUNG television.</p>
+        <div class="clearfix">
+            <a class="button right" href="{{ downloadUrl }}" class="button" style="margin-left: 1em">Download</a>
+            <a class="button secondary right" onclick="$(this).parents('.reveal-modal').foundation('reveal', 'close');" class="button">Cancel</a>
+        </div>
+    </div>
 </header>
