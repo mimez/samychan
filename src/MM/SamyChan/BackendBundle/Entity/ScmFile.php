@@ -185,4 +185,22 @@ class ScmFile
 
         return false;
     }
+
+    /**
+     * Find channel by name
+     *
+     * @param $name
+     * @return bool|mixed
+     */
+    public function getChannelByName($name)
+    {
+        $name = strtolower(trim($name));
+        foreach ($this->getChannels() as $scmChannel) {
+            if (strtolower(trim($scmChannel->getName())) == $name) {
+                return $scmChannel;
+            }
+        }
+
+        return false;
+    }
 }
