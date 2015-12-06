@@ -60,7 +60,7 @@ class SeriesDetector
             return false;
         }
 
-        // wir brauchen mind. 9 bytes
+        // we need at least 9 bytes
         if (strlen($cloneInfo) < 9) {
             return false;
         }
@@ -72,6 +72,10 @@ class SeriesDetector
             // 2013 B-series uses E/F-series format
             $series = 'F';
         }
+
+        // A File with CloneInfo is the old scm-format. If we get a series greater then H, return H
+        // (some J-Series TVs has still the old scm-format)
+        $series = ord($series) > ord('H') ? 'H' : $series;
 
         return $series;
     }
