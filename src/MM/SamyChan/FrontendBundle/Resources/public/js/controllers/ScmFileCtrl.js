@@ -1,4 +1,4 @@
-samyChanApp.controller('ScmFileCtrl', function ($scope, $http, $routeParams, backendUrlGenerator, nav) {
+samyChanApp.controller('ScmFileCtrl', function ($scope, $http, $routeParams, backendUrlGenerator, nav, $timeout) {
 
     $(document).resize();
 
@@ -116,8 +116,9 @@ samyChanApp.controller('ScmFileCtrl', function ($scope, $http, $routeParams, bac
                 channelData[columnName] = $scope.hotInstance.getDataAtRowProp(rowIndex, columnName);
             });
 
-            $scope.modifiedChannels[channelId] = channelData;
-            $scope.$apply();
+            $timeout(function() {
+                $scope.modifiedChannels[channelId] = channelData;
+            }, 0);
         });
 
         if (source == 'noresort') {
