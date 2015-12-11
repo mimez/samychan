@@ -27,4 +27,5 @@ MM\SamyChan\BackendBundle\Entity\ScmFile:
             targetEntity: ScmChannel
             mappedBy: scmFile
             cascade: ["persist"]
+            orderBy: { 'channelNo': 'ASC' }
     lifecycleCallbacks: {  }

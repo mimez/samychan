@@ -1,4 +1,4 @@
-samyChanApp.controller('ScmFileCtrl', function ($scope, $http, $routeParams, backendUrlGenerator, nav, $timeout) {
+samyChanApp.controller('ScmFileCtrl', function ($scope, $http, $routeParams, backendUrlGenerator, nav, $timeout, $rootScope) {
 
     $(document).resize();
 
@@ -11,11 +11,12 @@ samyChanApp.controller('ScmFileCtrl', function ($scope, $http, $routeParams, bac
     $scope.searchTerm = null;
     $scope.hotInstance = null;
 
-
-
     var init = function() {
         nav.setItemActive('scmFile', $routeParams.scmFileId);
         $scope.loadChannels();
+        $rootScope.$on("settingsImported", function () {
+            init();
+        });
     }
 
     /**
@@ -249,7 +250,6 @@ samyChanApp.controller('ScmFileCtrl', function ($scope, $http, $routeParams, bac
         // select the next row
         $scope.hotInstance.selectCell(selectedRow + offset, selectedCell[1]);
     };
-
 
     init();
 });

@@ -1,0 +1,58 @@
+<div ng-controller="ImporterCtrl" id="modal-importer" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+    <div ng-if="currentStep == 1">
+        <h2><i class="fa fa-magic" /> Import channel orders</h2>
+        <p class="lead">You can import orders from an existing channel-list. Please select the list you want to import.</p>
+        <form method="post" enctype="multipart/form-data" id="importer-form">
+            <input type="file" ng-model="file" name="form[file]" id="file"/>
+            <input type="hidden" name="form[series]" value="auto" />
+        </form>
+
+        <div class="clearfix">
+            <a class="button right" ng-click="next()" class="button" style="margin-left: 1em">Next</a>
+            <a class="button secondary right" onclick="$(this).parents('.reveal-modal').foundation('reveal', 'close');" class="button">Cancel</a>
+        </div>
+    </div>
+    <div ng-if="currentStep == 2">
+        <h2>Settings</h2>
+        <p class="lead">Choose your lists to import.</p>
+        <table style="width: 100%">
+            <thead>
+            <tr>
+                <td>Your channel-list</td>
+                <td>Import orders from</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="baseFile in scmFiles">
+                <td>{{ baseFile.label }}</td>
+                <td>
+                    <select ng-model="fileActions[baseFile.scmFileId]['importOrderFromFile']" class="baseFile">
+                        <option value="">No action</option>
+                        <option ng-repeat="file in importPackage.files" value="{{ file.scmFileId }}">{{ file.label }}</option>
+                    </select>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="clearfix">
+            <a class="button right" ng-click="next()" class="button" style="margin-left: 1em">Preview</a>
+            <a class="button secondary right" ng-click="prev()" class="button">Back</a>
+        </div>
+    </div>
+    <div ng-if="currentStep == 3">
+        <h2>Preview</h2>
+        <p class="lead">Following changes would be made. If it is allright, please go on.</p>
+        <textarea style="height: 150px">{{ changelog.join("\n") }}</textarea>
+        <div class="clearfix">
+            <a class="button right" ng-click="next()" class="button" style="margin-left: 1em">Import</a>
+            <a class="button secondary right" ng-click="prev()" class="button">Back</a>
+        </div>
+    </div>
+    <div ng-if="currentStep == 4">
+        <h2><i class="fa fa-check" /> Successfully imported</h2>
+        <p>Orders has been imported successfully.</p>
+        <div class="clearfix">
+            <a class="button right" onclick="$(this).parents('.reveal-modal').foundation('reveal', 'close');" class="button">Done</a>
+        </div>
+    </div>
+</div>

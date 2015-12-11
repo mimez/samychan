@@ -3,17 +3,17 @@ namespace MM\SamyChan\BackendBundle\Scm;
 
 use MM\SamyChan\BackendBundle\Entity;
 
-class TransferManager
+class ImportManager
 {
     /**
-     * Apply the orders from file to another
+     * Apply the orders from one file to another
      *
-     * @param Entity\ScmFile $sourceScmFile
-     * @param Entity\ScmFile $targetScmFile
+     * @param Entity\ScmFile $importScmFile
+     * @param Entity\ScmFile $scmFile
      *
      * @return array $changes
      */
-    public function transferChannelOrders(Entity\ScmFile $sourceScmFile, Entity\ScmFile $targetScmFile)
+    public function importChannelOrders(Entity\ScmFile $scmFile, Entity\ScmFile $importScmFile)
     {
         $changes = array();
         $processedChannelNames = array();
@@ -21,37 +21,37 @@ class TransferManager
         $highestChannelNo = 0;
 
         // loop over the target channels
-        foreach ($targetScmFile->getChannels() as $targetChannel) {
+        foreach ($scmFile->getChannels() as $chanenl) {
 
             // try to determine the target-channel in the source-File
-            $sourceChannel = $sourceScmFile->getChannelByName($targetChannel->getName());
+            $importChannel = $importScmFile->getChannelByName($chanenl->getName());
 
             // if we didnt match the channel, we cant do anything. skip this channel.
-            if (!$sourceChannel) {
-                $missedChannels[$targetChannel->getChannelNo()] = $targetChannel;
+            if (!$importChannel) {
+                $missedChannels[$chanenl->getChannelNo()] = $chanenl;
                 continue;
             }
 
             // check if we have already processed this channel name.
             // this is to avoid double processing of channels, whose name exist multiple times in one list
-            if (in_array(strtolower($targetChannel->getName()), $processedChannelNames)) {
+            if (in_array(strtolower($chanenl->getName()), $processedChannelNames)) {
                 continue;
             }
 
             // add channel to the proceeded channel names
-            $processedChannelNames[] = strtolower($targetChannel->getName());
+            $processedChannelNames[] = strtolower($chanenl->getName());
 
             // check if the channel nos already the same
-            if ($sourceChannel->getChannelNo() == $targetChannel->getChannelNo()) {
+            if ($importChannel->getChannelNo() == $chanenl->getChannelNo()) {
                 continue;
             }
 
             // transfer the channel-no
-            $changes[] = sprintf('set channel=(%s) from=(%s) to no=(%s)', $targetChannel->getName(), $targetChannel->getChannelNo(), $sourceChannel->getChannelNo());
-            $targetChannel->setChannelNo($sourceChannel->getChannelNo());
+            $changes[] = sprintf('set channel=(%s) from=(%s) to=(%s)', $chanenl->getName(), $chanenl->getChannelNo(), $importChannel->getChannelNo());
+            $chanenl->setChannelNo($importChannel->getChannelNo());
 
             // increase the highest channel-no
-            $highestChannelNo = max($highestChannelNo, $targetChannel->getChannelNo());
+            $highestChannelNo = max($highestChannelNo, $chanenl->getChannelNo());
         }
 
         // at this point, we changed all possible channels to the new channel-no.

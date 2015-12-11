@@ -43,3 +43,8 @@ mm_samychan_backend_channels:
 mm_samychan_backend_demo_load:
     path:     /demo/load/
     defaults: { _controller: MMSamyChanBackendBundle:Demo:load }
+
+mm_samychan_backend_settings_import_post:
+    path:     /{hash}/import-settings.json
+    methods:  [POST]
+    defaults: { _controller: MMSamyChanBackendBundle:SettingsImport:importSettingsPost, _format: json }

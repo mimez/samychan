@@ -68,6 +68,10 @@ class UploadController extends Controller
 
         $em = $this->get('doctrine')->getManager();
 
+        if (!is_a($data['file'], 'Symfony\Component\HttpFoundation\File\UploadedFile')) {
+            throw new \InvalidArgumentException('missing file');
+        }
+
         // parse uploaded file
         $scmPackage = $this->get('mm_samy_editor.scm_parser')->load(
             $data['file']->openFile(), // the file itself

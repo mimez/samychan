@@ -19,3 +19,5 @@ services:
         arguments: ["@kernel"]
     mm_samy_editor.scm_series_detector:
         class: MM\SamyChan\BackendBundle\Scm\SeriesDetector
+    mm_samy_editor.scm_import_manager:
+        class: MM\SamyChan\BackendBundle\Scm\ImportManager
