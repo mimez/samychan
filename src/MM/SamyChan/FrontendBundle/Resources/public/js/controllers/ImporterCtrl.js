@@ -1,4 +1,4 @@
-samyChanApp.controller('ImporterCtrl', function($scope, $rootScope, $http, backendUrlGenerator) {
+samyChanApp.controller('ImporterCtrl', function($scope, $rootScope, $http, backendUrlGenerator, eventTracker) {
 
     $scope.currentStep = null;
     $scope.importPackage = null;
@@ -8,6 +8,7 @@ samyChanApp.controller('ImporterCtrl', function($scope, $rootScope, $http, backe
         $scope.scmFiles = $rootScope.scmFiles;
         reset();
         $('#modal-importer').foundation('reveal', 'open');
+        eventTracker.track('Importer', 'open');
     }
 
     var reset = function() {
@@ -29,6 +30,8 @@ samyChanApp.controller('ImporterCtrl', function($scope, $rootScope, $http, backe
             $.unblockUI();
             showError(data);
         });
+
+        eventTracker.track('Importer', 'uploadFile');
     }
 
     var uploadFileSuccess = function(data) {
@@ -68,6 +71,8 @@ samyChanApp.controller('ImporterCtrl', function($scope, $rootScope, $http, backe
                 alert('error');
             })
         ;
+
+        eventTracker.track('Importer', 'run' + (live ? 'Live' : 'Dry'));
     }
 
     $scope.next = function() {

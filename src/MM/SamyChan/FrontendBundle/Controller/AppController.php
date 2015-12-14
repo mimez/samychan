@@ -15,7 +15,8 @@ class AppController extends Controller
 
         return $this->render('MMSamyChanFrontendBundle:Application:application.html.twig', [
             'hash' => $hash,
-            'firstScmFileId' => $this->helperGetFirstFileIdByScmPackage($scmPackage)
+            'firstScmFileId' => $this->helperGetFirstFileIdByScmPackage($scmPackage),
+            'series' => $scmPackage->getSeries()
         ]);
     }
 

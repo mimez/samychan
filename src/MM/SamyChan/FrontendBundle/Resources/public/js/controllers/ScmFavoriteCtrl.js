@@ -1,4 +1,4 @@
-samyChanApp.controller('ScmFavoriteCtrl', function ($scope, $http, $routeParams, backendUrlGenerator, nav) {
+samyChanApp.controller('ScmFavoriteCtrl', function ($scope, $http, $routeParams, backendUrlGenerator, nav, eventTracker) {
     $scope.favNo = $routeParams.favNo;
     $scope.unselectedChannels = [];
     $scope.selectedChannels = [];
@@ -9,6 +9,8 @@ samyChanApp.controller('ScmFavoriteCtrl', function ($scope, $http, $routeParams,
     var init = function() {
         loadData();
         nav.setItemActive('fav', $scope.favNo);
+
+        eventTracker.track('FavoriteManager', 'open', $scope.favNo);
     }
 
     var loadData = function() {

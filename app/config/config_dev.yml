@@ -46,3 +46,7 @@ assetic:
 
 #swiftmailer:
 #    delivery_address: me@example.com
+
+twig:
+    globals:
+        ga_tracking_enabled: false

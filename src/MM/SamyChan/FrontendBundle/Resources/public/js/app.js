@@ -17,16 +17,13 @@ samyChanApp.config(function ($routeProvider) {
             redirectTo: '/files/' + $("body").data("first-scm-file-id")
         });
 });
-samyChanApp.run(function($http, $rootScope, backendUrlGenerator) {
+samyChanApp.run(function($http, $rootScope, backendUrlGenerator, eventTracker) {
     $http.get(backendUrlGenerator.buildPackageUrl()).then(function(res) {
         $rootScope.scmFiles = res.data.files;
         $rootScope.favorites = res.data.favorites;
     });
-});
 
-samyChanApp.controller('TestCtrl', function($scope, $http, $routeParams, backendUrlGenerator) {
-
-
+    eventTracker.track('Package', 'open', $("body").data("series"));
 });
 
 
