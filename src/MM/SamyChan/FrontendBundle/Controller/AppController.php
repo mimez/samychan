@@ -64,6 +64,10 @@ class AppController extends Controller
                 'label' => 'Cable Digital',
                 'icon' => 'fa-signal',
             ),
+            'dvbt' => array(
+                'label' => 'Terrestrial Digital',
+                'icon' => 'fa-signal',
+            ),
             'dvbs' => array(
                 'label' => 'Satelite Digital',
                 'icon' => 'fa-globe',

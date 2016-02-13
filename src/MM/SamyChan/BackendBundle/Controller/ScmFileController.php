@@ -197,6 +197,10 @@ class ScmFileController extends Controller
                 'label' => 'Cable Digital',
                 'icon' => 'fa-signal',
             ),
+            'dvbc' => array(
+                'label' => 'Terrestrial Digital',
+                'icon' => 'fa-signal',
+            ),
             'dvbs' => array(
                 'label' => 'Satelite Digital',
                 'icon' => 'fa-globe',

@@ -33,6 +33,7 @@ scm_config:
             files:
                 dvbc: dvbc-sqlite
                 dvbs: dvbc-sqlite
+                dvbt: dvbc-sqlite
 
 
 

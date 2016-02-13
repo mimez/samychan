@@ -2,7 +2,7 @@ samyChanApp.factory('eventTracker', function() {
 
     return {
         track: function(eventCategory, eventAction, eventLabel, eventValue) {
-            if (typeof ga == undefined) {
+            if (typeof ga == "undefined") {
                 return;
             }
 
