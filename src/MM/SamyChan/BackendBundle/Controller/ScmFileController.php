@@ -205,7 +205,10 @@ class ScmFileController extends Controller
                 'label' => 'Satelite Digital',
                 'icon' => 'fa-globe',
             ),
-
+            'astra_192e' => array(
+                'label' => 'Satelite Digital',
+                'icon' => 'fa-globe',
+            ),
         );
 
         if (!isset($supportedFiles[$filename])) {

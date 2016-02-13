@@ -34,6 +34,7 @@ scm_config:
                 dvbc: dvbc-sqlite
                 dvbs: dvbc-sqlite
                 dvbt: dvbc-sqlite
+                astra_192e: dvbc-sqlite
 
 
 

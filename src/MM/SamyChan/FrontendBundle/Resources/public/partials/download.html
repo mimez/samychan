@@ -1,10 +1,6 @@
 <div ng-controller="DownloadCtrl" id="modal-download" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
     <h2 id="modalTitle"><i class="fa fa-cloud-download" /> Download</h2>
     <p class="lead">Thank you for using SamyCHAN. Click the download button and save the file to your usb-stick. Afterwards you can import the file into your SAMSUNG television.</p>
-    <div style="width: 400px; height: 200px;" id="adcontent">
-        <!-- www.samychan.com / Responsive -->
-
-    </div>
     <div class="clearfix">
         <a class="button right" ng-click="download()" href="{{ downloadUrl }}" class="button" style="margin-left: 1em">Download</a>
         <a class="button secondary right" onclick="$(this).parents('.reveal-modal').foundation('reveal', 'close');" class="button">Cancel</a>
