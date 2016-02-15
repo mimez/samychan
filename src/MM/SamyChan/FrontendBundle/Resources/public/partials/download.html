@@ -1,8 +1,22 @@
 <div ng-controller="DownloadCtrl" id="modal-download" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
-    <h2 id="modalTitle"><i class="fa fa-cloud-download" /> Download</h2>
-    <p class="lead">Thank you for using SamyCHAN. Click the download button and save the file to your usb-stick. Afterwards you can import the file into your SAMSUNG television.</p>
-    <div class="clearfix">
-        <a class="button right" ng-click="download()" href="{{ downloadUrl }}" class="button" style="margin-left: 1em">Download</a>
-        <a class="button secondary right" onclick="$(this).parents('.reveal-modal').foundation('reveal', 'close');" class="button">Cancel</a>
+    <div ng-if="currentStep == 1">
+        <h2 id="modalTitle"><i class="fa fa-cloud-download" /> Download</h2>
+        <p class="lead">Thank you for using SamyCHAN. Click the download button and save the file to your usb-stick. Afterwards you can import the file into your SAMSUNG television.</p>
+        <div class="clearfix">
+            <a class="button right" ng-click="download()" href="{{ downloadUrl }}" class="button" style="margin-left: 1em">Download</a>
+            <a class="button secondary right" onclick="$(this).parents('.reveal-modal').foundation('reveal', 'close');" class="button">Cancel</a>
+        </div>
+    </div>
+    <div ng-if="currentStep == 2">
+        <h2 id="modalTitle"><i class="fa fa-beer" /> Buy me a beer?</h2>
+        <p class="lead">Do you like SamyCHAN? I'm trying to improve SamyCHAN permanently. If you want to support me, you can buy me a beer :-)</p>
+        <h2>Yes, i will buy you a beer!</h2>
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+            <input type="hidden" name="cmd" value="_s-xclick">
+            <input type="hidden" name="hosted_button_id" value="BA7NQJ9R2865G">
+            <input type="image" onclick="donate()" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+            <img alt="" border="0" src="https://www.paypalobjects.com/de_DE/i/scr/pixel.gif" width="1" height="1">
+        </form>
+
     </div>
 </div>
