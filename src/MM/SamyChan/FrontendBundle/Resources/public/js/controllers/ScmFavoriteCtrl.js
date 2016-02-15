@@ -83,7 +83,7 @@ samyChanApp.controller('ScmFavoriteCtrl', function ($scope, $http, $routeParams,
                 column: 1,
                 sortOrder: true
             },
-            data: $scope.unselectedChannels,
+            data: angular.copy($scope.unselectedChannels),
             multiSelect: false
         });
 
@@ -134,7 +134,7 @@ samyChanApp.controller('ScmFavoriteCtrl', function ($scope, $http, $routeParams,
             colHeaders: ["No", "name", "channelId", "Remove"],
             stretchH: 'all',
             columnSorting: false,
-            data: $scope.selectedChannels,
+            data: angular.copy($scope.selectedChannels),
             multiSelect: false,
             fillHandle: false,
             afterChange: changeCell,
@@ -187,10 +187,8 @@ samyChanApp.controller('ScmFavoriteCtrl', function ($scope, $http, $routeParams,
                 return; // nothing has been changed
             }
 
-            $scope.selectedChannels.sort(function(a,b) {return a.favSort - b.favSort});
+            $scope.hotInstances.selectedChannels.getData().sort(function(a,b) {return a.favSort - b.favSort});
             $scope.hotInstances.selectedChannels.render();
-
-            /*reorderSelectedChannels();*/
         });
     }
 
@@ -217,23 +215,41 @@ samyChanApp.controller('ScmFavoriteCtrl', function ($scope, $http, $routeParams,
     var moveChannel = function(channelIdToMove, hotInstance, row) {
         var channelIndex;
 
-        if (channelIndex = getIndexByScmChannelId(channelIdToMove, $scope.unselectedChannels)) {
-            console.log(channelIndex);
-            var newChannel = angular.copy($scope.unselectedChannels[channelIndex]);
+        // channel is in the UNSELECTED-List
+        if (channelIndex = getIndexByScmChannelId(channelIdToMove, $scope.hotInstances.unselectedChannels.getData())) {
+            var newChannel = angular.copy($scope.hotInstances.unselectedChannels.getData()[channelIndex]);
             newChannel["favSort"] = $scope.selectedChannels.length + 1;
+
+            // add channel to selectedChannels
+            $scope.hotInstances.selectedChannels.getData().push(newChannel);
+            $scope.hotInstances.selectedChannels.render();
+
+            // remove channel from unselectedChannels
+            hotInstance.alter("remove_row", row);
+
+            // modify the orginal data arrays
+            $scope.unselectedChannels.splice(getIndexByScmChannelId(channelIdToMove, $scope.unselectedChannels), 1);
             $scope.selectedChannels.push(newChannel);
-            $scope.hotInstances.selectedChannels.loadData($scope.selectedChannels);
-            hotInstance.alter("remove_row", row); // remove row from the current HOT-View
-            $scope.unselectedChannels.splice(channelIndex, 1); // and remove the channel from the data array
+
+            // select last row in the selected-grid
             $scope.hotInstances.selectedChannels.selectCell($scope.selectedChannels.length - 1, 0);
 
-        } else if (channelIndex = getIndexByScmChannelId(channelIdToMove, $scope.selectedChannels)) {
-            console.log(channelIndex);
-            var newChannel = angular.copy($scope.selectedChannels[channelIndex]);
-            $scope.unselectedChannels.push(newChannel);
+        // channel is in the SELECTED-List
+        } else if (channelIndex = getIndexByScmChannelId(channelIdToMove, $scope.hotInstances.selectedChannels.getData())) {
+            var newChannel = angular.copy($scope.hotInstances.selectedChannels.getData()[channelIndex]);
+
+            // add channel to selectedChannels
+            $scope.hotInstances.unselectedChannels.getData().push(newChannel);
+            $scope.hotInstances.unselectedChannels.render();
+
+            // remove channel from the grid
             hotInstance.alter("remove_row", row);
-            $scope.selectedChannels.splice(channelIndex, 1);
-            $scope.hotInstances.unselectedChannels.loadData($scope.unselectedChannels);
+
+            // modify the orginal data arrays
+            $scope.selectedChannels.splice(getIndexByScmChannelId(channelIdToMove, $scope.selectedChannels), 1);
+            $scope.unselectedChannels.push(newChannel);
+
+            $scope.hotInstances.unselectedChannels.loadData($scope.hotInstances.unselectedChannels.getData());
             reorderSelectedChannels();
         }
 
