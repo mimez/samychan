@@ -193,6 +193,10 @@ class ScmFileController extends Controller
                 'label' => 'AstraHDPlus Digital',
                 'icon' => 'fa-globe',
             ),
+            'map-FreesatD' => array(
+                'label' => 'Freesat',
+                'icon' => 'fa-globe',
+            ),
             'dvbc' => array(
                 'label' => 'Cable Digital',
                 'icon' => 'fa-signal',
@@ -207,6 +211,10 @@ class ScmFileController extends Controller
             ),
             'astra_192e' => array(
                 'label' => 'Satelite Digital',
+                'icon' => 'fa-globe',
+            ),
+            'freesat' => array(
+                'label' => 'Freesat',
                 'icon' => 'fa-globe',
             ),
         );

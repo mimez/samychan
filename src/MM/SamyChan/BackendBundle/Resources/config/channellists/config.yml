@@ -15,6 +15,7 @@ scm_config:
                 map-AirD: AirD-320
                 map-SateD: SateD-168
                 map-AstraHDPlusD: AstraHDPlusD-212
+                map-FreesatD: FreesatD-320
         F:
             files:
                 map-CableD: CableD-320
@@ -22,6 +23,7 @@ scm_config:
                 map-AirD: AirD-320
                 map-SateD: SateD-168
                 map-AstraHDPlusD: AstraHDPlusD-212
+                map-FreesatD: FreesatD-320
         H:
             files:
                 map-CableD: CableD-320
@@ -29,12 +31,14 @@ scm_config:
                 map-AirD: AirD-320
                 map-SateD: SateD-168
                 map-AstraHDPlusD: AstraHDPlusD-212
+                map-FreesatD: FreesatD-320
         J:
             files:
                 dvbc: dvbc-sqlite
                 dvbs: dvbc-sqlite
                 dvbt: dvbc-sqlite
                 astra_192e: dvbc-sqlite
+                freesat: dvbc-sqlite
 
 
 
