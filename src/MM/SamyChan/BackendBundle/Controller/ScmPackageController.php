@@ -30,8 +30,7 @@ class ScmPackageController extends Controller
         );
 
         foreach ($scmPackage->getFiles() as $scmFile) {
-
-            $file = $this->helperGetFileMetaByName($scmFile->getFilename());
+            $file = $this->get('mm_samy_editor.scm_config')->getFileMetaDataByFilename($scmFile->getFilename());
 
             // if the scmFile is not supported, we dont display it in the sidebar
             if (false === $file) {
@@ -102,67 +101,5 @@ class ScmPackageController extends Controller
         $q = $em->createQuery("SELECT COUNT(c.channelNo) FROM MM\SamyChan\BackendBundle\Entity\ScmChannel c JOIN c.scmFile f WHERE f.scmPackage = :scmPackage AND c.channelNo > 0 AND c.fav{$favNo}sort > 0");
         $q->setParameter('scmPackage', $scmPackage);
         return (int)$q->getSingleScalarResult();
-    }
-
-    /**
-     * Helper to get metadata of a filename
-     *
-     * @param $filename
-     * @return bool|array
-     */
-    public function helperGetFileMetaByName($filename)
-    {
-        $supportedFiles = array(
-            'map-CableD' => array(
-                'label' => 'Cable Digital',
-                'icon' => 'fa-signal',
-            ),
-            'map-AirA' => array(
-                'label' => 'Terrestrial Analog',
-                'icon' => 'fa-globe',
-            ),
-            'map-AirD' => array(
-                'label' => 'Terrestrial Digital',
-                'icon' => 'fa-globe',
-            ),
-            'map-SateD' => array(
-                'label' => 'Satelite Digital',
-                'icon' => 'fa-globe',
-            ),
-            'map-AstraHDPlusD' => array(
-                'label' => 'AstraHDPlus Digital',
-                'icon' => 'fa-globe',
-            ),
-            'map-FreesatD' => array(
-                'label' => 'Freesat',
-                'icon' => 'fa-globe',
-            ),
-            'dvbc' => array(
-                'label' => 'Cable Digital',
-                'icon' => 'fa-signal',
-            ),
-            'dvbt' => array(
-                'label' => 'Terrestrial Digital',
-                'icon' => 'fa-signal',
-            ),
-            'dvbs' => array(
-                'label' => 'Satelite Digital',
-                'icon' => 'fa-globe',
-            ),
-            'astra_192e' => array(
-                'label' => 'Satelite Digital',
-                'icon' => 'fa-globe',
-            ),
-            'freesat' => array(
-                'label' => 'Freesat',
-                'icon' => 'fa-globe',
-            ),
-        );
-
-        if (!isset($supportedFiles[$filename])) {
-            return false;
-        }
-
-        return $supportedFiles[$filename];
     }
 }

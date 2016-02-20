@@ -39,7 +39,40 @@ scm_config:
                 dvbt: dvbc-sqlite
                 astra_192e: dvbc-sqlite
                 freesat: dvbc-sqlite
-
+    file_meta_data:
+        map-CableD:
+            label: Cable Digital
+            icon: fa-signal
+        map-AirA:
+            label: Terrestrial Analog
+            icon: fa-globe
+        map-AirD:
+            label: Terrestrial Digital
+            icon: fa-globe
+        map-SateD:
+            label: Satelite Digital
+            icon: fa-globe
+        map-AstraHDPlusD:
+            label: AstraHDPlus Digital
+            icon: fa-globe
+        map-FreesatD:
+            label: Freesat
+            icon: fa-globe
+        dvbc:
+            label: Cable Digital
+            icon: fa-signal
+        dvbt:
+            label: Terrestrial Digital
+            icon: fa-signal
+        dvbs:
+            label: Satelite Digital
+            icon: fa-global
+        astra_192e:
+            label: Satelite Digital
+            icon: fa-globe
+        freesat:
+            label: Freesat
+            icon: fa-globe
 
 
 

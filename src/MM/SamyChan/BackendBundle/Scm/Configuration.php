@@ -77,4 +77,21 @@ class Configuration {
 
         return array_keys($config['series']);
     }
+
+    /**
+     * Get Meta-Data to a corresponding filename
+     *
+     * @param string $filename
+     * @return bool|array false if config does not exist, otherwise the meta-data-array
+     */
+    public function getFileMetaDataByFilename($filename)
+    {
+        $fileMetaData = $this->getConfig()['file_meta_data'];
+
+        if (!isset($fileMetaData[$filename])) {
+            return false;
+        }
+
+        return $fileMetaData[$filename];
+    }
 }
