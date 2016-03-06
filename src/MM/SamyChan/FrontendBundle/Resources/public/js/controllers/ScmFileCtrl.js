@@ -1,4 +1,4 @@
-samyChanApp.controller('ScmFileCtrl', function ($scope, $http, $routeParams, backendUrlGenerator, nav, $timeout, $rootScope) {
+samyChanApp.controller('ScmFileCtrl', function ($scope, $http, $routeParams, backendUrlGenerator, nav, $timeout, $rootScope, eventTracker) {
 
     $(document).resize();
 
@@ -203,6 +203,11 @@ samyChanApp.controller('ScmFileCtrl', function ($scope, $http, $routeParams, bac
 
     $scope.channelDown = function() {
         moveChannel('down');
+    }
+
+    $scope.exportChannels = function() {
+        eventTracker.track('File', 'export');
+        window.open(backendUrlGenerator.buildFileExportUrl($routeParams.scmFileId));
     }
 
     moveChannel = function(type) {

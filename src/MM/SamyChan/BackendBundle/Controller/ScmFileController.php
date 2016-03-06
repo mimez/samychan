@@ -5,6 +5,7 @@ namespace MM\SamyChan\BackendBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use MM\SamyChan\BackendBundle\Scm;
 use MM\SamyChan\BackendBundle\Entity;
@@ -96,6 +97,44 @@ class ScmFileController extends Controller
         // json response
         $response = new Response(json_encode(array('State' => 'OK')));
         $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
+    }
+
+    public function fileExportAction($hash, $scmFileId)
+    {
+        $em = $this->get('doctrine');
+
+        // load scmFile
+        $scmFile = $em->getRepository('MM\SamyChan\BackendBundle\Entity\ScmFile')->findAndValidateHash($scmFileId, $hash);
+
+        $response = new StreamedResponse();
+        $response->setCallback(function () use ($scmFile) {
+
+            $file = new \SplFileObject('php://output', 'w+');
+
+            // Header
+            $file->fputcsv([
+                'channelNo' => 'Channel no.',
+                'name' => 'Name',
+            ], ";");
+
+            // channels
+            foreach ($scmFile->getChannels() as $channel)
+            {
+                $file->fputcsv([
+                    'channelNo' => $channel->getChannelNo(),
+                    'name' => utf8_decode($channel->getName()),
+                ], ";");
+            }
+        });
+
+        // filename = package-filename_channel-list-filename.csv
+        $filename = $scmFile->getScmPackage()->getFilename() . '_' . $scmFile->getFilename() . '.csv';
+
+        $response->setStatusCode(200);
+        $response->headers->set('Content-Type', 'text/csv; charset=iso-8859-1');
+        $response->headers->set('Content-Disposition', sprintf('attachment; filename="%s"', $filename));
 
         return $response;
     }

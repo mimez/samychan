@@ -6,6 +6,10 @@ samyChanApp.factory('backendUrlGenerator', function() {
             return "/backend/" + scmPackageHash + "/file/" + scmFileId + "/json/";
         },
 
+        buildFileExportUrl: function(scmFileId) {
+            return "/backend/" + scmPackageHash + "/file/" + scmFileId + "/csv/";
+        },
+
         buildPackageUrl: function() {
             return "/backend/" + scmPackageHash + ".json";
         },
