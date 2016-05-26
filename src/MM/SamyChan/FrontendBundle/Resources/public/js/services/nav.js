@@ -11,6 +11,10 @@ samyChanApp.factory('nav', function($http, backendUrlGenerator) {
             this.activeItem = {type: type, id: id};
             this.buildItems();
         },
+        updateFavCount: function(favNo, count) {
+            nav.favorites[favNo]["channelCount"] = count;
+            nav.buildItems();
+        },
         buildItems: function() {
             this.items = [];
             for (var i in this.scmFiles) {

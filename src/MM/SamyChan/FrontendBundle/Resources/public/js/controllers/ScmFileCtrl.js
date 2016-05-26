@@ -84,6 +84,7 @@ samyChanApp.controller('ScmFileCtrl', function ($scope, $http, $routeParams, bac
             });
 
             $.unblockUI();
+            $(document).resize();
         });
 
     }

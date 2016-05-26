@@ -278,12 +278,15 @@ samyChanApp.controller('ScmFavoriteCtrl', function ($scope, $http, $routeParams,
         }
 
         $.blockUI();
-        $.post(backendUrlGenerator.buildFavoriteUrl($scope.favNo), {"scmChannels": favChannels}).
-            success(function(data, status, headers, config) {
-                $.unblockUI();
-            }).
-            error(function(data, status, headers, config){
-                $.unblockUI();
+        $http.post(backendUrlGenerator.buildFavoriteUrl($scope.favNo), $.param({"scmChannels": favChannels}), {
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).
+        success(function(data, status, headers, config) {
+            $.unblockUI();
+            nav.updateFavCount($scope.favNo, favChannels.length);
+        }).
+        error(function(data, status, headers, config){
+            $.unblockUI();
             }
         );
     }
