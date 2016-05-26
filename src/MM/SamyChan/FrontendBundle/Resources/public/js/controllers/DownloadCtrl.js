@@ -3,6 +3,7 @@ samyChanApp.controller('DownloadCtrl', function($scope, eventTracker, $timeout) 
     $scope.currentStep = 1;
 
     $scope.startDownloader = function() {
+        reset();
         $('#modal-download').foundation('reveal', 'open');
         eventTracker.track('Downloader', 'open');
     }
@@ -16,5 +17,7 @@ samyChanApp.controller('DownloadCtrl', function($scope, eventTracker, $timeout) 
         eventTracker.track('Downloader', 'donate');
     }
 
-    $("#download-button").click($scope.startDownloader);
+    reset = function() {
+        $scope.currentStep = 1;
+    }
 });
