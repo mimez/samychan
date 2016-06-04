@@ -60,16 +60,15 @@ samyChanApp.controller('ScmFavoriteCtrl', function ($scope, $http, $routeParams,
                 {data: "name", readOnly: true},
                 {data: "scmChannelId", readOnly: true},
                 {data: "Move", renderer: function (instance, td, row, col, prop, value, cellProperties) {
-                    if (typeof td.rendered == 'undefined') {
-                        var a = document.createElement('a');
-                        a.appendChild(document.createTextNode("Add"));
-                        td.appendChild(a);
-                        td.rendered = true;
-                        Handsontable.Dom.addEvent(a, 'mousedown', function (e){
-                            moveChannel(instance.getDataAtRowProp(row, 'scmChannelId'), instance, row);
-                        });
-
+                    while (td.firstChild) {
+                        td.removeChild(td.firstChild);
                     }
+                    var a = document.createElement('a');
+                    a.appendChild(document.createTextNode("Add"));
+                    td.appendChild(a);
+                    Handsontable.Dom.addEvent(a, 'mousedown', function (e){
+                        moveChannel(instance.getDataAtRowProp(row, 'scmChannelId'), instance, row);
+                    });
                     td.setAttribute("class", "text-center");
 
                     return td;
@@ -115,16 +114,16 @@ samyChanApp.controller('ScmFavoriteCtrl', function ($scope, $http, $routeParams,
                 {data: "name", readOnly: true},
                 {data: "scmChannelId", readOnly: true},
                 {data: "Move", renderer: function (instance, td, row, col, prop, value, cellProperties) {
-                    if (typeof td.rendered == 'undefined') {
-                        var a = document.createElement('a');
-                        a.appendChild(document.createTextNode("Remove"));
-                        td.appendChild(a);
-                        td.rendered = true;
-                        Handsontable.Dom.addEvent(a, 'mousedown', function (e){
-                            moveChannel(instance.getDataAtRowProp(row, 'scmChannelId'), instance, row);
-                        });
-
+                    while (td.firstChild) {
+                        td.removeChild(td.firstChild);
                     }
+                    var a = document.createElement('a');
+                    a.appendChild(document.createTextNode("Remove"));
+                    td.appendChild(a);
+                    Handsontable.Dom.addEvent(a, 'mousedown', function (e){
+                        moveChannel(instance.getDataAtRowProp(row, 'scmChannelId'), instance, row);
+                    });
+
                     td.setAttribute("class", "text-center");
 
                     return td;
@@ -163,6 +162,8 @@ samyChanApp.controller('ScmFavoriteCtrl', function ($scope, $http, $routeParams,
             moveChannel(channelId, $scope.hotInstances.selectedChannels, cell.row);
         });
 
+
+
         // filter
         $("#selected-channels-filter").bind("keyup mouseup", function() {
             var input = $(this);
@@ -187,7 +188,7 @@ samyChanApp.controller('ScmFavoriteCtrl', function ($scope, $http, $routeParams,
                 return; // nothing has been changed
             }
 
-            $scope.hotInstances.selectedChannels.getData().sort(function(a,b) {return a.favSort - b.favSort});
+            $scope.hotInstances.selectedChannels.getSourceData().sort(function(a,b) {return a.favSort - b.favSort});
             $scope.hotInstances.selectedChannels.render();
         });
     }
@@ -216,12 +217,12 @@ samyChanApp.controller('ScmFavoriteCtrl', function ($scope, $http, $routeParams,
         var channelIndex;
 
         // channel is in the UNSELECTED-List
-        if (channelIndex = getIndexByScmChannelId(channelIdToMove, $scope.hotInstances.unselectedChannels.getData())) {
-            var newChannel = angular.copy($scope.hotInstances.unselectedChannels.getData()[channelIndex]);
+        if (channelIndex = getIndexByScmChannelId(channelIdToMove, $scope.hotInstances.unselectedChannels.getSourceData())) {
+            var newChannel = angular.copy($scope.hotInstances.unselectedChannels.getSourceData()[channelIndex]);
             newChannel["favSort"] = $scope.selectedChannels.length + 1;
 
             // add channel to selectedChannels
-            $scope.hotInstances.selectedChannels.getData().push(newChannel);
+            $scope.hotInstances.selectedChannels.getSourceData().push(newChannel);
             $scope.hotInstances.selectedChannels.render();
 
             // remove channel from unselectedChannels
@@ -234,25 +235,47 @@ samyChanApp.controller('ScmFavoriteCtrl', function ($scope, $http, $routeParams,
             // select last row in the selected-grid
             $scope.hotInstances.selectedChannels.selectCell($scope.selectedChannels.length - 1, 0);
 
-        // channel is in the SELECTED-List
-        } else if (channelIndex = getIndexByScmChannelId(channelIdToMove, $scope.hotInstances.selectedChannels.getData())) {
-            var newChannel = angular.copy($scope.hotInstances.selectedChannels.getData()[channelIndex]);
+            // channel is in the SELECTED-List
+        } else if (channelIndex = getIndexByScmChannelId(channelIdToMove, $scope.hotInstances.selectedChannels.getSourceData())) {
+            var newChannel = angular.copy($scope.hotInstances.selectedChannels.getSourceData()[channelIndex]);
 
-            // add channel to selectedChannels
-            $scope.hotInstances.unselectedChannels.getData().push(newChannel);
-            $scope.hotInstances.unselectedChannels.render();
+            addChannelToUnselected(newChannel);
 
-            // remove channel from the grid
+            // remove channel from the selected-grid
             hotInstance.alter("remove_row", row);
 
             // modify the orginal data arrays
             $scope.selectedChannels.splice(getIndexByScmChannelId(channelIdToMove, $scope.selectedChannels), 1);
             $scope.unselectedChannels.push(newChannel);
 
-            $scope.hotInstances.unselectedChannels.loadData($scope.hotInstances.unselectedChannels.getData());
             reorderSelectedChannels();
         }
 
+    }
+
+    /**
+     * Add channel to the unselected-grid
+     *
+     * @param object channel
+     */
+    var addChannelToUnselected = function(channel) {
+        var hot = $scope.hotInstances.unselectedChannels;
+        var index = getIndexBySortValue(hot, channel.channelNo);
+        hot.alter('insert_row', index, 1);
+        hot.setDataAtCell(index, 0, channel.filename);
+        hot.setDataAtCell(index, 1, channel.channelNo);
+        hot.setDataAtCell(index, 2, channel.name);
+        hot.setDataAtCell(index, 3, channel.scmChannelId);
+    }
+
+    var getIndexBySortValue = function(hot, sortValue) {
+        var channelNo;
+        for (var i = 0; i < hot.countRows(); i++) {
+            channelNo = hot.getDataAtRowProp(i, 'channelNo');
+            if (sortValue <= channelNo) {
+                return i;
+            }
+        }
     }
 
     var getIndexByScmChannelId = function (scmChannelId, channelList) {
@@ -270,6 +293,7 @@ samyChanApp.controller('ScmFavoriteCtrl', function ($scope, $http, $routeParams,
      */
     $scope.save = function() {
         var favChannels = [];
+        reorderSelectedChannels();
 
         for (var i = 0; i < $scope.hotInstances.selectedChannels.countRows(); i++) {
             var scmChannelId = $scope.hotInstances.selectedChannels.getDataAtRowProp(i, 'scmChannelId');
@@ -281,12 +305,12 @@ samyChanApp.controller('ScmFavoriteCtrl', function ($scope, $http, $routeParams,
         $http.post(backendUrlGenerator.buildFavoriteUrl($scope.favNo), $.param({"scmChannels": favChannels}), {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).
-        success(function(data, status, headers, config) {
-            $.unblockUI();
-            nav.updateFavCount($scope.favNo, favChannels.length);
-        }).
-        error(function(data, status, headers, config){
-            $.unblockUI();
+            success(function(data, status, headers, config) {
+                $.unblockUI();
+                nav.updateFavCount($scope.favNo, favChannels.length);
+            }).
+            error(function(data, status, headers, config){
+                $.unblockUI();
             }
         );
     }

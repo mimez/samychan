@@ -67,7 +67,8 @@ class ScmFavoriteController extends Controller
         // update channels with new favorit sort
         $sort = 1;
         $channels = $request->get('scmChannels');
-
+        $channels = is_array($channels) ? $channels : [];
+        
         foreach ($channels as $scmChannelData) {
             $scmChannel = $em->getRepository('MM\SamyChan\BackendBundle\Entity\ScmChannel')->find($scmChannelData['scmChannelId']); // load channel
             $scmChannel->{'setFav' . $favNo . 'sort'}($sort); // set new sort

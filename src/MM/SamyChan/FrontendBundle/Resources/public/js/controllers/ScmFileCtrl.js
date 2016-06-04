@@ -245,7 +245,7 @@ samyChanApp.controller('ScmFileCtrl', function ($scope, $http, $routeParams, bac
         // get channelno of the next row
         nextRowChannelNo = $scope.hotInstance.getDataAtRowProp(selectedRow + offset, "channelNo");
 
-        // special logic for gaps between channelNos. if we a gap, than do nothing more
+        // special logic for gaps between channelNos. if we have a gap, than do nothing more
         if (nextRowChannelNo != selectedChannelNo + offset) {
             return;
         }
