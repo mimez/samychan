@@ -95,16 +95,8 @@ samyChanApp.controller('DownloadCtrl', function($scope, eventTracker, backendUrl
         }
     ];
 
-    $scope.startDownloader = function() {
-        alert('foo');
-        reset();
-        $('#modal-download').foundation('reveal', 'open');
-        eventTracker.track('Downloader', 'open');
-    }
-
     $scope.download = function() {
         eventTracker.track('Downloader', 'download');
-        $scope.currentStep = 2;
     }
 
     $scope.donate = function() {
@@ -114,4 +106,6 @@ samyChanApp.controller('DownloadCtrl', function($scope, eventTracker, backendUrl
     $scope.trackAmazon = function() {
         eventTracker.track('Downloader', 'clickAmazon');
     }
+
+    eventTracker.track('Downloader', 'open');
 });
