@@ -13,6 +13,10 @@ samyChanApp.config(function ($routeProvider) {
             templateUrl: '/bundles/mmsamychanfrontend/partials/favorite.html',
             controller: 'ScmFavoriteCtrl'
         })
+        .when('/download', {
+            templateUrl: '/bundles/mmsamychanfrontend/partials/download.html',
+            controller: 'DownloadCtrl'
+        })
         .otherwise({
             redirectTo: '/files/' + $("body").data("first-scm-file-id")
         });
