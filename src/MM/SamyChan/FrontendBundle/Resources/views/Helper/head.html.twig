@@ -1,10 +1,12 @@
 <meta charset="utf-8">
-<title>{{ meta_title is defined ? meta_title ~ ' - ' : ''}} SamyChan</title>
+<title>{{ meta_title is defined ? meta_title : 'SamyChan'}}</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-touch-fullscreen" content="yes">
-<meta name="description" content="Avalon Admin Theme">
+{% if meta_descr is defined %}
+    <meta name="description" content="Avalon Admin Theme">
+{% endif %}
 <meta name="author" content="Michael Mezger">
 <link rel="shortcut icon" href="/bundles/mmsamychanfrontend/images/favicons/64x64.png">
 <link rel="icon apple-touch-icon" sizes="16x16 32x32 64x64" href="/bundles/mmsamychanfrontend/images/favicons/64x64.png" type="image/png">

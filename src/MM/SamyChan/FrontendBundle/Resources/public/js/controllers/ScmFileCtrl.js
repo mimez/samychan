@@ -72,6 +72,7 @@ samyChanApp.controller('ScmFileCtrl', function ($scope, $http, $routeParams, bac
                 columns: columns,
                 colHeaders: colHeaders,
                 stretchH: 'all',
+                beforeChange: $scope.beforeChange,
                 afterChange: $scope.afterChange,
                 multiSelect: false,
                 fillHandle: false,
@@ -87,6 +88,24 @@ samyChanApp.controller('ScmFileCtrl', function ($scope, $http, $routeParams, bac
             $(document).resize();
         });
 
+    }
+
+    $scope.beforeChange = function(changes, source) {
+        if (changes == null || typeof changes.length == 'undefined') {
+            return;
+        }
+
+        $.each(changes, function(index, change) {
+            if (change[2] == change[3]) {
+                return; // nothing has been changed
+            }
+
+            if (isNaN(parseInt(change[3]))) {
+                changes[index][3] = change[2];
+            } else {
+                changes[index][3] = parseInt(change[3]);
+            }
+        });
     }
 
     /**
