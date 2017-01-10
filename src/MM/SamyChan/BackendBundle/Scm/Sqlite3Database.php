@@ -42,13 +42,18 @@ class Sqlite3Database
      */
     public function __construct($binarayData)
     {
-        $this->setFilepath(tempnam('/tmp/', 'MM'));
+        // @todo: fix absolute pathes
+        $tmppath = __DIR__ . '/../../../../../app/tmp';
+        if (!file_exists($tmppath)) {
+            mkdir($tmppath);
+        }
+        $this->setFilepath(tempnam(realpath($tmppath), 'MM'));
         file_put_contents($this->getFilepath(), $binarayData);
     }
 
     public function __destruct()
     {
-        #unlink($this->getFilepath());
+        unlink($this->getFilepath());
     }
 
     /**
