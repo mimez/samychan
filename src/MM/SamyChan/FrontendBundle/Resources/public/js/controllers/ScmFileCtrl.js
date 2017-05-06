@@ -100,10 +100,13 @@ samyChanApp.controller('ScmFileCtrl', function ($scope, $http, $routeParams, bac
                 return; // nothing has been changed
             }
 
-            if (isNaN(parseInt(change[3]))) {
-                changes[index][3] = change[2];
-            } else {
-                changes[index][3] = parseInt(change[3]);
+            // channel-no validation: only integers are allowed
+            if (change[1] == "channelNo") {
+                if (isNaN(parseInt(change[3]))) {
+                    changes[index][3] = change[2];
+                } else {
+                    changes[index][3] = parseInt(change[3]);
+                }
             }
         });
     }
