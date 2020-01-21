@@ -1,0 +1,23 @@
+.MuiDrawer-root,
+.MuiDrawer-paper {
+    width: 240px;
+    margin-right: 1rem;
+    z-index: -1;
+    padding-top: 80px;
+}
+.MuiDrawer-root {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    bottom: 0;
+    z-index: 1;
+
+}
+.MuiDrawer-root.closed .MuiDrawer-paper {
+    width: 70px;
+    overflow: hidden;
+    margin-top: 50px;
+}
+.MuiDrawer-paper ul {
+    width: 240px;
+}

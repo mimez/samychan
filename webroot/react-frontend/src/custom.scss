@@ -1,0 +1,86 @@
+// Import Bootstrap and its default variables
+@import '~bootstrap/scss/bootstrap.scss';
+
+a.dropdown-item {
+  cursor: pointer;
+}
+.channels {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 0;
+}
+.channel {
+  box-sizing: border-box;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  width: calc(25% - 5px);
+  box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+  border-radius: 5px;
+  overflow: hidden;
+  background: #fff;
+
+  div.channel-no {
+    padding-top: 10px;
+    padding-left: 10px;
+  }
+
+  .line {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  input:not([type='checkbox']) {
+    border: 0;
+    background-color:transparent;
+    width: 50px;
+  }
+  &:hover input:not([type='checkbox']) {
+    background: #fff;
+    border-bottom: 1px solid #333;
+  }
+
+
+  input:focus {
+    background: #fff !important;
+    outline: none;
+  }
+
+  &.hidden {
+    display: none;
+  }
+  &:focus,
+  &:focus-within {
+    outline: none;
+    box-shadow: 0 0 3pt 2pt darkcyan;
+  }
+  &:focus input.channel-no {
+    background: #fff;
+  }
+
+  input.channel-no {
+    display: inline-block;
+    width: 40px;
+    font-size: 15px;
+  }
+  div.name {
+    padding-left: 10px;
+  }
+  input.name {
+    display: inline-block;
+    font-weight: bolder;
+    text-overflow: ellipsis;
+    width: 10rem;
+    overflow: hidden;
+    font-size: 15px;
+  }
+
+  &:hover {
+    background-color:rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
+}
+.channel-list-settings {
+  margin-bottom: 1rem;
+}

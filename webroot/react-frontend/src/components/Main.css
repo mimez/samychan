@@ -1,0 +1,18 @@
+.main-root {
+    display: flex;
+}
+.MuiAppBar-root {
+    z-index: 99999;
+    position: absolute;
+}
+.MuiAppBar-root .MuiTypography-root {
+    flex-grow: 1;
+}
+main {
+    padding-left: 90px;
+    padding-top: 80px;
+    padding-right: 20px;
+}
+.nav-open main {
+    padding-left: 260px;
+}
