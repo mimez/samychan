@@ -6,11 +6,27 @@ import ListItem from '@material-ui/core/ListItem';
 import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import MailIcon from '@material-ui/icons/Mail';
-import clsx from 'clsx';
-import "./Navigation.css"
+import TvIcon from '@material-ui/icons/Tv';
+import StarIcon from '@material-ui/icons/Star';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+  root: props => ({
+    background: "#fff",
+    borderRight: "1px solid #CCC",
+    marginRight: "1rem",
+    width: props.open ? "auto" : "60px",
+  }),
+  container: {
+    overflow: "hidden"
+  },
+  list: {
+    minWidth: "240px"
+  }
+}));
 
 export default (props) => {
+  const classes = useStyles(props);
 
   const getNavFiles = () => {
     if (typeof props.scmPackage.files === "undefined") return []
@@ -19,7 +35,7 @@ export default (props) => {
       let link = React.forwardRef((props, ref) => <Link {...props} to={"/" + hash + "/files/" + file.scmFileId} ref={ref} />);
       return (
         <ListItem key={"list-item-file-" + file.scmFileId} button component={link}>
-          <ListItemIcon><MailIcon /></ListItemIcon>
+          <ListItemIcon><TvIcon /></ListItemIcon>
           <ListItemText primary={file.label} secondary={file.channelCount + " channels"} />
         </ListItem>
       )
@@ -34,7 +50,7 @@ export default (props) => {
       let link = React.forwardRef((props, ref) => <Link {...props} to={"/" + hash + "/favorites/" + favorite.favNo} ref={ref} />);
       return (
         <ListItem key={"list-item-fav-" + favorite.favNo} button component={link}>
-          <ListItemIcon><MailIcon /></ListItemIcon>
+          <ListItemIcon><StarIcon /></ListItemIcon>
           <ListItemText primary={"Fav #" + favorite.favNo} secondary={favorite.channelCount + " channels"} />
         </ListItem>
       )
@@ -42,18 +58,17 @@ export default (props) => {
   }
 
   return (
-    <Drawer
-      variant="permanent"
-      className={clsx({open: props.open, closed: !props.open})}
-    >
-      <List>
-        {getNavFiles()}
-      </List>
-      <Divider />
-      <List>
-        {getNavFavorites()}
-      </List>
-    </Drawer>
+    <div className={classes.root}>
+      <div className={classes.container}>
+        <List className={classes.list}>
+          {getNavFiles()}
+        </List>
+        <Divider />
+        <List className={classes.list}>
+          {getNavFavorites()}
+        </List>
+      </div>
+    </div>
   );
 }
 
