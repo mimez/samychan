@@ -1,5 +1,14 @@
 // Import Bootstrap and its default variables
-@import '~bootstrap/scss/bootstrap.scss';
+#root,
+.app-container,
+html,
+body {
+  height: 100%;
+}
+.channel-list-settings {
+  display: flex;
+  justify-content: space-between;
+}
 
 a.dropdown-item {
   cursor: pointer;
