@@ -6,20 +6,37 @@ import Navigation from "./Navigation";
 import DownloadPackage from "./DownloadPackage";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import "./Main.css"
 import Theme from "../Theme"
 import Api from "../utils/Api"
 import AppHeader from "./AppHeader"
 import { ThemeProvider } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
+const useStyles = makeStyles(theme => ({
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    height: "100%"
+  },
+  mainContainer: {
+    display: "flex",
+    flexGrow: 1,
+    overflow: "hidden"
+  },
+  main: {
+    flexGrow: 1,
+    overflowY: "scroll"
+  }
+}));
 
 export default (props) => {
-  const [scmPackage, setScmPackage] = useState(undefined);
-  const [navOpen, setNavOpen] = useState(true);
+  const classes = useStyles(props);
+  const [scmPackage, setScmPackage] = useState(undefined)
+  const [navOpen, setNavOpen] = useState(true)
 
   const handleDrawerToggle = () => {
-    setNavOpen(!navOpen);
-  };
+    setNavOpen(!navOpen)
+  }
 
   useEffect(() => {
     Api.getPackage(props.match.params.scmPackageHash, (data) => setScmPackage(data))
@@ -27,18 +44,18 @@ export default (props) => {
 
   var renderApp = () => {
     return (
-      <div className={navOpen ? "nav-open" : "nav-closed"}>
+      <div className={classes.root}>
         <ThemeProvider theme={Theme}>
-          <CircularProgress />
           <CssBaseline />
           <AppHeader scmPackage={scmPackage} onToggleDrawer={handleDrawerToggle}/>
-          <Navigation open={navOpen} scmPackage={scmPackage}/>
-          <main>
-            <Route path="/:scmPackageHash/files/:scmFileId" component={File} />
-            <Route path="/:scmPackageHash/favorites/:favNo" component={Favorites} />
-            <Route path="/:scmPackageHash/download" component={DownloadPackage} />
-          </main>
-
+          <div className={classes.mainContainer}>
+            <Navigation open={navOpen} scmPackage={scmPackage}/>
+            <main className={classes.main}>
+              <Route path="/:scmPackageHash/files/:scmFileId" component={File} />
+              <Route path="/:scmPackageHash/favorites/:favNo" component={Favorites} />
+              <Route path="/:scmPackageHash/download" component={DownloadPackage} />
+            </main>
+          </div>
         </ThemeProvider>
       </div>
     )
