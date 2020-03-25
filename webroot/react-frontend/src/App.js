@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import './custom.scss';
 import 'jquery/dist/jquery.min.js'
 import ScmPackage from './components/ScmPackage';
