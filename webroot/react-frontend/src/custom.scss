@@ -24,21 +24,14 @@ a.dropdown-item {
   box-sizing: border-box;
   margin-bottom: 5px;
   margin-right: 5px;
-  width: calc(25% - 5px);
-  box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+  width: 100%;
+  //box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
   border-radius: 5px;
   overflow: hidden;
-  background: #fff;
-
-  div.channel-no {
-    padding-top: 10px;
-    padding-left: 10px;
-  }
-
-  .line {
-    display: flex;
-    justify-content: space-between;
-  }
+  background: #48434b;
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
 
   input:not([type='checkbox']) {
     border: 0;
@@ -46,13 +39,11 @@ a.dropdown-item {
     width: 50px;
   }
   &:hover input:not([type='checkbox']) {
-    background: #fff;
-    border-bottom: 1px solid #333;
+    background: #ffffff21;
   }
 
-
   input:focus {
-    background: #fff !important;
+    background: #ffffff21;
     outline: none;
   }
 
@@ -61,32 +52,40 @@ a.dropdown-item {
   }
   &:focus,
   &:focus-within {
-    outline: none;
-    box-shadow: 0 0 3pt 2pt darkcyan;
+    background: #6b5f73;
   }
   &:focus input.channel-no {
     background: #fff;
   }
-
+  input.name,
   input.channel-no {
     display: inline-block;
-    width: 40px;
-    font-size: 15px;
+    padding: 5px;
+    margin-right: 1rem;
+    color: #fff;
   }
-  div.name {
-    padding-left: 10px;
+
+  input.channel-no {
+    width: 60px;
+    font-size: 15px;
+    text-align: right;
+    margin-right: 5px;
   }
   input.name {
-    display: inline-block;
+    flex-grow: 1;
+
+  }
+  input.name {
     font-weight: bolder;
     text-overflow: ellipsis;
     width: 10rem;
     overflow: hidden;
     font-size: 15px;
+    padding: 5px;
   }
 
   &:hover {
-    background-color:rgba(0, 0, 0, 0.1);
+    /*background-color:rgba(0, 0, 0, 0.1);*/
     cursor: pointer;
   }
 }

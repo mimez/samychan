@@ -2,11 +2,15 @@ import React, { Component } from "react"
 import Checkbox from "@material-ui/core/Checkbox";
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import {makeStyles} from "@material-ui/core/styles";
+
+const useStyles = makeStyles(theme => ({
+  root: props => ({
+    background: theme.palette.primary.light,
+  })
+}));
 
 export default class Channel extends Component {
-
   constructor(props){
     super(props)
     this.handleBlur = this.handleBlur.bind(this);
@@ -20,7 +24,16 @@ export default class Channel extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return this.props.selected !== nextProps.selected
+
+    if (this.props.selected !== nextProps.selected) {
+      return true
+    }
+
+    if (this.state.channelNo !== nextState.channelNo || this.state.name !== nextState.name) {
+      return true
+    }
+
+    return false
   }
 
   handleBlur(field, event) {
@@ -99,39 +112,32 @@ export default class Channel extends Component {
         id={"channel-" + this.props.channelData.channelId}
         draggable="true"
       >
-        <div className="line">
-          <div className="channel-no">
-            <input
-              type="number"
-              className="channel-no"
-              value={this.state.channelNo}
-              onChange={this.handleChange.bind(this, "channelNo")}
-              onBlur={this.handleBlur.bind(this, "channelNo")}
-              tabIndex="-1"
-            />
-          </div>
-          <Checkbox
-            value="secondary"
-            color="secondary"
-            size="small"
-            className="checkbox-selector"
+        <Checkbox
+          value="secondary"
+          color="secondary"
+          size="small"
+          className="checkbox-selector"
+        />
+          <input
+            type="text"
+            className="channel-no"
+            value={this.state.channelNo}
+            onChange={this.handleChange.bind(this, "channelNo")}
+            onBlur={this.handleBlur.bind(this, "channelNo")}
+            tabIndex="-1"
           />
-        </div>
-        <div className="line">
-          <div className="name">
-            <input
-              type="text"
-              className="name"
-              value={this.state.name}
-              onChange={this.handleChange.bind(this, "name")}
-              onBlur={this.handleBlur.bind(this, "name")}
-              tabIndex="-1"
-            />
-          </div>
+          <input
+            type="text"
+            className="name"
+            value={this.state.name}
+            onChange={this.handleChange.bind(this, "name")}
+            onBlur={this.handleBlur.bind(this, "name")}
+            tabIndex="-1"
+          />
+
           <IconButton aria-label="delete" size="small">
             <MoreVertIcon />
           </IconButton>
-        </div>
       </li>
     )
   }

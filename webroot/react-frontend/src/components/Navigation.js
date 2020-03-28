@@ -12,9 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
   root: props => ({
-    background: "#fff",
-    borderRight: "1px solid #CCC",
-    marginRight: "1rem",
+    background: theme.palette.primary.light,
     width: props.open ? "auto" : "60px",
   }),
   container: {
