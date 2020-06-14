@@ -1,4 +1,4 @@
-import React, {Component, useState} from "react"
+import React, {useState} from "react"
 import Channel from "./Channel";
 import ChannelListSettings from "./ChannelListSettings";
 import { FixedSizeList as List } from 'react-window';
@@ -6,9 +6,9 @@ import AutoSizer from "react-virtualized-auto-sizer";
 
 export default (props) => {
 
-  const [filter, setFilter] = useState({text: ""});
-  const [sort, setSort] = useState({field: "channelNo", dir: "asc", type: "number"});
-  const [selectedChannelId, setSelectedChannelId] =useState(0);
+  const [filter, setFilter] = useState({text: ""})
+  const [sort, setSort] = useState({field: "channelNo", dir: "asc", type: "number"})
+  const [cursorPos, setCursorPos] = useState({channelId: 0, field: "no"})
 
   const filterChannels = (channels) => {
     let filteredChannels = []
@@ -54,12 +54,11 @@ export default (props) => {
     }
   }
 
-  const handleKeyNavigation = (dir) => {
-    console.log(selectedChannelId)
+  const handleKeyNavigation = (dir, field) => {
     var currentIndex, newIndex
     let channelsToDisplay = getChannelsToDisplay()
     for (let i in channelsToDisplay) {
-      if (selectedChannelId !== channelsToDisplay[i].channelId) {
+      if (cursorPos.channelId !== channelsToDisplay[i].channelId) {
         continue
       }
       currentIndex = parseInt(i)
@@ -76,30 +75,36 @@ export default (props) => {
         case "up":
           newIndex = currentIndex - 1
           break
+        case "current":
+          newIndex = currentIndex
         default:
       }
 
       if (typeof channelsToDisplay[newIndex] !== "undefined") {
-        setSelectedChannelId(channelsToDisplay[newIndex].channelId)
+        setCursorPos({channelId: channelsToDisplay[newIndex].channelId, field: field})
       }
     }
   }
 
+  const handleCursorChange = (channelId, field) => {
+    setCursorPos({channelId: channelId, field: field})
+  }
+
   let channelsToDisplay = getChannelsToDisplay()
+  let channelTabIndex = 0;
 
   const Row = ({ index, style }) => {
     let channel = channelsToDisplay[index]
+    channelTabIndex = channelTabIndex + 1
     return (
       <Channel
       channelData={channel}
       key={channel.channelId}
+      channelTabIndex={channelTabIndex}
       onChannelChange={handleChannelChange}
       onKeyNavigation={handleKeyNavigation}
-      onSelect={() => setSelectedChannelId(channel.channelId)}
-        /*selected={selectedChannelId === channel.channelId ? true : false}
-
-        */
-      /*ref={channelRefs[channel.channelId]}*/
+      onCursorChange={handleCursorChange}
+      cursorPos={cursorPos}
       style={style}
       ></Channel>
     )
