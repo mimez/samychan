@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react"
 import ChannelList from "./ChannelList";
+import Api from "../utils/Api"
 
 export default (props) => {
 
@@ -7,32 +8,24 @@ export default (props) => {
   const [channels, setChannels] = useState([]);
 
   useEffect(() => {
-    fetch("http://samychan.devbox.local/backend/5e11c1bd532f4/file/13/json/")
-      .then(results => {
-        return results.json()
-      })
-      .then(data => {
-        setChannels(data.channels)
-      })
-  }, [scmFileId])
+    Api.getFile(props.match.params.scmPackageHash, props.match.params.scmFileId, (data) => setChannels(data.channels))
+  }, [props.match.params.scmPackageHash, props.match.params.scmFileId])
 
 
   const handleChannelChange = (channel) => {
-    let newChannels = channels
+    let newChannels = [...channels]
     for (let i in newChannels) {
       if (newChannels[i].channelId === channel.channelId) {
         newChannels[i] = channel
       }
     }
-    setChannels(newChannels);
+    setChannels(newChannels)
   }
 
   return (
-    <div>
-      <ChannelList
-        channels={channels}
-        onChannelChange={handleChannelChange}
-      />
-    </div>
+    <ChannelList
+      channels={channels}
+      onChannelChange={handleChannelChange}
+    />
   );
 }

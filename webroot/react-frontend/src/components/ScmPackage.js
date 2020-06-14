@@ -24,9 +24,7 @@ const useStyles = makeStyles(theme => ({
     overflow: "hidden"
   },
   main: {
-    flexGrow: 1,
-    overflowY: "scroll",
-    padding: "10px"
+    flexGrow: 1
   }
 }));
 

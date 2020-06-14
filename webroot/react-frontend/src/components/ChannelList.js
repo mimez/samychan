@@ -1,92 +1,65 @@
-import React, { Component } from "react"
+import React, {Component, useState} from "react"
 import Channel from "./Channel";
 import ChannelListSettings from "./ChannelListSettings";
+import { FixedSizeList as List } from 'react-window';
+import AutoSizer from "react-virtualized-auto-sizer";
 
-export default class ChannelList extends Component {
-  constructor(props) {
-    super(props)
-    this.handleFilterTextChange = this.handleFilterTextChange.bind(this)
-    this.handleSortChange = this.handleSortChange.bind(this)
-    this.handleChannelChange = this.handleChannelChange.bind(this)
-    this.handleChannelSelect = this.handleChannelSelect.bind(this)
-    this.handleKeyNavigation = this.handleKeyNavigation.bind(this)
-    this.channelRefs = {}
-    this.channelRefs[69] = React.createRef()
-    this.state = {
-      channelsToDisplay: [],
-      filter: {
-        text: ""
-      },
-      sort: {
-        field: "channelNo",
-        dir: "asc",
-        type: "number"
-      },
-      selectedChannelId: ""
-    }
-  }
+export default (props) => {
 
-  filterChannels(channels) {
+  const [filter, setFilter] = useState({text: ""});
+  const [sort, setSort] = useState({field: "channelNo", dir: "asc", type: "number"});
+  const [selectedChannelId, setSelectedChannelId] =useState(0);
+
+  const filterChannels = (channels) => {
     let filteredChannels = []
     for (let i in channels) {
-      if (channels[i].name.toLowerCase().indexOf(this.state.filter.text.toLowerCase()) !== -1) {
+      if (channels[i].name.toLowerCase().indexOf(filter.text.toLowerCase()) !== -1) {
         filteredChannels.push(channels[i])
       }
     }
     return filteredChannels
   }
 
-  sortChannels(channels) {
+  const sortChannels = (channels) => {
     let retA = 1, retB = -1
-    if (this.state.sort.dir === "desc") {
+    if (sort.dir === "desc") {
       retA = -1
       retB = 1
     }
-    switch (this.state.sort.type) {
+    switch (sort.type) {
       case "number":
-        channels.sort((a,b) => parseInt(a[this.state.sort.field]) > parseInt(b[this.state.sort.field]) ? retA : retB)
+        channels.sort((a,b) => parseInt(a[sort.field]) > parseInt(b[sort.field]) ? retA : retB)
         break;
       default:
       case "text":
-        channels.sort((a,b) => a[this.state.sort.field] > b[this.state.sort.field] ? retB : retA)
+        channels.sort((a,b) => a[sort.field] > b[sort.field] ? retB : retA)
     }
 
     return channels
   }
 
-  handleFilterTextChange(filterText) {
-    this.setState({
-      filter: {text: filterText}
-    });
+  const handleSortChange = (field, dir, type) => {
+    setSort({field: field, dir: dir, type: type})
   }
 
-  handleSortChange(field, dir, type) {
-    this.setState({
-      sort: {field: field, dir: dir, type: type}
-    });
-  }
-
-  getChannelsToDisplay() {
-    let channelsToDisplay = this.filterChannels(this.props.channels)
-    channelsToDisplay = this.sortChannels(channelsToDisplay)
+  const getChannelsToDisplay = () => {
+    let channelsToDisplay = filterChannels(props.channels)
+    channelsToDisplay = sortChannels(channelsToDisplay)
     return channelsToDisplay
   }
 
-  handleChannelChange(channel) {
-    if (typeof this.props.onChannelChange === "function") {
-      this.props.onChannelChange(channel)
+  const handleChannelChange = (channel) => {
+    if (typeof props.onChannelChange === "function") {
+      props.onChannelChange(channel)
     }
   }
 
-  handleChannelSelect(channel) {
-    this.setState({selectedChannelId: channel.channelId})
-  }
-
-  handleKeyNavigation(dir) {
+  const handleKeyNavigation = (dir) => {
+    console.log(selectedChannelId)
     var currentIndex, newIndex
-    let channelsToDisplay = this.getChannelsToDisplay()
+    let channelsToDisplay = getChannelsToDisplay()
     for (let i in channelsToDisplay) {
-      if (this.state.selectedChannelId !== channelsToDisplay[i].channelId) {
+      if (selectedChannelId !== channelsToDisplay[i].channelId) {
         continue
       }
       currentIndex = parseInt(i)
@@ -98,63 +71,69 @@ export default class ChannelList extends Component {
           newIndex = currentIndex + 1
           break
         case "down":
-          newIndex = currentIndex + this.getColumnCount();
+          newIndex = currentIndex + 1
           break
         case "up":
-          newIndex = currentIndex - this.getColumnCount();
+          newIndex = currentIndex - 1
           break
         default:
       }
 
       if (typeof channelsToDisplay[newIndex] !== "undefined") {
-        this.setState({selectedChannelId: channelsToDisplay[newIndex].channelId})
+        setSelectedChannelId(channelsToDisplay[newIndex].channelId)
       }
     }
   }
 
-  getColumnCount() {
-    var count = 0
-    var elements = document.querySelectorAll('.channel-list .channel')
-    var lastY = elements[0].getBoundingClientRect().y;
-    for (var element of elements) {
-      if (lastY !== element.getBoundingClientRect().y) {
-        return count
-      }
-      count++
-    }
-  }
+  let channelsToDisplay = getChannelsToDisplay()
 
-  render() {
-    let channelsToDisplay = this.getChannelsToDisplay()
-    let channels = []
-    for (let i in channelsToDisplay) {
-        channels.push(<Channel
-          channelData={channelsToDisplay[i]}
-          key={channelsToDisplay[i].channelId}
-          onChannelChange={this.handleChannelChange}
-          selected={this.state.selectedChannelId === channelsToDisplay[i].channelId ? true : false}
-          onSelect={this.handleChannelSelect}
-          onKeyNavigation={this.handleKeyNavigation}
-          ref={this.channelRefs[channelsToDisplay[i].channelId]}
-        ></Channel>)
-    }
-
+  const Row = ({ index, style }) => {
+    let channel = channelsToDisplay[index]
     return (
-      <div className="channel-list">
-        <ChannelListSettings
-          filterText={this.state.filter.text}
-          sortField={this.state.sort.field}
-          sortDir={this.state.sort.dir}
-          sortType={this.state.sort.type}
-          onFilterTextChange={this.handleFilterTextChange}
-          onSortChange={this.handleSortChange}
-          sort={{sortField: "name", sortDir: "desc", sortType: "text"}}
-          options={this.props.options}
-        />
-        <ul className="channels">
-          {channels}
-        </ul>
-      </div>
+      <Channel
+      channelData={channel}
+      key={channel.channelId}
+      onChannelChange={handleChannelChange}
+      onKeyNavigation={handleKeyNavigation}
+      onSelect={() => setSelectedChannelId(channel.channelId)}
+        /*selected={selectedChannelId === channel.channelId ? true : false}
+
+        */
+      /*ref={channelRefs[channel.channelId]}*/
+      style={style}
+      ></Channel>
     )
   }
+
+  return (
+    <div className="channel-list">
+      <ChannelListSettings
+        filterText={filter.text}
+        sortField={sort.field}
+        sortDir={sort.dir}
+        sortType={sort.type}
+        onFilterTextChange={(text) => setFilter({text: text})}
+        onSortChange={handleSortChange}
+        sort={{sortField: "name", sortDir: "desc", sortType: "text"}}
+        options={props.options}
+      />
+      <div id="channel-list-container">
+        <AutoSizer>
+          {({ height, width }) => (
+            <List
+              height={height}
+              itemCount={getChannelsToDisplay().length}
+              itemSize={55}
+              width={width}
+              className="channels"
+              overscanCount={5}
+              itemData={channelsToDisplay}
+            >
+              {Row}
+            </List>
+          )}
+        </AutoSizer>
+      </div>
+    </div>
+  )
 }
