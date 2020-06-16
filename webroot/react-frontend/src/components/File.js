@@ -11,7 +11,6 @@ export default (props) => {
     Api.getFile(props.match.params.scmPackageHash, props.match.params.scmFileId, (data) => setChannels(data.channels))
   }, [props.match.params.scmPackageHash, props.match.params.scmFileId])
 
-
   const handleChannelChange = (channel) => {
     let newChannels = [...channels]
     for (let i in newChannels) {

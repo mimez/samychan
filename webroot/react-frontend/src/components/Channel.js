@@ -54,6 +54,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default React.memo((props) => {
+  console.log("RENDER CHANNEL")
 
   /**
    * Testplan
@@ -195,12 +196,6 @@ export default React.memo((props) => {
         onKeyDown={handleKeyNav}
         id={"channel-" + props.channelData.channelId}
       >
-        <Checkbox
-          value="secondary"
-          color="secondary"
-          size="small"
-          className="checkbox-selector"
-        />
         <input
           type="text"
           className="channel-no"
@@ -224,10 +219,8 @@ export default React.memo((props) => {
           autoFocus={props.cursorPos.channelId === props.channelData.channelId && props.cursorPos.field === 'name'}
           onBlur={blurInput}
         />
+        <input type="checkbox" />
 
-        <IconButton aria-label="delete" size="small">
-          <MoreVertIcon />
-        </IconButton>
       </div>
     </div>
   )

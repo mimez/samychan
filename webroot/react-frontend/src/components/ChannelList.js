@@ -1,16 +1,17 @@
-import React, {useState} from "react"
+import React, {useState, useMemo} from "react"
 import Channel from "./Channel";
 import ChannelListSettings from "./ChannelListSettings";
-import { FixedSizeList as List } from 'react-window';
-import AutoSizer from "react-virtualized-auto-sizer";
+import ChannelListChannels from "./ChannelListChannels";
+
 
 export default (props) => {
-
+  console.log("RENDER CHANNEL LIST")
   const [filter, setFilter] = useState({text: ""})
   const [sort, setSort] = useState({field: "channelNo", dir: "asc", type: "number"})
-  const [cursorPos, setCursorPos] = useState({channelId: 0, field: "no"})
+
 
   const filterChannels = (channels) => {
+    console.log("filterChannels")
     let filteredChannels = []
     for (let i in channels) {
       if (channels[i].name.toLowerCase().indexOf(filter.text.toLowerCase()) !== -1) {
@@ -21,6 +22,7 @@ export default (props) => {
   }
 
   const sortChannels = (channels) => {
+  console.log("sortChannels")
     let retA = 1, retB = -1
     if (sort.dir === "desc") {
       retA = -1
@@ -42,73 +44,20 @@ export default (props) => {
     setSort({field: field, dir: dir, type: type})
   }
 
-  const getChannelsToDisplay = () => {
+  const getChannelsToDisplay = (channels) => {
+  console.log("getChannelsToDisplay")
+    return props.channels
     let channelsToDisplay = filterChannels(props.channels)
     channelsToDisplay = sortChannels(channelsToDisplay)
     return channelsToDisplay
   }
 
-  const handleChannelChange = (channel) => {
-    if (typeof props.onChannelChange === "function") {
-      props.onChannelChange(channel)
-    }
-  }
 
-  const handleKeyNavigation = (dir, field) => {
-    var currentIndex, newIndex
-    let channelsToDisplay = getChannelsToDisplay()
-    for (let i in channelsToDisplay) {
-      if (cursorPos.channelId !== channelsToDisplay[i].channelId) {
-        continue
-      }
-      currentIndex = parseInt(i)
-      switch (dir) {
-        case "left":
-          newIndex = currentIndex - 1
-          break
-        case "right":
-          newIndex = currentIndex + 1
-          break
-        case "down":
-          newIndex = currentIndex + 1
-          break
-        case "up":
-          newIndex = currentIndex - 1
-          break
-        case "current":
-          newIndex = currentIndex
-        default:
-      }
 
-      if (typeof channelsToDisplay[newIndex] !== "undefined") {
-        setCursorPos({channelId: channelsToDisplay[newIndex].channelId, field: field})
-      }
-    }
-  }
 
-  const handleCursorChange = (channelId, field) => {
-    setCursorPos({channelId: channelId, field: field})
-  }
 
-  let channelsToDisplay = getChannelsToDisplay()
-  let channelTabIndex = 0;
+  let channelsToDisplay = getChannelsToDisplay(props.channels)
 
-  const Row = ({ index, style }) => {
-    let channel = channelsToDisplay[index]
-    channelTabIndex = channelTabIndex + 1
-    return (
-      <Channel
-      channelData={channel}
-      key={channel.channelId}
-      channelTabIndex={channelTabIndex}
-      onChannelChange={handleChannelChange}
-      onKeyNavigation={handleKeyNavigation}
-      onCursorChange={handleCursorChange}
-      cursorPos={cursorPos}
-      style={style}
-      ></Channel>
-    )
-  }
 
   return (
     <div className="channel-list">
@@ -122,23 +71,9 @@ export default (props) => {
         sort={{sortField: "name", sortDir: "desc", sortType: "text"}}
         options={props.options}
       />
-      <div id="channel-list-container">
-        <AutoSizer>
-          {({ height, width }) => (
-            <List
-              height={height}
-              itemCount={getChannelsToDisplay().length}
-              itemSize={55}
-              width={width}
-              className="channels"
-              overscanCount={5}
-              itemData={channelsToDisplay}
-            >
-              {Row}
-            </List>
-          )}
-        </AutoSizer>
-      </div>
+      <ChannelListChannels
+        channels={channelsToDisplay}
+      />
     </div>
   )
 }
