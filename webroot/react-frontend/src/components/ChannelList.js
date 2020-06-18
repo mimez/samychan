@@ -5,10 +5,10 @@ import ChannelListChannels from "./ChannelListChannels";
 
 
 export default (props) => {
-  console.log("RENDER CHANNEL LIST")
-  const [filter, setFilter] = useState({text: ""})
-  const [sort, setSort] = useState({field: "channelNo", dir: "asc", type: "number"})
 
+  const [filter, setFilter] = useState({text: ""})
+
+  const [sort, setSort] = useState({field: "channelNo", dir: "asc", type: "number"})
 
   const filterChannels = (channels) => {
     console.log("filterChannels")
@@ -45,19 +45,19 @@ export default (props) => {
   }
 
   const getChannelsToDisplay = (channels) => {
-  console.log("getChannelsToDisplay")
-    return props.channels
     let channelsToDisplay = filterChannels(props.channels)
     channelsToDisplay = sortChannels(channelsToDisplay)
+
     return channelsToDisplay
   }
 
-
-
-
+  const handleChannelChange = (channel) => {
+    if (typeof props.onChannelChange === "function") {
+      props.onChannelChange(channel)
+    }
+  }
 
   let channelsToDisplay = getChannelsToDisplay(props.channels)
-
 
   return (
     <div className="channel-list">
@@ -73,6 +73,7 @@ export default (props) => {
       />
       <ChannelListChannels
         channels={channelsToDisplay}
+        onChannelChange={handleChannelChange}
       />
     </div>
   )
