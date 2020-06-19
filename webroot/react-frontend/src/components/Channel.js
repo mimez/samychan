@@ -1,9 +1,6 @@
 import React from "react"
-import Checkbox from "@material-ui/core/Checkbox";
-import IconButton from '@material-ui/core/IconButton';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import {makeStyles} from "@material-ui/core/styles";
-import { useState, useEffect } from 'react';
+import {useState} from 'react';
 
 const useStyles = makeStyles(theme => ({
   root: (props) => ({
@@ -54,7 +51,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default React.memo((props) => {
-  console.log("RENDER CHANNEL")
 
   /**
    * Testplan
@@ -189,6 +185,12 @@ export default React.memo((props) => {
     }
   }
 
+  const toggleChannelSelection = (event) => {
+    if (typeof props.onSelectionChange === "function") {
+      props.onSelectionChange(props.channelData.channelId)
+    }
+  }
+
   return (
     <div style={props.style}>
       <div
@@ -196,6 +198,11 @@ export default React.memo((props) => {
         onKeyDown={handleKeyNav}
         id={"channel-" + props.channelData.channelId}
       >
+        <input
+          type="checkbox"
+          onChange={toggleChannelSelection}
+          checked={props.selected}
+        />
         <input
           type="text"
           className="channel-no"
@@ -219,7 +226,6 @@ export default React.memo((props) => {
           autoFocus={props.cursorPos.channelId === props.channelData.channelId && props.cursorPos.field === 'name'}
           onBlur={blurInput}
         />
-        <input type="checkbox" />
 
       </div>
     </div>

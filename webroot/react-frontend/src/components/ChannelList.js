@@ -1,5 +1,4 @@
-import React, {useState, useMemo} from "react"
-import Channel from "./Channel";
+import React, {useState} from "react"
 import ChannelListSettings from "./ChannelListSettings";
 import ChannelListChannels from "./ChannelListChannels";
 
@@ -10,8 +9,9 @@ export default (props) => {
 
   const [sort, setSort] = useState({field: "channelNo", dir: "asc", type: "number"})
 
+  const [selectedChannels, setSelectedChannels] = useState([])
+
   const filterChannels = (channels) => {
-    console.log("filterChannels")
     let filteredChannels = []
     for (let i in channels) {
       if (channels[i].name.toLowerCase().indexOf(filter.text.toLowerCase()) !== -1) {
@@ -22,7 +22,6 @@ export default (props) => {
   }
 
   const sortChannels = (channels) => {
-  console.log("sortChannels")
     let retA = 1, retB = -1
     if (sort.dir === "desc") {
       retA = -1
@@ -57,23 +56,39 @@ export default (props) => {
     }
   }
 
+  const handleSelectionChange = (channelId) => {
+    let newSelectedChannels = [...selectedChannels]
+    let index = newSelectedChannels.indexOf(channelId)
+    if (index === -1) {
+      newSelectedChannels.push(channelId)
+    } else {
+      newSelectedChannels.splice(index, 1)
+    }
+    setSelectedChannels(newSelectedChannels)
+  }
+
   let channelsToDisplay = getChannelsToDisplay(props.channels)
 
   return (
     <div className="channel-list">
       <ChannelListSettings
         filterText={filter.text}
+        sort={{sortField: "name", sortDir: "desc", sortType: "text"}}
         sortField={sort.field}
         sortDir={sort.dir}
         sortType={sort.type}
         onFilterTextChange={(text) => setFilter({text: text})}
         onSortChange={handleSortChange}
-        sort={{sortField: "name", sortDir: "desc", sortType: "text"}}
-        options={props.options}
+        onSelectionChange={handleSelectionChange}
+        selectedChannels={selectedChannels}
+        channelActions={props.channelActions}
+
       />
       <ChannelListChannels
         channels={channelsToDisplay}
         onChannelChange={handleChannelChange}
+        onSelectionChange={handleSelectionChange}
+        selectedChannels={selectedChannels}
       />
     </div>
   )

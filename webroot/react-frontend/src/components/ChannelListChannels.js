@@ -4,14 +4,8 @@ import React, {useState} from "react";
 import Channel from "./Channel";
 
 export default (props) => {
-  console.log("RENDER CHANNEL LIST CHANNELS")
-  const [cursorPos, setCursorPos] = useState({channelId: 0, field: "no"})
 
-  if (props.channels.length === 0) {
-    return (
-      <h1>{props.channels.length} Channels</h1>
-    )
-  }
+  const [cursorPos, setCursorPos] = useState({channelId: 0, field: "no"})
 
   const handleKeyNavigation = (dir, field) => {
     console.log("handleKeyNavigation")
@@ -55,10 +49,15 @@ export default (props) => {
     setCursorPos({channelId: channelId, field: field})
   }
 
+  const handleSelectionChange = (channelId) => {
+    props.onSelectionChange(channelId)
+  }
+
   let channelTabIndex = 0;
 
   const Row = ({ index, style }) => {
     let channel = props.channels[index]
+    let selected = props.selectedChannels.indexOf(channel.channelId) !== -1
     channelTabIndex = channelTabIndex + 1
 
     return (
@@ -71,6 +70,8 @@ export default (props) => {
         onCursorChange={handleCursorChange}
         cursorPos={cursorPos}
         style={style}
+        onSelectionChange={handleSelectionChange}
+        selected={selected}
       ></Channel>
     )
   }

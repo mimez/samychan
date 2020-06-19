@@ -4,7 +4,6 @@ import Api from "../utils/Api"
 
 export default (props) => {
 
-  const [scmFileId, setScmFileId] = useState('');
   const [channels, setChannels] = useState([]);
 
   useEffect(() => {
@@ -21,10 +20,20 @@ export default (props) => {
     setChannels(newChannels)
   }
 
+  const addChannelsToFavorite = () => {
+
+  }
+
+  let channelActions = [
+    {label: "Add to Fav #1", onClick: (channels) => {addChannelsToFavorite(channels, 1)}},
+    {label: "Add to Fav #2", onClick: (channels) => {addChannelsToFavorite(channels, 2)}}
+  ]
+
   return (
     <ChannelList
       channels={channels}
       onChannelChange={handleChannelChange}
+      channelActions={channelActions}
     />
   );
 }

@@ -7,7 +7,6 @@ import Tooltip from "@material-ui/core/Tooltip";
 
 export default (props) => {
 
-  const [channels, setChannels] = useState([])
   const [selectedChannels, setSelectedChannels] = useState([])
   const channelListOptions = [
     <Tooltip title="Add channel">
@@ -19,22 +18,14 @@ export default (props) => {
 
   useEffect(() => {
     Api.getFavorites(props.match.params.scmPackageHash, props.match.params.favNo, (data) => {
-      console.log(data)
-      setChannels(data.channels)
       setSelectedChannels(data.selectedChannels)
     })
   }, [props.match.params.scmPackageHash, props.match.params.favNo])
 
-  const addChannel = () => {
-
-  }
-
   return (
-    <div>
-        <ChannelList
-          channels={selectedChannels}
-          options={channelListOptions}
-        />
-    </div>
+    <ChannelList
+      channels={selectedChannels}
+      options={channelListOptions}
+    />
   );
 }

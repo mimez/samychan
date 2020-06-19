@@ -1,41 +1,43 @@
+var baseUrl = "http://samychan.devbox.local/backend/"
+
 export default {
     buildFileUrl: function(scmPackageHash, scmFileId) {
-        return "/backend/" + scmPackageHash + "/file/" + scmFileId + "/json/";
+        return baseUrl + scmPackageHash + "/file/" + scmFileId + "/json/";
     },
 
     buildFileExportUrl: function(scmPackageHash, scmFileId) {
-        return "/backend/" + scmPackageHash + "/file/" + scmFileId + "/csv/";
+        return baseUrl + scmPackageHash + "/file/" + scmFileId + "/csv/";
     },
 
     buildPackageUrl: function(scmPackageHash) {
-        return "http://samychan.devbox.local/backend/" + scmPackageHash + ".json";
+        return baseUrl + scmPackageHash + ".json";
     },
 
     buildReorderUrl: function(scmPackageHash, scmFileId) {
-        return "/backend/" + scmPackageHash + "/file/" + scmFileId + "/reorder/";
+        return baseUrl + scmPackageHash + "/file/" + scmFileId + "/reorder/";
     },
 
     buildFavoriteUrl: function(scmPackageHash, favNo) {
-        return "http://samychan.devbox.local/backend/" + scmPackageHash + "/favorites/" + favNo + ".json";
+        return baseUrl + scmPackageHash + "/favorites/" + favNo + ".json";
     },
 
     buildChannelsUrl: function(scmPackageHash) {
-        return "/backend/" + scmPackageHash + "/channels.json";
+        return baseUrl + scmPackageHash + "/channels.json";
     },
 
     buildDownloadUrl: function(scmPackageHash) {
-        return "/backend/" + scmPackageHash + "/download/";
+        return baseUrl + scmPackageHash + "/download/";
     },
 
     buildUploadUrl: function() {
-        return "/backend/upload/";
+        return baseUrl + "upload/";
     },
 
     buildUploadJsonUrl: function() {
-        return "/backend/upload.json";
+        return baseUrl + "upload.json";
     },
 
     buildImportSettingsUrl: function(scmPackageHash) {
-        return "/backend/" + scmPackageHash + "/import-settings.json";
+        return baseUrl + scmPackageHash + "/import-settings.json";
     }
 }

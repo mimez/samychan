@@ -2,22 +2,26 @@ import React, {useState} from "react";
 import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import SortIcon from '@material-ui/icons/Sort';
-import Grid from "@material-ui/core/Grid";
 import Popper from "@material-ui/core/Popper";
-import Box from "@material-ui/core/Box";
 import Paper from '@material-ui/core/Paper';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 import ExportIcon from '@material-ui/icons/InsertDriveFile';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 export default (props) => {
+
   const [sortPopperIsVisible, setSortPopperIsVisible] = useState(false)
-  const anchorRef = React.useRef(null);
+  const [selectionPopperIsVisible, setSelectionPopperIsVisible] = useState(false)
+
+  const sortAnchorRef = React.useRef(null);
+  const selectionAnchorRef = React.useRef(null);
+
   const sortOptions = [
     {label: "channel no asc", field: "channel_no", dir: "asc", type: "number"},
     {label: "channel no desc", field: "channel_no", dir: "desc", type: "number"},
@@ -29,24 +33,46 @@ export default (props) => {
     props.onFilterTextChange(e.target.value);
   }
 
-  const handleSortPopperClose = () => {
-    setSortPopperIsVisible(false)
-  }
-
-  const handleSortIconClick = (event) => {
-    setSortPopperIsVisible(true)
-  }
-
   const handleSortChange = (sortOption) => {
     props.onSortChange(sortOption.field, sortOption.dir, sortOption.type)
     setSortPopperIsVisible(false);
   }
+  let header;
+  if (props.selectedChannels.length > 0 && props.channelActions.length > 0) {
+    header =
+      <div>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => setSelectionPopperIsVisible(true)}
+          ref={selectionAnchorRef}
+        >
+          {props.selectedChannels.length} items selected
+          <ExpandMoreIcon />
+        </Button>
+        <Popper open={selectionPopperIsVisible} anchorEl={selectionAnchorRef.current}>
+          <Paper>
+            <ClickAwayListener onClickAway={() => setSelectionPopperIsVisible(false)}>
+              <MenuList>
+                {props.channelActions.map((item, key) =>
+                  <MenuItem key={key} onClick={(event) => {item.onClick(props.selectedChannels); setSelectionPopperIsVisible(false)}}>
+                    {item.label}
+                  </MenuItem>
+                )}
+              </MenuList>
+            </ClickAwayListener>
+          </Paper>
+        </Popper>
+      </div>
+  } else {
+    header = <Typography variant="h6" noWrap>
+      Cable Digital
+    </Typography>
+  }
 
   return (
     <Toolbar className="channel-list-settings">
-      <Typography variant="h6" noWrap>
-        Cable Digital
-      </Typography>
+      {header}
       <div>
         <TextField
           label="Search..."
@@ -59,13 +85,13 @@ export default (props) => {
           </IconButton>
         </Tooltip>
         <Tooltip title="Change sort" open={sortPopperIsVisible ? false : undefined}>
-          <IconButton ref={anchorRef} aria-label="change sort" onClick={handleSortIconClick}>
+          <IconButton ref={sortAnchorRef} aria-label="change sort" onClick={() => setSortPopperIsVisible(true)}>
             <SortIcon />
           </IconButton>
         </Tooltip>
-        <Popper open={sortPopperIsVisible} anchorEl={anchorRef.current}>
+        <Popper open={sortPopperIsVisible} anchorEl={sortAnchorRef.current}>
           <Paper>
-            <ClickAwayListener onClickAway={handleSortPopperClose}>
+            <ClickAwayListener onClickAway={() => setSortPopperIsVisible(false)}>
               <MenuList>
                 {sortOptions.map((sortOption, index) => (
                   <MenuItem key={sortOption.label} onClick={(event) => handleSortChange(sortOption)}>
