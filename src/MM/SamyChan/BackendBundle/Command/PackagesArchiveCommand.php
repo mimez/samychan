@@ -37,7 +37,7 @@ class PackagesArchiveCommand extends Command
             return;
         }
 
-        $query = $em->createQuery('SELECT p FROM MM\SamyChan\BackendBundle\Entity\ScmPackage p ORDER BY p.scm_package_id')->setMaxResults(100);
+        $query = $em->createQuery('SELECT p FROM MM\SamyChan\BackendBundle\Entity\ScmPackage p WHERE p.isArchived = false ORDER BY p.scm_package_id')->setMaxResults(100);
         $scmPackages = $query->getResult();
         foreach ($scmPackages as $scmPackage) {
             $output->writeln(sprintf('archiving package=(%s)', $scmPackage->getHash()));
