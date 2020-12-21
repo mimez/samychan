@@ -19,9 +19,12 @@ MM\SamyChan\BackendBundle\Entity\ScmPackage:
             length: 1
         demo:
             type: boolean
+        isArchived:
+            type: boolean
+            default: false
     oneToMany:
         files:
             targetEntity: ScmFile
             mappedBy: scmPackage
-            cascade: ["persist"]
+            cascade: ["all"]
     lifecycleCallbacks: {  }

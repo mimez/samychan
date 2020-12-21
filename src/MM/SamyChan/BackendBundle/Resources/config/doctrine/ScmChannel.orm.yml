@@ -62,4 +62,5 @@ MM\SamyChan\BackendBundle\Entity\ScmChannel:
                 name: scm_file_id
                 nullable: false
                 referencedColumnName: scm_file_id
+                onDelete: "CASCADE"
     lifecycleCallbacks: {  }

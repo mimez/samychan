@@ -19,6 +19,28 @@ class ScmPackage
      */
     private $hash;
 
+    /**
+     * @var boolean
+     */
+    private $isArchived;
+
+    /**
+     * @return bool
+     */
+    public function isArchived()
+    {
+        return $this->isArchived;
+    }
+
+    /**
+     * @param bool $isArchived
+     * @return ScmPackage
+     */
+    public function setIsArchived($isArchived)
+    {
+        $this->isArchived = $isArchived;
+        return $this;
+    }
 
     /**
      * Get id

@@ -22,10 +22,11 @@ MM\SamyChan\BackendBundle\Entity\ScmFile:
                 name: scm_package_id
                 nullable: false
                 referencedColumnName: scm_package_id
+                onDelete: "CASCADE"
     oneToMany:
         channels:
             targetEntity: ScmChannel
             mappedBy: scmFile
-            cascade: ["persist"]
+            cascade: ["all"]
             orderBy: { 'channelNo': 'ASC' }
     lifecycleCallbacks: {  }
